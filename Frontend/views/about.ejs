@@ -1,0 +1,644 @@
+<%- include('partials/header') %>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap');
+
+  :root {
+    --gold: #c8962a;
+    --gold-light: #e8b84b;
+    --gold-pale: #f5e6c3;
+    --charcoal: #1a1a1a;
+    --cream: #faf7f2;
+    --soft-bg: #f4f0e8;
+    --text-muted: #6b6b6b;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html  { scroll-behavior: smooth; }
+  body  { background: var(--cream); font-family: 'Lato', sans-serif; overflow-x: hidden; cursor: none; }
+
+  /* ── CURSOR ── */
+  .cursor-dot  { width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99999;transition:transform .1s; }
+  .cursor-ring { width:36px;height:36px;border:1.5px solid var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99998;transition:transform .18s,width .2s,height .2s,opacity .2s;transform:translate(-14px,-14px); }
+  .cursor-ring.hovered { width:56px;height:56px;opacity:.5;transform:translate(-24px,-24px); }
+
+  /* ── NOISE ── */
+  body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.5; }
+
+  /* ══════════ PAGE HERO ══════════ */
+  .page-hero {
+    background: var(--charcoal);
+    min-height: 85vh;
+    display: flex; align-items: flex-end;
+    position: relative; overflow: hidden;
+    padding: 0 2rem 5rem;
+  }
+  .hero-full-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: .22;
+    transform: scale(1.05);
+    transition: transform 10s ease;
+  }
+  .page-hero:hover .hero-full-img { transform: scale(1); }
+  .hero-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top,rgba(26,26,26,1) 0%,rgba(26,26,26,.45) 55%,transparent 100%);
+  }
+  .hero-lines {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(200,150,42,.03) 40px,rgba(200,150,42,.03) 41px);
+  }
+  .page-hero-inner {
+    position: relative; z-index: 5;
+    max-width: 1280px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: flex-end;
+  }
+  .breadcrumb {
+    position: absolute; top: 7rem; left: 0;
+    display: flex; align-items: center; gap: .5rem;
+    font-family: 'Bebas Neue', sans-serif; font-size: .75rem;
+    letter-spacing: .3em; color: rgba(255,255,255,.3);
+  }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .breadcrumb sep { color: rgba(255,255,255,.15); margin: 0 .3rem; }
+
+  .hero-left {
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp .9s ease forwards .3s;
+  }
+  .hero-eyebrow {
+    font-family: 'Bebas Neue', sans-serif; font-size: .8rem;
+    letter-spacing: .45em; color: var(--gold); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .hero-eyebrow::after { content:''; width:50px; height:1px; background:var(--gold); opacity:.5; }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem,6vw,5.5rem); font-weight: 900;
+    color: #fff; line-height: 1.05;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); display: block; }
+
+  .hero-right {
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp .9s ease forwards .55s;
+    padding-bottom: .5rem;
+  }
+  .hero-quote {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+    font-style: italic; font-weight: 300;
+    color: rgba(255,255,255,.65); line-height: 1.85;
+    border-left: 2px solid var(--gold); padding-left: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .hero-scroll {
+    display: flex; align-items: center; gap: .75rem;
+    font-family: 'Bebas Neue', sans-serif; font-size: .7rem;
+    letter-spacing: .3em; color: rgba(255,255,255,.3);
+  }
+  .scroll-bar { width:40px; height:1px; background:rgba(255,255,255,.15); position:relative; overflow:hidden; }
+  .scroll-bar::after { content:''; position:absolute; inset:0; background:var(--gold); animation:scrollPulse 2.2s ease-in-out infinite; }
+
+  /* ══════════ MARQUEE ══════════ */
+  .marquee-strip { background:var(--gold); padding:.75rem 0; overflow:hidden; white-space:nowrap; }
+  .marquee-track { display:inline-flex; gap:3rem; animation:marqueeScroll 25s linear infinite; }
+  .marquee-item  { font-family:'Bebas Neue',sans-serif; font-size:.85rem; letter-spacing:.2em; color:var(--charcoal); display:flex; align-items:center; gap:.75rem; }
+  .marquee-dot   { width:4px; height:4px; background:var(--charcoal); border-radius:50%; }
+
+  /* ══════════ INTRO ══════════ */
+  .intro-section {
+    max-width: 1280px; margin: 0 auto;
+    padding: 8rem 2rem;
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 7rem; align-items: center;
+  }
+  .intro-images { position: relative; }
+  .img-main {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    clip-path: polygon(0 0,100% 0,100% 88%,88% 100%,0 100%);
+    display: block;
+  }
+  .img-accent {
+    position: absolute; bottom: -2.5rem; right: -2.5rem;
+    width: 54%; aspect-ratio: 1/1; object-fit: cover;
+    border: 5px solid var(--cream);
+    box-shadow: -6px -6px 0 var(--gold);
+  }
+  .yr-badge {
+    position: absolute; top: 3rem; left: -2rem;
+    background: var(--charcoal); padding: 1.25rem 1.5rem; z-index: 3;
+  }
+  .yr-badge b { display:block; font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--gold); line-height:1; }
+  .yr-badge small { font-size:.62rem; text-transform:uppercase; letter-spacing:.12em; color:rgba(255,255,255,.5); }
+
+  .section-eyebrow {
+    font-family: 'Bebas Neue', sans-serif; font-size: .8rem;
+    letter-spacing: .4em; color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .section-eyebrow::before { content:''; width:35px; height:1px; background:var(--gold); }
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(2rem,3.5vw,3rem);
+    font-weight: 700; line-height: 1.2; color: var(--charcoal); margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-body {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.12rem;
+    color: var(--text-muted); line-height: 1.95; margin-bottom: 1.2rem;
+  }
+  .intro-stats { display:flex; gap:2.5rem; flex-wrap:wrap; margin-top:2rem; }
+  .istat-num  { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--charcoal); line-height:1; }
+  .istat-lbl  { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:var(--text-muted); margin-top:.2rem; }
+
+  /* ══════════ QUOTE BAND ══════════ */
+  .quote-band {
+    background: var(--charcoal); padding: 6rem 2rem;
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .quote-band::before {
+    content: '"'; font-family: 'Playfair Display', serif;
+    font-size: 28rem; line-height: .65;
+    color: rgba(200,150,42,.04);
+    position: absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem,3vw,2.4rem); font-style: italic;
+    color: #fff; max-width: 800px; margin: 0 auto;
+    line-height: 1.55; position: relative; z-index: 1;
+  }
+  .quote-text em { color: var(--gold-light); }
+  .quote-attr {
+    margin-top: 1.75rem; font-family: 'Bebas Neue', sans-serif;
+    font-size: .72rem; letter-spacing: .35em;
+    color: rgba(255,255,255,.28); position: relative; z-index: 1;
+  }
+
+  /* ══════════ TIMELINE ══════════ */
+  .timeline-section { padding: 8rem 2rem; background: var(--soft-bg); }
+  .tl-inner         { max-width: 1100px; margin: 0 auto; }
+  .tl-hdr           { text-align: center; margin-bottom: 5rem; }
+
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+    background: linear-gradient(to bottom,var(--gold),var(--gold-light),var(--gold));
+  }
+  .tl-item {
+    position: relative; padding: 0 0 4rem 3.5rem;
+    display: grid; grid-template-columns: 130px 1fr;
+    gap: 2.5rem; align-items: flex-start;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -9px; top: 7px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--gold); border: 3px solid var(--soft-bg);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .tl-item:hover .tl-dot { transform: scale(1.4); box-shadow: 0 0 0 6px rgba(200,150,42,.15); }
+  .tl-year  { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; text-align:right; padding-top:.1rem; }
+  .tl-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--charcoal); margin-bottom:.6rem; }
+  .tl-body  { font-size:.9rem; color:var(--text-muted); line-height:1.8; }
+  .tl-img   { margin-top:1rem; width:100%; max-width:360px; height:170px; object-fit:cover; opacity:.85; transition:opacity .3s; }
+  .tl-item:hover .tl-img { opacity:1; }
+
+  /* ══════════ VALUES ══════════ */
+  .values-section { padding: 8rem 2rem; }
+  .values-inner   { max-width: 1280px; margin: 0 auto; }
+  .values-hdr     { max-width: 560px; margin-bottom: 4rem; }
+  .values-grid    { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .val-card {
+    padding: 2.5rem; background: #fff;
+    border-top: 3px solid transparent;
+    transition: border-color .3s, transform .3s, box-shadow .3s;
+    position: relative; overflow: hidden;
+  }
+  .val-card::after {
+    content: attr(data-n); position: absolute;
+    bottom: -1rem; right: .5rem;
+    font-family:'Bebas Neue',sans-serif; font-size:6rem;
+    color:rgba(0,0,0,.03); line-height:1; pointer-events:none;
+  }
+  .val-card:hover { border-top-color:var(--gold); transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,.08); }
+  .val-icon  { font-size:2.2rem; margin-bottom:1.1rem; display:block; }
+  .val-title { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--charcoal); margin-bottom:.6rem; }
+  .val-body  { font-size:.88rem; color:var(--text-muted); line-height:1.8; }
+
+  /* ══════════ TEAM ══════════ */
+  .team-section { padding: 8rem 2rem; background: var(--charcoal); }
+  .team-inner   { max-width: 1280px; margin: 0 auto; }
+  .team-hdr     { margin-bottom: 4rem; }
+  .team-hdr .section-eyebrow { color: rgba(255,255,255,.4); }
+  .team-hdr .section-title   { color: #fff; }
+  .team-grid    { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+  .team-card    { position: relative; overflow: hidden; cursor: pointer; }
+  .team-img-w   { position: relative; overflow: hidden; aspect-ratio: 3/4; }
+  .team-img     { width:100%; height:100%; object-fit:cover; transition:transform .6s,filter .4s; filter:grayscale(25%); }
+  .team-card:hover .team-img { transform:scale(1.07); filter:grayscale(0%); }
+  .team-over    {
+    position:absolute; inset:0;
+    background:linear-gradient(to top,rgba(26,26,26,.92) 0%,transparent 55%);
+    display:flex; flex-direction:column; justify-content:flex-end; padding:1.5rem;
+  }
+  .team-name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:.2rem; }
+  .team-role { font-size:.72rem; text-transform:uppercase; letter-spacing:.15em; color:var(--gold); }
+  .team-bio  { font-size:.8rem; color:rgba(255,255,255,.6); margin-top:.6rem; line-height:1.6; max-height:0; overflow:hidden; transition:max-height .4s,opacity .4s; opacity:0; }
+  .team-card:hover .team-bio { max-height:80px; opacity:1; }
+  .team-links { display:flex; gap:.5rem; margin-top:.7rem; transform:translateY(8px); opacity:0; transition:transform .3s,opacity .3s; }
+  .team-card:hover .team-links { transform:translateY(0); opacity:1; }
+  .team-links a { width:28px;height:28px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.75rem;text-decoration:none;border:1px solid rgba(255,255,255,.15);transition:background .2s; }
+  .team-links a:hover { background:var(--gold); }
+
+  /* ══════════ BHILWARA PRIDE ══════════ */
+  .pride-section { padding: 8rem 2rem; }
+  .pride-inner   { max-width: 1280px; margin: 0 auto; }
+  .pride-grid    { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; margin-top:5rem; }
+  .pride-imgs    { position:relative; height:500px; }
+  .pimg1 { position:absolute; top:0; left:0; width:72%; height:72%; object-fit:cover; }
+  .pimg2 { position:absolute; bottom:0; right:0; width:55%; height:55%; object-fit:cover; border:4px solid var(--cream); box-shadow:-5px -5px 0 var(--gold); }
+  .pride-badge   { position:absolute; bottom:36%; left:65%; background:var(--gold); padding:1rem 1.2rem; font-family:'Bebas Neue',sans-serif; font-size:1.9rem; color:var(--charcoal); line-height:1; text-align:center; z-index:3; }
+  .pride-badge small { display:block; font-size:.52rem; letter-spacing:.15em; margin-top:.2rem; }
+  .facts-list    { display:flex; flex-direction:column; gap:1.5rem; margin-top:2rem; }
+  .fact-row      { display:flex; gap:1.25rem; align-items:flex-start; padding-bottom:1.5rem; border-bottom:1px solid rgba(0,0,0,.06); }
+  .fact-icon     { width:46px; height:46px; flex-shrink:0; background:var(--gold-pale); display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .fact-title    { font-weight:700; font-size:.88rem; color:var(--charcoal); margin-bottom:.25rem; text-transform:uppercase; letter-spacing:.04em; }
+  .fact-body     { font-size:.87rem; color:var(--text-muted); line-height:1.75; }
+
+  /* ══════════ STATS STRIP ══════════ */
+  .stats-strip { background:var(--gold); padding:3.5rem 2rem; }
+  .stats-row   { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; text-align:center; }
+  .ss-num { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4vw,3.2rem); color:var(--charcoal); line-height:1; }
+  .ss-lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:.15em; color:rgba(26,26,26,.5); margin-top:.3rem; font-weight:700; }
+
+  /* ══════════ CTA ══════════ */
+  .cta-section { padding:8rem 2rem; background:var(--charcoal); text-align:center; position:relative; overflow:hidden; }
+  .cta-section::before { content:'BHILWARA'; font-family:'Bebas Neue',sans-serif; font-size:clamp(5rem,14vw,12rem); color:rgba(255,255,255,.025); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap; letter-spacing:.1em; }
+  .cta-box    { position:relative; z-index:1; max-width:680px; margin:0 auto; }
+  .cta-title  { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.4rem); font-weight:900; color:#fff; line-height:1.1; margin-bottom:1.5rem; }
+  .cta-title em { font-style:italic; color:var(--gold-light); }
+  .cta-sub    { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:rgba(255,255,255,.5); line-height:1.8; margin-bottom:2.5rem; }
+  .cta-btns   { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .btn-gold   { background:var(--gold);color:var(--charcoal);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;padding:1rem 2.5rem;border:none;cursor:pointer;transition:background .3s,transform .2s;text-decoration:none;display:inline-block; }
+  .btn-gold:hover { background:var(--gold-light);transform:translateY(-2px); }
+  .btn-ghost  { background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.15em;padding:1rem 2.5rem;cursor:pointer;transition:border-color .3s,color .3s,transform .2s;text-decoration:none;display:inline-block; }
+  .btn-ghost:hover { border-color:var(--gold);color:var(--gold);transform:translateY(-2px); }
+
+  /* ══════════ REVEAL ══════════ */
+  .reveal       { opacity:0; transform:translateY(38px); transition:opacity .75s ease,transform .75s ease; }
+  .reveal-l     { opacity:0; transform:translateX(-40px); transition:opacity .75s ease,transform .75s ease; }
+  .reveal-r     { opacity:0; transform:translateX(40px); transition:opacity .75s ease,transform .75s ease; }
+  .reveal-s     { opacity:0; transform:scale(.92); transition:opacity .75s ease,transform .75s ease; }
+  .reveal.v,.reveal-l.v,.reveal-r.v,.reveal-s.v { opacity:1; transform:none; }
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+  .d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+
+  /* ══════════ KEYFRAMES ══════════ */
+  @keyframes fadeUp        { to{opacity:1;transform:translateY(0)} }
+  @keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  @keyframes scrollPulse   { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(100%)} }
+  @keyframes floatUp       { 0%{opacity:0;transform:translateY(0) rotate(0deg)} 10%{opacity:.09} 90%{opacity:.04} 100%{opacity:0;transform:translateY(-100vh) rotate(360deg)} }
+  .float-icon { position:absolute; font-size:1.1rem; opacity:0; animation:floatUp 9s ease-in infinite; }
+
+  /* ══════════ RESPONSIVE ══════════ */
+  @media(max-width:1024px){
+    .page-hero-inner { grid-template-columns:1fr; }
+    .hero-right      { display:none; }
+    .intro-section   { grid-template-columns:1fr; gap:4rem; }
+    .img-accent      { display:none; }
+    .tl-item         { grid-template-columns:90px 1fr; gap:1.25rem; }
+    .values-grid     { grid-template-columns:1fr 1fr; }
+    .team-grid       { grid-template-columns:1fr 1fr; }
+    .pride-grid      { grid-template-columns:1fr; gap:3rem; }
+    .pride-imgs      { height:360px; }
+    .stats-row       { grid-template-columns:repeat(3,1fr); gap:2rem; }
+  }
+  @media(max-width:640px){
+    .page-hero        { min-height:70vh; padding-bottom:3.5rem; }
+    .hero-title       { font-size:2.6rem; }
+    .intro-section    { padding:5rem 1.25rem; }
+    .intro-stats      { gap:1.5rem; }
+    .timeline         { padding-left:1rem; }
+    .tl-item          { grid-template-columns:1fr; padding-left:2.5rem; }
+    .tl-year          { text-align:left; }
+    .values-grid      { grid-template-columns:1fr; }
+    .team-grid        { grid-template-columns:1fr 1fr; }
+    .stats-row        { grid-template-columns:1fr 1fr; gap:1.5rem 1rem; }
+    .pride-imgs       { height:260px; }
+    .pimg2            { display:none; }
+    .pride-badge      { left:auto; right:1rem; bottom:1rem; }
+    .cta-btns         { flex-direction:column; align-items:center; }
+    .quote-text       { font-size:1.2rem; }
+  }
+</style>
+
+<!-- Floating Icons -->
+<div id="floatWrap" style="position:fixed;inset:0;pointer-events:none;z-index:9989;overflow:hidden;"></div>
+<div class="cursor-dot"  id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="page-hero">
+  <img class="hero-full-img" src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=1800" alt="Bhilwara textile looms">
+  <div class="hero-grad"></div>
+  <div class="hero-lines"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="/">Home</a><sep>/</sep><span style="color:rgba(255,255,255,.5)">Our Story</span>
+    </div>
+    <div class="hero-left">
+      <p class="hero-eyebrow">Est. 1975 · Bhilwara, Rajasthan</p>
+      <h1 class="hero-title">
+        Woven with<br><em>Pride &amp; Purpose</em>
+      </h1>
+    </div>
+    <div class="hero-right">
+      <blockquote class="hero-quote">
+        "From a single loom in a small shed to the heart of India's textile capital — 
+        our story is stitched together by the hands of thousands of skilled weavers."
+      </blockquote>
+      <div class="hero-scroll">
+        <div class="scroll-bar"></div>Scroll to explore
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <% ['Since 1975','Bhilwara Heritage','50+ Years','ISO Certified','Made in Rajasthan','Manchester of India','Direct from Mill','1200+ Patterns','Since 1975','Bhilwara Heritage','50+ Years','ISO Certified','Made in Rajasthan','Manchester of India','Direct from Mill','1200+ Patterns'].forEach(t=>{ %>
+    <div class="marquee-item"><span class="marquee-dot"></span><%= t %></div>
+    <% }) %>
+  </div>
+</div>
+
+<!-- ══════════ INTRO ══════════ -->
+<section>
+  <div class="intro-section">
+
+    <div class="reveal-l">
+      <img class="img-main" src="https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=700" alt="Bhilwara fabric rolls" loading="lazy">
+      <img class="img-accent" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=400" alt="Textile worker" loading="lazy">
+      <div class="yr-badge reveal-s d2">
+        <b>1975</b><small>Year Founded</small>
+      </div>
+    </div>
+
+    <div class="reveal-r d1">
+      <p class="section-eyebrow">Our Beginning</p>
+      <h2 class="section-title">A Legacy Woven <em>Thread by Thread</em></h2>
+      <p class="section-body">
+        It began in 1975 with a single power loom, a family's dream, and the quiet ambition of Bhilwara's artisan tradition. Our founder, Shri Rameshwar Lal Sharma, started weaving plain poly-viscose fabric in a 400 sq. ft. shed on the outskirts of town.
+      </p>
+      <p class="section-body">
+        Today, that shed has grown into a vertically integrated manufacturing unit spanning 3 lakh square feet — spinning, weaving, dyeing, finishing and dispatch all under one roof. We have never outsourced our quality.
+      </p>
+      <p class="section-body">
+        Our fabrics have clothed school children in Kerala, corporate professionals in Mumbai, hotel staff in Dubai, and defence personnel across India. Every metre carries the legacy of five decades of uninterrupted craftsmanship.
+      </p>
+      <div class="intro-stats">
+        <div class="reveal d1"><div class="istat-num" data-count="50">0</div><div class="istat-lbl">Years Active</div></div>
+        <div class="reveal d2"><div class="istat-num" data-count="800">0</div><div class="istat-lbl">Clients Served</div></div>
+        <div class="reveal d3"><div class="istat-num" data-count="3">0</div><div class="istat-lbl">Lakh Sq.Ft. Plant</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ QUOTE ══════════ -->
+<div class="quote-band">
+  <p class="quote-text reveal">
+    "Bhilwara doesn't just manufacture fabric — it manufactures <em>the backbone of Indian clothing.</em>
+    And we have been at its heart for half a century."
+  </p>
+  <p class="quote-attr reveal d2">— Founder's Vision · Bhilwara Textile, Est. 1975</p>
+</div>
+
+<!-- ══════════ TIMELINE ══════════ -->
+<section class="timeline-section">
+  <div class="tl-inner">
+    <div class="tl-hdr reveal">
+      <p class="section-eyebrow" style="justify-content:center">Our Journey</p>
+      <h2 class="section-title" style="text-align:center;max-width:480px;margin:0 auto">Five Decades of <em>Milestones</em></h2>
+    </div>
+
+    <div class="timeline">
+      <%
+      const milestones = [
+        { year:'1975', title:'The First Loom', body:'Shri Rameshwar Lal Sharma sets up a single power loom in Bhilwara. First order: 500 metres of plain grey poly-viscose for a Delhi garment house. The dream begins.', img:null },
+        { year:'1983', title:'Expanding to a Mill', body:'The family invests in 20 additional looms and establishes the first proper mill unit in the Bhilwara Industrial Area. First full-time team of 45 weavers hired.', img:null },
+        { year:'1991', title:'In-House Dyeing Unit', body:'We set up our own dyeing and processing plant — eliminating third-party dependence and achieving full colour control. A game-changer for quality and lead times.', img:'https://images.unsplash.com/photo-1504222490345-c075b7c1bc53?auto=format&fit=crop&q=80&w=500' },
+        { year:'1999', title:'ISO 9001 Certification', body:'Bhilwara Textile becomes one of the first mills in Rajasthan to receive ISO 9001 certification — validating our commitment to world-class standards.', img:null },
+        { year:'2008', title:'Second Generation Takes Over', body:'Shri Rajiv Sharma joins as MD, modernising the facility with rapier and air-jet looms, ERP-based inventory management, and a pan-India dealer network.', img:'https://images.unsplash.com/photo-1580518337843-f959e992563b?auto=format&fit=crop&q=80&w=500' },
+        { year:'2015', title:'Green Manufacturing Initiative', body:'Solar panels installed across the facility. Waterless dyeing technology adopted for 35% of lines. GOTS-certified organic cotton range launched — Bhilwara Textile leads on sustainability.', img:null },
+        { year:'2020', title:'Digital & Export Expansion', body:'B2B portal launched. Direct exports begin to UAE, Bangladesh, and Nepal. Annual turnover crosses ₹120 crore for the first time despite global disruptions.', img:null },
+        { year:'2025', title:'50 Years of Excellence', body:'Half a century of uninterrupted manufacturing. 1200+ patterns, 800+ active clients, 3 lakh sq.ft. facility. A new generation of Bhilwara excellence begins.', img:'https://images.unsplash.com/photo-1544441892-794166f1e3be?auto=format&fit=crop&q=80&w=500' }
+      ];
+      milestones.forEach(m => {
+      %>
+      <div class="tl-item reveal d1">
+        <div class="tl-dot"></div>
+        <div class="tl-year"><%= m.year %></div>
+        <div>
+          <div class="tl-title"><%= m.title %></div>
+          <p class="tl-body"><%= m.body %></p>
+          <% if(m.img){ %><img class="tl-img" src="<%= m.img %>" alt="<%= m.title %>" loading="lazy"><% } %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VALUES ══════════ -->
+<section class="values-section">
+  <div class="values-inner">
+    <div class="values-hdr reveal">
+      <p class="section-eyebrow">What We Stand For</p>
+      <h2 class="section-title">Our Core <em>Values</em></h2>
+      <p class="section-body" style="max-width:440px">Every decision we take — from the fibre we source to the way we pack your order — is guided by these principles.</p>
+    </div>
+    <div class="values-grid">
+      <%
+      const vals = [
+        { icon:'🧵', n:'01', title:'Uncompromising Quality', body:'Every batch tested — GSM, colourfastness, tensile strength, shrinkage. Our NABL-accredited lab never lets a substandard metre leave the floor.' },
+        { icon:'🤝', n:'02', title:'Relationships Over Transactions', body:'We have clients who have been with us for 25+ years. We pick up the phone. We solve problems. We treat your business like our own.' },
+        { icon:'🌿', n:'03', title:'Sustainable Production', body:'Solar energy, waterless dyeing, organic ranges. We believe the future of textiles is green, and we are actively building towards it.' },
+        { icon:'💡', n:'04', title:'Continuous Innovation', body:'200+ new fabric designs every season. New patterns, new blends, new finishes — our R&D team keeps your catalogue fresh and competitive.' },
+        { icon:'⚡', n:'05', title:'Speed & Reliability', body:'Confirmed orders dispatched within 72 hours. Dedicated logistics team. Real-time tracking. Your deadlines are non-negotiable to us.' },
+        { icon:'🏆', n:'06', title:'Pride in Bhilwara', body:'We are ambassadors of Bhilwara\'s 50-year textile legacy. Every metre carries the honour of a city that clothes an entire nation.' }
+      ];
+      vals.forEach((v,i)=>{ %>
+      <div class="val-card reveal d<%= (i%3)+1 %>" data-n="<%= v.n %>">
+        <span class="val-icon"><%= v.icon %></span>
+        <div class="val-title"><%= v.title %></div>
+        <p class="val-body"><%= v.body %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ STATS STRIP ══════════ -->
+<div class="stats-strip">
+  <div class="stats-row">
+    <% [['50','Years Active'],['1200','Fabric Patterns'],['800','Happy Clients'],['300000','Sq.Ft. Facility'],['120','Cr+ Turnover']].forEach(([n,l])=>{ %>
+    <div class="reveal">
+      <div class="ss-num" data-count="<%= n %>">0</div>
+      <div class="ss-lbl"><%= l %></div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+
+<!-- ══════════ TEAM ══════════ -->
+<section class="team-section">
+  <div class="team-inner">
+    <div class="team-hdr reveal">
+      <p class="section-eyebrow">The People Behind the Fabric</p>
+      <h2 class="section-title" style="color:#fff">Meet Our <em style="color:var(--gold-light)">Leadership</em></h2>
+    </div>
+    <div class="team-grid">
+      <%
+      const team = [
+        { name:'Rajiv Sharma', role:'Managing Director', bio:'2nd generation visionary. IIT-Bombay alumnus. Modernised the entire facility after 2008.', img:'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400' },
+        { name:'Priya Sharma', role:'Director – Quality & Sustainability', bio:'Leads our green manufacturing push and NABL lab. Instrumental in GOTS certification.', img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400' },
+        { name:'Arun Mehta', role:'Head of Sales & B2B', bio:'25 years in textile sales. Manages 800+ client relationships across India and exports.', img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400' },
+        { name:'Santosh Verma', role:'Chief Production Officer', bio:'30 years on the loom floor. Oversees all weaving, dyeing, and finishing operations.', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400' }
+      ];
+      team.forEach((m,i)=>{ %>
+      <div class="team-card reveal d<%= i+1 %>">
+        <div class="team-img-w">
+          <img class="team-img" src="<%= m.img %>" alt="<%= m.name %>" loading="lazy">
+          <div class="team-over">
+            <div class="team-name"><%= m.name %></div>
+            <div class="team-role"><%= m.role %></div>
+            <p class="team-bio"><%= m.bio %></p>
+            <div class="team-links">
+              <a href="#" title="LinkedIn">in</a>
+              <a href="#" title="Email">✉</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ BHILWARA PRIDE ══════════ -->
+<section class="pride-section">
+  <div class="pride-inner">
+    <div class="reveal" style="text-align:center">
+      <p class="section-eyebrow" style="justify-content:center">Bhilwara — India's Textile Capital</p>
+      <h2 class="section-title" style="text-align:center;max-width:580px;margin:0 auto">Why <em>Bhilwara</em> is the Heart of India's Fabric</h2>
+    </div>
+    <div class="pride-grid">
+
+      <div class="pride-imgs reveal-l">
+        <img class="pimg1" src="https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=600" alt="Bhilwara fabric" loading="lazy">
+        <img class="pimg2" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=400" alt="Weaving" loading="lazy">
+        <div class="pride-badge">40%<small>of India's<br>Suiting</small></div>
+      </div>
+
+      <div class="reveal-r d2">
+        <p class="section-eyebrow">City of Looms</p>
+        <h3 class="section-title">The <em>Manchester of India</em></h3>
+        <p class="section-body">Bhilwara is not just a city — it is a phenomenon. Home to over 100 integrated textile mills and 1,000+ power loom units, this Rajasthani city produces fabric for the entire subcontinent and beyond.</p>
+        <div class="facts-list">
+          <% [
+            ['🏭','100+ Integrated Mills','Bhilwara houses one of the highest concentrations of textile manufacturing units in any single Indian city — all within a few square kilometres.'],
+            ['🧵','40% of National Suiting Output','Nearly 40% of all suiting fabric consumed in India originates from Bhilwara\'s looms — a statistic that has held strong for three decades.'],
+            ['👷','5 Lakh+ Livelihoods','The textile industry supports over five lakh direct and indirect jobs in the Bhilwara region, making textiles the lifeblood of the local economy.'],
+            ['🌍','Exported to 30+ Countries','Bhilwara fabric reaches UAE, UK, Bangladesh, Nepal, Sri Lanka and beyond — carrying Indian craftsmanship across the globe.']
+          ].forEach(([ico,ttl,bdy])=>{ %>
+          <div class="fact-row reveal d2">
+            <div class="fact-icon"><%= ico %></div>
+            <div>
+              <div class="fact-title"><%= ttl %></div>
+              <p class="fact-body"><%= bdy %></p>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta-section">
+  <div class="cta-box">
+    <p class="section-eyebrow reveal" style="justify-content:center;color:rgba(255,255,255,.35)">Ready to Work Together?</p>
+    <h2 class="cta-title reveal d1">Let's Build Something <em>Remarkable</em></h2>
+    <p class="cta-sub reveal d2">Whether you need 100 metres or 1 lakh metres — we'd love to be your fabric partner. Reach out for samples, pricing, or a factory visit.</p>
+    <div class="cta-btns reveal d3">
+      <a href="/#inquiry"                  class="btn-gold">📩 Send Enquiry</a>
+      <a href="/fabrics"                   class="btn-ghost">View Fabrics</a>
+      <a href="https://wa.me/91XXXXXXXXXX" class="btn-ghost">💬 WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+(function(){
+
+  /* ── Cursor ── */
+  const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+  document.addEventListener('mousemove',e=>{
+    dot.style.transform=`translate(${e.clientX-4}px,${e.clientY-4}px)`;
+    ring.style.transform=`translate(${e.clientX-18}px,${e.clientY-18}px)`;
+  });
+  document.querySelectorAll('a,button,.team-card,.val-card,.tl-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
+  });
+
+  /* ── Floating Icons ── */
+  const icons=['🧵','🪡','✂️','🧶','📐','🪢'];
+  const fc=document.getElementById('floatWrap');
+  for(let i=0;i<14;i++){
+    const el=document.createElement('div');
+    el.className='float-icon';
+    el.textContent=icons[Math.floor(Math.random()*icons.length)];
+    el.style.cssText=`left:${Math.random()*100}vw;bottom:${Math.random()*10}vh;animation-delay:${Math.random()*9}s;animation-duration:${8+Math.random()*7}s;font-size:${0.6+Math.random()*0.9}rem;`;
+    fc.appendChild(el);
+  }
+
+  /* ── Scroll Reveal ── */
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');obs.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-s').forEach(el=>obs.observe(el));
+
+  /* ── Counters ── */
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const co=new IntersectionObserver(entries=>{
+      if(!entries[0].isIntersecting)return;
+      const t=parseInt(el.dataset.count),big=t>=100000;
+      let n=0;const step=t/60;
+      const tm=setInterval(()=>{
+        n=Math.min(n+step,t);
+        el.textContent=big?Math.floor(n/1000)+'K+':Math.floor(n)+'+';
+        if(n>=t)clearInterval(tm);
+      },22);
+      co.unobserve(el);
+    },{threshold:.4});
+    co.observe(el);
+  });
+
+  /* ── Hero Parallax ── */
+  const hi=document.querySelector('.hero-full-img');
+  window.addEventListener('scroll',()=>{
+    if(hi&&window.scrollY<window.innerHeight)
+      hi.style.transform=`scale(1.05) translateY(${window.scrollY*.06}px)`;
+  });
+
+})();
+</script>

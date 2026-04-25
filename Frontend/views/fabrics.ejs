@@ -1,0 +1,295 @@
+<%- include('partials/header') %>
+
+<div id="floatingIcons" style="position:fixed;inset:0;pointer-events:none;z-index:9989;overflow:hidden;"></div>
+
+<div class="cursor-dot"  id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <img class="page-hero-img" src="https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=1600" alt="Fabric rolls background">
+
+  <svg class="hero-weave" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <% for(let i=0;i<12;i++){ %>
+    <line x1="0" y1="<%= i*50 %>" x2="500" y2="<%= i*50 + 200 %>" stroke="#c8962a" stroke-width=".8" opacity="0.6"/>
+    <% } %>
+    <% for(let i=0;i<10;i++){ %>
+    <line x1="<%= i*55 %>" y1="0" x2="<%= i*55 - 100 %>" y2="600" stroke="#c8962a" stroke-width=".5" opacity="0.4"/>
+    <% } %>
+  </svg>
+
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span style="color:rgba(255,255,255,.55)">Our Fabrics</span>
+    </div>
+    <p class="page-hero-label">Our Collection</p>
+    <h1 class="page-hero-title">
+      Premium Fabrics<br>
+      <em>Direct From the Loom</em>
+    </h1>
+    <p class="page-hero-sub">
+      1200+ fabric patterns. 4 core categories. Zero middlemen. 
+      Everything you need for suitings, shirtings, uniforms and beyond — 
+      straight from Bhilwara's finest manufacturing units.
+    </p>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <% ['Cotton Suitings','Poly-Viscose Blends','Uniform Fabrics','Premium Shirtings','Woolen Blends','Custom Dyeing','ISO Certified','Direct from Mill','Cotton Suitings','Poly-Viscose Blends','Uniform Fabrics','Premium Shirtings','Woolen Blends','Custom Dyeing','ISO Certified','Direct from Mill'].forEach(t => { %>
+    <div class="marquee-item"><span class="marquee-dot"></span><%= t %></div>
+    <% }) %>
+  </div>
+</div>
+
+<div class="feature-banner reveal">
+  <div class="feature-banner-inner">
+    <div class="fb-left">
+      <div class="fb-label">Why Order From Us</div>
+      <h3>Mill-Direct Quality. <em>Wholesale Pricing.</em></h3>
+      <p>No agents. No markup. We manufacture and supply — you get the best price on the best fabric.</p>
+    </div>
+    <div class="fb-stats">
+      <div class="fb-stat">
+        <div class="fb-stat-num" data-count="1200">0</div>
+        <div class="fb-stat-lbl">Patterns</div>
+      </div>
+      <div class="fb-stat">
+        <div class="fb-stat-num" data-count="4">0</div>
+        <div class="fb-stat-lbl">Categories</div>
+      </div>
+      <div class="fb-stat">
+        <div class="fb-stat-num" data-count="72">0</div>
+        <div class="fb-stat-lbl">Hr Dispatch</div>
+      </div>
+      <div class="fb-stat">
+        <div class="fb-stat-num" data-count="100">0</div>
+        <div class="fb-stat-lbl">Min. Metres</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="filter-section">
+  <div class="filter-inner">
+    <div class="filter-top reveal">
+      <div>
+        <div class="filter-title">All Fabrics</div>
+        <div class="filter-count" id="fabricCount">Showing all 12 fabrics</div>
+      </div>
+      <div class="grid-toggle">
+        <button class="grid-btn active" id="btn3col" title="3 columns">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="4" height="4" stroke-width="1.5"/><rect x="6" y="1" width="4" height="4" stroke-width="1.5"/><rect x="11" y="1" width="4" height="4" stroke-width="1.5"/><rect x="1" y="7" width="4" height="4" stroke-width="1.5"/><rect x="6" y="7" width="4" height="4" stroke-width="1.5"/><rect x="11" y="7" width="4" height="4" stroke-width="1.5"/></svg>
+        </button>
+        <button class="grid-btn" id="btn2col" title="2 columns">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" stroke-width="1.5"/></svg>
+        </button>
+        <button class="grid-btn" id="btn1col" title="List view">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="4" stroke-width="1.5"/><rect x="1" y="7" width="14" height="4" stroke-width="1.5"/><rect x="1" y="13" width="14" height="2" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="filter-tags reveal delay-1" id="filterTags">
+      <button class="filter-btn active" data-filter="all"><span>All Fabrics</span></button>
+      <button class="filter-btn" data-filter="suiting"><span>Suitings</span></button>
+      <button class="filter-btn" data-filter="shirting"><span>Shirtings</span></button>
+      <button class="filter-btn" data-filter="uniform"><span>Uniforms</span></button>
+      <button class="filter-btn" data-filter="woolen"><span>Woolen Blends</span></button>
+      <button class="filter-btn" data-filter="custom"><span>Custom Range</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="fabrics-section">
+  <div class="fabrics-inner">
+    <div class="fabrics-grid" id="fabricsGrid">
+
+      <%
+      const fabrics = [
+        {
+          name: "Classic Poly-Viscose Suiting",
+          category: "suiting",
+          catLabel: "Suiting",
+          badge: "Bestseller", badgeClass: "",
+          desc: "India's most trusted suiting blend. Rich texture, wrinkle resistance, and 200+ shades available. Ideal for corporate formals and school uniforms.",
+          gsm: "200–260 GSM", moq: "100 Metres", width: "58 inches", finish: "Anti-wrinkle",
+          swatches: ["#1a2a4a","#3d3d3d","#4a2c0a","#2c4a2c","#5a4a2a"],
+          img: "https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=700",
+          large: true
+        },
+        {
+          name: "Pure Cotton Oxford Shirting",
+          category: "shirting",
+          catLabel: "Shirting",
+          badge: "Popular", badgeClass: "",
+          desc: "Crisp, breathable, premium-feel Oxford weave cotton. Perfect for formal and casual shirt manufacturing at scale.",
+          gsm: "120–140 GSM", moq: "100 Metres", width: "60 inches", finish: "Soft-feel",
+          swatches: ["#ffffff","#e8e8e8","#b8d4e8","#d8c4b8","#f0e8d8"],
+          img: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "School Uniform Twill",
+          category: "uniform",
+          catLabel: "Uniform",
+          badge: "Bulk Preferred", badgeClass: "",
+          desc: "Robust poly-cotton twill specifically designed for school uniforms. Colour retention tested up to 50 washes. Fast delivery on bulk orders.",
+          gsm: "180–220 GSM", moq: "200 Metres", width: "58 inches", finish: "Shrink-proof",
+          swatches: ["#1a3a6a","#2a5a3a","#4a1a1a","#3a2a5a","#1a4a4a"],
+          img: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Superfine Wool-Poly Suiting",
+          category: "woolen",
+          catLabel: "Woolen",
+          badge: "Premium", badgeClass: "new",
+          desc: "Luxurious warmth with sharp drape. Our winter suiting range blends finest wool with polyester for shape retention and comfort in cold climates.",
+          gsm: "280–340 GSM", moq: "100 Metres", width: "58 inches", finish: "Brushed finish",
+          swatches: ["#2c2c2c","#4a3a2a","#3a2a4a","#2a3a2a","#4a4a2a"],
+          img: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Linen-Look Poly Shirting",
+          category: "shirting",
+          catLabel: "Shirting",
+          badge: "Summer Special", badgeClass: "",
+          desc: "Achieves the natural texture and breathability of linen at a fraction of the cost. High-volume summer shirt production staple.",
+          gsm: "110–130 GSM", moq: "100 Metres", width: "60 inches", finish: "Linen texture",
+          swatches: ["#d4c4a8","#b8c4b8","#c8b4a0","#e0d4c0","#a8b8c8"],
+          img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Corporate Uniform Serge",
+          category: "uniform",
+          catLabel: "Uniform",
+          badge: "Corporate Pick", badgeClass: "",
+          desc: "Polished serge weave for hotel staff, security personnel, and corporate uniform programs. Maintains crease and colour after repeated washing.",
+          gsm: "220–250 GSM", moq: "200 Metres", width: "58 inches", finish: "Anti-pilling",
+          swatches: ["#1a1a2a","#2a2a3a","#1a2a1a","#3a1a1a","#2a3a3a"],
+          img: "https://images.unsplash.com/photo-1544441892-794166f1e3be?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Organic GOTS Cotton Shirting",
+          category: "shirting",
+          catLabel: "Shirting",
+          badge: "Eco", badgeClass: "eco",
+          desc: "GOTS-certified 100% organic cotton. Zero harmful dyes, waterless processing. The conscious choice for sustainable fashion brands.",
+          gsm: "130–150 GSM", moq: "100 Metres", width: "60 inches", finish: "Enzyme washed",
+          swatches: ["#e8dcc8","#c8d4c0","#d4c8b8","#b8c4b0","#e0d0b8"],
+          img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Custom Dobby Suiting",
+          category: "custom",
+          catLabel: "Custom",
+          badge: "Custom MOQ", badgeClass: "custom",
+          desc: "Woven-to-order dobby patterns for fashion houses and boutique brands. Provide your design file — our jacquard looms handle the rest.",
+          gsm: "220–280 GSM", moq: "300 Metres", width: "58 inches", finish: "Custom",
+          swatches: ["#8a6a4a","#4a6a8a","#6a4a8a","#8a4a4a","#4a8a6a"],
+          img: "https://images.unsplash.com/photo-1504198322253-cfa87a0ff60f?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Melange Jersey Suiting",
+          category: "suiting",
+          catLabel: "Suiting",
+          badge: "New Season", badgeClass: "new",
+          desc: "Heathered melange effect with gentle stretch. Modern suiting for the contemporary workwear buyer who values comfort without compromising on sharpness.",
+          gsm: "200–230 GSM", moq: "100 Metres", width: "60 inches", finish: "2-way stretch",
+          swatches: ["#7a7a7a","#9a8a7a","#6a7a6a","#7a6a7a","#8a8a6a"],
+          img: "https://images.unsplash.com/photo-1580518337843-f959e992563b?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Defence & Industrial Drill",
+          category: "uniform",
+          catLabel: "Uniform",
+          badge: "Heavy Duty", badgeClass: "",
+          desc: "High-tenacity polyester-cotton drill for defence, industrial workwear, and security uniforms. Tear-resistant and maintains rigidity under stress.",
+          gsm: "260–300 GSM", moq: "500 Metres", width: "58 inches", finish: "Starch-free",
+          swatches: ["#2a3a1a","#1a2a1a","#3a3a1a","#1a1a1a","#2a2a2a"],
+          img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Tweed Wool Overcoating",
+          category: "woolen",
+          catLabel: "Woolen",
+          badge: "Winter Range", badgeClass: "new",
+          desc: "Heavy-weight tweed-effect wool blend for overcoats and jackets. Rich texture, outstanding warmth, available in 40+ heritage colour options.",
+          gsm: "380–450 GSM", moq: "100 Metres", width: "60 inches", finish: "Milled finish",
+          swatches: ["#5a4a3a","#3a4a5a","#4a3a5a","#5a3a3a","#3a5a3a"],
+          img: "https://images.unsplash.com/photo-1548778052-311f4bc2b502?auto=format&fit=crop&q=80&w=700"
+        },
+        {
+          name: "Printed Ethnic Suiting",
+          category: "custom",
+          catLabel: "Custom",
+          badge: "Ethnic Range", badgeClass: "custom",
+          desc: "Digital and rotary printed suiting fabric with traditional motifs — paisleys, block prints, and geometric patterns inspired by Rajasthan's craft heritage.",
+          gsm: "180–220 GSM", moq: "200 Metres", width: "58 inches", finish: "Rotary print",
+          swatches: ["#c8522a","#e8a82a","#2a6a4a","#4a2a8a","#c82a6a"],
+          img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?auto=format&fit=crop&q=80&w=700"
+        }
+      ];
+      %>
+
+      <% fabrics.forEach((f, i) => { %>
+      <div class="fabric-card reveal delay-<%= (i%3)+1 %> <%= f.large ? 'large' : '' %>" data-category="<%= f.category %>">
+        <div class="fabric-img-wrap">
+          <img class="fabric-img" src="<%= f.img %>" alt="<%= f.name %>" loading="lazy">
+          <% if(f.badge){ %><div class="fabric-badge <%= f.badgeClass %>"><%= f.badge %></div><% } %>
+          <button class="fabric-wish" onclick="this.classList.toggle('wished');this.textContent=this.classList.contains('wished')?'❤️':'🤍'">🤍</button>
+          
+ <div class="fabric-swatches">
+    <% if (f && f.swatches && Array.isArray(f.swatches)) { %>
+        <% f.swatches.forEach(color => { %>
+            <div class="swatch" "></div>
+        <% }) %>
+    <% } else { %>
+        <span>No colors available</span>
+    <% } %>
+</div>
+        </div> 
+
+        <div class="fabric-body">
+          <div class="fabric-cat"><%= f.catLabel %></div>
+          <div class="fabric-name"><%= f.name %></div>
+          <div class="fabric-desc"><%= f.desc %></div>
+          <div class="fabric-meta">
+            <div class="meta-item"><span class="meta-label">GSM</span><span class="meta-value"><%= f.gsm %></span></div>
+            <div class="meta-item"><span class="meta-label">Min Order</span><span class="meta-value"><%= f.moq %></span></div>
+            <div class="meta-item"><span class="meta-label">Width</span><span class="meta-value"><%= f.width %></span></div>
+            <div class="meta-item"><span class="meta-label">Finish</span><span class="meta-value"><%= f.finish %></span></div>
+          </div>
+          <div class="fabric-actions">
+            <button class="btn-enquire" onclick="openModal('<%= f.name %>')"><span>📩 Enquire Now</span></button>
+            <button class="btn-sample" onclick="openModal('<%= f.name %>', true)">Request Sample</button>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+
+    </div><div class="load-more-wrap reveal">
+      <button class="btn-load-more" id="loadMoreBtn"><span>Load More Fabrics</span></button>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-label" id="modalMode">Request Sample</div>
+    <div class="modal-title" id="modalTitle">Fabric Name</div>
+    <p class="modal-sub">Fill in your details and we'll get back within 4 working hours with pricing, availability, and sample dispatch info.</p>
+    <form class="modal-form" action="/inquiry" method="POST">
+      <input type="hidden" name="fabric" id="modalFabricInput">
+      <input class="modal-input" type="text"  name="name"  placeholder="Your Name *" required>
+      <input class="modal-input" type="tel"   name="phone" placeholder="Phone / WhatsApp *" required>
+      <input class="modal-input" type="email" name="email" placeholder="Email Address">
+      <input class="modal-input" type="text"  name="qty"   placeholder="Quantity Required (e.g. 500 metres)">
+      <button class="modal-submit" type="submit">Send Enquiry →</button>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
