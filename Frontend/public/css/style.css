@@ -1132,7 +1132,32 @@ body::before { content:'';position:fixed;inset:0;background-image:url("data:imag
   .feature-banner-inner { flex-direction:column; }
 }
 
+/* ══════════ CIRCULAR CATEGORY SLIDER ══════════ */
+.bt-circle-slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 2rem 0;
+}
 
+/* Slider ke track ko flex aur animation dena */
+.bt-circle-track {
+    display: flex;
+    gap: 3rem; /* Gol circles ke beech ka gap */
+    width: max-content;
+    animation: scrollCircles 20s linear infinite;
+}
+
+/* Hover karne par slider rukega taaki user click kar sake */
+.bt-circle-slider-wrapper:hover .bt-circle-track {
+    animation-play-state: paused;
+}
+
+/* Loop Animation */
+@keyframes scrollCircles {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
 
 /* admin ke dashbroad work */

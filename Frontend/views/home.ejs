@@ -9,7 +9,8 @@
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- ══════════ ABOUT ══════════ --><section class="py-16 bg-gray-50">
+<!-- ══════════ ABOUT ══════════ -->
+ <section class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             
@@ -75,7 +76,63 @@
         </div>
     </div>
 </section>
+<section id="bhilwara-featured-categories" class="py-16 bg-white relative">
+    
+    <div class="text-center mb-10 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 font-['Playfair_Display']">Most Popular Categories</h2>
+        <p class="text-gray-500 mt-2 text-sm md:text-base font-['Lato']">Browse the most desirable categories</p>
+    </div>
 
+    <div class="bt-circle-slider-wrapper max-w-7xl mx-auto px-4 reveal delay-1">
+        
+        <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+        <div class="bt-circle-track">
+            
+            <% if (categories && categories.length > 0) { %>
+                
+                <% categories.forEach(function(cat) { %>
+                    <a href="/fabrics?cat=<%= cat.name.toLowerCase().replace(/\s+/g, '-') %>" class="group flex flex-col items-center min-w-[140px] cursor-pointer">
+                        
+                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-50 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-[#c8962a] group-hover:shadow-[0_0_20px_rgba(200,150,42,0.2)] transition-all duration-300 overflow-hidden relative">
+                            <% if (cat.image) { %>
+                                <img src="<%= cat.image %>" alt="<%= cat.name %>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <% } else { %>
+                                <span class="text-3xl transform group-hover:scale-110 transition-transform duration-300">🧵</span>
+                            <% } %>
+                        </div>
+
+                        <span class="mt-4 text-sm font-bold text-gray-700 group-hover:text-[#c8962a] transition-colors text-center w-full px-2 font-['Lato']">
+                            <%= cat.name %>
+                        </span>
+                    </a>
+                <% }); %>
+
+                <% categories.forEach(function(cat) { %>
+                    <a href="/fabrics?cat=<%= cat.name.toLowerCase().replace(/\s+/g, '-') %>" class="group flex flex-col items-center min-w-[140px] cursor-pointer">
+                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-50 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-[#c8962a] group-hover:shadow-[0_0_20px_rgba(200,150,42,0.2)] transition-all duration-300 overflow-hidden relative">
+                            <% if (cat.image) { %>
+                                <img src="<%= cat.image %>" alt="<%= cat.name %>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <% } else { %>
+                                <span class="text-3xl transform group-hover:scale-110 transition-transform duration-300">🧵</span>
+                            <% } %>
+                        </div>
+                        <span class="mt-4 text-sm font-bold text-gray-700 group-hover:text-[#c8962a] transition-colors text-center w-full px-2 font-['Lato']">
+                            <%= cat.name %>
+                        </span>
+                    </a>
+                <% }); %>
+
+            <% } else { %>
+                <div class="text-center w-full py-10 text-gray-500 font-bold w-full">
+                    No categories found.
+                </div>
+            <% } %>
+
+        </div>
+    </div>
+</section>   
 
 
 

@@ -15,7 +15,12 @@ const categorySchema = new mongoose.Schema({
   // Category ki thodi details (e.g., "Best for summer wear")
   description: { 
     type: String 
+  },
+// 📸 NAYA FIELD: Image ka path save karne ke liye
+  image: { 
+    type: String 
   }
+
 
 }, { timestamps: true }); // timestamps se 'kab bani' aur 'kab update hui' apne aap save ho jayega
 

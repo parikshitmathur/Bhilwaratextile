@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Buyers - Textile Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex justify-center items-center min-h-screen py-10">
+
+    <div class="max-w-6xl w-full bg-white p-8 md:p-12 flex flex-col md:flex-row gap-12 shadow-sm rounded-lg relative">
+        
+        <div class="w-full md:w-1/2">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">For Buyers</h1>
+            <p class="text-gray-500 mb-10">We lead buyers to the Right Textile Suppliers.</p>
+
+            <div class="flex items-start gap-4 mb-8">
+                <div class="bg-blue-100 p-3 rounded-full shrink-0">
+                    <span class="text-3xl">🔍</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 uppercase">Choose Relevant Category</h3>
+                    <p class="text-gray-500 text-sm mt-1">Select your needs category and find best suppliers across the globe for any textile products.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4 mb-8">
+                <div class="bg-blue-100 p-3 rounded-full shrink-0">
+                    <span class="text-3xl">🏪</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 uppercase">Get Numerous Seller Contacts</h3>
+                    <p class="text-gray-500 text-sm mt-1">Get the best sourcing options for all your textile needs straight to your inbox.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+                <div class="bg-blue-100 p-3 rounded-full shrink-0">
+                    <span class="text-3xl">👍</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 uppercase">Get Multiple Quotes</h3>
+                    <p class="text-gray-500 text-sm mt-1">Select the right vendors and get multiple quotes for your daily textile needs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 flex flex-col items-center justify-center">
+            <div class="w-full bg-white shadow-xl rounded-lg border border-gray-100 overflow-hidden">
+                <div class="bg-[#1e3a8a] text-white text-center py-4 font-bold text-lg uppercase tracking-wide">
+                    Post Textile Requirement
+                </div>
+                <div class="p-6 md:p-8">
+                    <form action="/submit-requirement" method="POST" class="space-y-5">
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Company / Buyer Name</label>
+                            <input type="text" name="name" required placeholder="e.g. Fashion Exports Ltd." class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Mobile Number</label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l text-sm">+91</span>
+                                    <input type="tel" name="mobile" required placeholder="9876543210" class="w-full p-3 border border-gray-300 rounded-r focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                                <input type="email" name="email" required placeholder="buyer@email.com" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Textile Category</label>
+                            <select name="category" required class="w-full p-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                <option value="" disabled selected>-- Select Fabric Type --</option>
+                                <option value="pv_blends">PV Blends (Polyester Viscose)</option>
+                                <option value="premium_suiting">Premium Suiting & Shirting</option>
+                                <option value="denim">Denim Fabric</option>
+                                <option value="melange_cotton">Mélange & Cotton</option>
+                                <option value="uniform">Uniform & Technical Textiles</option>
+                                <option value="linen_wool">Linen & Wool Blends</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Estimated Quantity (Meters)</label>
+                            <input type="number" name="quantity" required placeholder="e.g. 5000" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+
+                        <button type="submit" class="w-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold text-lg py-4 rounded-lg shadow-md transition duration-300 mt-4">
+                            Submit Requirement
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
