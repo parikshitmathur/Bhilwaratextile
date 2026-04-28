@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Requirement = require('../models/Requirement');
-
+const Category = require('../models/Category'); //
 // GET Route: फॉर्म दिखाने के लिए
-router.get('/buyer', (req, res) => {
-    res.render('buyer'); 
+router.get('/buyer', async (req, res) => {
+    const allCategories = await Category.find();
+    res.render('buyer', { categories: allCategories });
 });
-
 // POST Route: फॉर्म का डेटा डेटाबेस में ठूसने के लिए
 router.post('/submit-requirement', async (req, res) => {
     try {
@@ -35,7 +35,7 @@ router.post('/submit-requirement', async (req, res) => {
         `);
 
     } catch (error) {
-        console.error("Hag diya code ne:", error);
+        console.error("error", error);
         res.status(500).send("<h1>Server Error. Check console!</h1>");
     }
 });

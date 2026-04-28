@@ -22,33 +22,56 @@ const upload = multer({ storage: storage });
 
 
 // 🔴 POST: Category Add (With Image) -> 'upload.single("image")' add kiya hai
+// ... baaki imports wahi rahenge ...
+// 🔴 POST: Category Add/Update (Smart Route)
 router.post('/add', upload.single('image'), async (req, res) => {
   try {
-    // Agar photo upload hui hai, toh uska public path save karo
-    // Taaki EJS usko <img src="/images/category-img/xyz.jpg"> karke dikha sake
     let imagePath = '';
     if (req.file) {
       imagePath = '/images/category-img/' + req.file.filename;
     }
 
-    await Category.create({
-      name: req.body.name,
-      description: req.body.description,
-      image: imagePath // 📸 Database mein path save ho gaya
-    });
+    // Comma-separated subcategories ko array mein badlo
+    let subCatArray = [];
+    if (req.body.subcategories) {
+        // Filter lagaya hai taaki khali space ya extra comma na save ho
+        subCatArray = req.body.subcategories.split(',').map(item => item.trim()).filter(item => item !== "");
+    }
+
+    // 🧠 SMART LOGIC: Pehle check karo ki category already hai kya?
+    let existingCategory = await Category.findOne({ name: req.body.name });
+
+    if (existingCategory) {
+        // 🔹 AGAR PEHLE SE HAI -> Toh usko Update karo
+        
+        if (imagePath) existingCategory.image = imagePath; // Agar nayi photo dali hai toh update kar do
+        if (req.body.description) existingCategory.description = req.body.description;
+
+        // Purani aur nayi subcategories ko mila do (Set ka use kiya taaki duplicate entry na ho)
+        existingCategory.subcategories = [...new Set([...existingCategory.subcategories, ...subCatArray])];
+
+        await existingCategory.save();
+        console.log(`✅ Category '${req.body.name}' Update ho gayi!`);
+
+    } else {
+        // 🔹 AGAR NAHI HAI -> Toh Nayi Category Banao
+        
+        await Category.create({
+          name: req.body.name,
+          description: req.body.description,
+          image: imagePath,
+          subcategories: subCatArray
+        });
+        console.log(`🚀 Nayi Category '${req.body.name}' Ban gayi!`);
+    }
 
     res.redirect('/admin/add-category');
 
   } catch (error) {
-    if(error.code === 11000) {
-      return res.status(400).send("Bhai, ye category pehle se bani hui hai!");
-    }
     console.log("Upload Error:", error);
-    res.status(500).send("Server mein photo save karne mein gadbad hui!");
+    res.status(500).send("Galti ho gayi bhai!");
   }
 });
-
-
 // 🟢 GET: Saari Categories lene ke liye
 router.get('/all', async (req, res) => {
   try {

@@ -19,7 +19,12 @@ const categorySchema = new mongoose.Schema({
 // 📸 NAYA FIELD: Image ka path save karne ke liye
   image: { 
     type: String 
-  }
+  },
+  // 🆕 NAYA FIELD: Sub-categories save karne ke liye
+  subcategories: [{
+    type: String,
+    trim: true
+  }]
 
 
 }, { timestamps: true }); // timestamps se 'kab bani' aur 'kab update hui' apne aap save ho jayega

@@ -74,15 +74,40 @@
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Textile Category</label>
-                            <select name="category" required class="w-full p-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                                <option value="" disabled selected>-- Select Fabric Type --</option>
-                                <option value="pv_blends">PV Blends (Polyester Viscose)</option>
-                                <option value="premium_suiting">Premium Suiting & Shirting</option>
-                                <option value="denim">Denim Fabric</option>
-                                <option value="melange_cotton">Mélange & Cotton</option>
-                                <option value="uniform">Uniform & Technical Textiles</option>
-                                <option value="linen_wool">Linen & Wool Blends</option>
-                            </select>
+                       <select id="mainCat" name="category" onchange="updateSubCats()" class="...">
+    <option value="" disabled selected>Select Category</option>
+    <% categories.forEach(cat => { %>
+        <option value="<%= cat.name %>" data-subs="<%= cat.subcategories.join(',') %>">
+            <%= cat.name %>
+        </option>
+    <% }) %>
+</select>
+
+<select id="subCat" name="subcategory" class="...">
+    <option value="">-- Select Sub Category --</option>
+</select>
+
+<script>
+function updateSubCats() {
+    const mainSelect = document.getElementById('mainCat');
+    const subSelect = document.getElementById('subCat');
+    const selectedOption = mainSelect.options[mainSelect.selectedIndex];
+    
+    // Sub-categories nikaalo data attribute se
+    const subs = selectedOption.getAttribute('data-subs');
+    
+    subSelect.innerHTML = '<option value="">-- Select Sub Category --</option>';
+    
+    if (subs) {
+        subs.split(',').forEach(s => {
+            const op = document.createElement('option');
+            op.value = s;
+            op.innerText = s;
+            subSelect.appendChild(op);
+        });
+    }
+}
+</script>
                         </div>
 
                         <div>
