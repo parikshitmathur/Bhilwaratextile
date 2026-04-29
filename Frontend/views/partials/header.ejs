@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title> 
+   <title><%= typeof title !== 'undefined' ? title : "Bhilwara Textile" %></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/main.js" defer></script>
@@ -35,9 +35,11 @@
             <div class="flex justify-between items-center h-20">
                 
                 <div class="flex-shrink-0 transition-transform duration-300 hover:scale-105 cursor-pointer">
-                    <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
-                        BHILWARA<span class="text-yellow-600">TEXTILE</span>
-                    </h2>
+                    <a href="/">
+                        <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
+                            BHILWARA<span class="text-yellow-600">TEXTILE</span>
+                        </h2>
+                    </a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8 h-full">
@@ -91,6 +93,9 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <a href="/seller" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition">For Sellers</a>
+                    
                     <a href="/about" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition">Our Story</a>
                     
                     <div class="flex items-center space-x-4 pl-4 border-l border-gray-300">
@@ -101,7 +106,7 @@
                             <div class="flex items-center space-x-2 text-sm font-bold text-gray-800">
                                 <a href="/login" class="hover:text-blue-600 transition">Sign In</a>
                                 <span class="text-gray-400">|</span>
-                                <a href="/register" class="hover:text-blue-600 transition flex items-center gap-1">
+                                <a href="/join-free" class="hover:text-blue-600 transition flex items-center gap-1">
                                     Free Join
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </a>
@@ -110,7 +115,7 @@
                         </div>
                     </div>
 
-                    <a href="#inquiry" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-gray-900 rounded-lg hover:bg-yellow-600">
+                    <a href="/buyer" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-gray-900 rounded-lg hover:bg-yellow-600">
                         GET QUOTE
                     </a>
                 </div>

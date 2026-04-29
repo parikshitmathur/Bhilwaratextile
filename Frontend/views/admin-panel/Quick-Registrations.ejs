@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#f4f0e8] min-h-screen flex overflow-hidden font-['Lato']">
+
+    <%- include('partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <%- include('partials/header') %>
+
+        <main class="flex-1 overflow-y-auto p-8 flex items-start justify-center">
+            <div class="bg-white w-full max-w-5xl rounded-2xl shadow-xl overflow-hidden mt-4">
+                
+                <div class="bg-[#1a1a1a] px-8 py-6 border-b-4 border-[#c8962a]">
+                    <h2 class="text-2xl text-white font-bold font-['Playfair_Display'] tracking-wider">
+                        Quick <span class="text-[#c8962a]">Registrations</span> (Leads)
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-1">Users who joined via the 'Free Join' mobile number form.</p>
+                </div>
+
+                <div class="p-6">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 border-b-2 border-gray-200">
+                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">S.No</th>
+                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Mobile Number</th>
+                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Status</th>
+                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <% registrations.forEach(function(reg, index) { %>
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="p-4 text-gray-500 font-bold"><%= index + 1 %></td>
+                                    <td class="p-4 font-bold text-lg text-blue-600">+91 <%= reg.mobile %></td>
+                                    <td class="p-4">
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">
+                                            <%= reg.status %>
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">
+                                        <%= new Date(reg.createdAt).toLocaleString('en-IN') %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>
