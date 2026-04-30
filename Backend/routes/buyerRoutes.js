@@ -3,7 +3,7 @@ const router = express.Router();
 const Requirement = require('../models/Requirement');
 const Category = require('../models/Category'); //
 // GET Route: फॉर्म दिखाने के लिए
-router.get('/buyer', async (req, res) => {
+router.get('user/buyer', async (req, res) => {
     const allCategories = await Category.find();
     res.render('buyer', { categories: allCategories });
 });

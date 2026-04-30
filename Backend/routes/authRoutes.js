@@ -15,11 +15,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+
 // 🟢 1. UI Pages dikhane ke routes (Naye pages bhi jod diye)
-router.get('/register', (req, res) => res.render('register'));
-router.get('/login', (req, res) => res.render('login'));
-router.get('/forgot-password', (req, res) => res.render('forgot-password')); // NAYA
-router.get('/reset-password', (req, res) => res.render('reset-password')); // NAYA
+router.get('/register', (req, res) => res.render('user/register'));
+router.get('/login', (req, res) => res.render('user/login'));
+router.get('/forgot-password', (req, res) => res.render('user/forgot-password')); // NAYA
+router.get('/reset-password', (req, res) => res.render('user/reset-password')); // NAYA
 
 
 // 🔴 2. SIMPLE REGISTER API (Bina kisi security/encryption ke)
