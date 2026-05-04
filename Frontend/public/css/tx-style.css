@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #0b0c10;
+  color: white;
+}
+
+.tx-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.tx-card {
+  background: #111827;
+  padding: 40px;
+  border-radius: 16px;
+  width: 360px;
+  box-shadow: 0 0 40px rgba(201,146,42,0.2);
+}
+
+.tx-logo {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  color: #C9922A;
+}
+
+.tx-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #1f2937;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+
+.tx-btn {
+  width: 100%;
+  padding: 12px;
+  background: #C9922A;
+  border: none;
+  margin-top: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}

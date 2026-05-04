@@ -1,0 +1,160 @@
+<%- include('./partials/Seller-Sidebar') %>
+
+<!-- Main Dashboard Area -->
+<main class="tx-main-wrapper">
+    <div class="tx-content-container">
+        
+        <!-- Header Section -->
+        <header class="tx-dash-header">
+            <div class="tx-welcome">
+                <h1>Ram Ram,<h1>
+ 
+  <span class="gold-gradient">
+    <%= user && user.name ? user.name : user.email %>
+  </span> 🧵
+</h1>🧵</h1>
+<% if (user.isVerified) { %>
+    <span style="color:green;">✔ Verified Seller</span>
+<% } else { %>
+    <span style="color:orange;">Pending Approval</span>
+<% } %>
+                <p>Bhilwara Textile Merchant Portal | Monitoring your success.</p>
+            </div>
+            <div class="tx-action-btns">
+                <button class="tx-btn-outline">Download Report</button>
+                <button class="tx-btn-gold">+ Add New Fabric</button>
+            </div>
+        </header>
+
+        <!-- Stats Overview (The "Ek Number" Grid) -->
+        <section class="tx-stats-grid">
+            <div class="tx-stat-box">
+                <div class="tx-stat-icon">📈</div>
+                <div class="tx-stat-details">
+                    <span class="tx-stat-label">Total Revenue</span>
+                    <h2 class="tx-stat-value">₹2,45,000</h2>
+                    <span class="tx-stat-trend up">+12.5% vs last month</span>
+                </div>
+            </div>
+
+            <div class="tx-stat-box">
+                <div class="tx-stat-icon">📦</div>
+                <div class="tx-stat-details">
+                    <span class="tx-stat-label">Orders Processed</span>
+                    <h2 class="tx-stat-value">1,240</h2>
+                    <span class="tx-stat-trend">85 Pending Shipments</span>
+                </div>
+            </div>
+
+            <div class="tx-stat-box">
+                <div class="tx-stat-icon">⭐</div>
+                <div class="tx-stat-details">
+                    <span class="tx-stat-label">Merchant Rating</span>
+                    <h2 class="tx-stat-value">4.9/5.0</h2>
+                    <span class="tx-stat-trend gold">Top Rated Seller</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Data Section -->
+        <div class="tx-grid-layout">
+            <!-- Recent Orders Table -->
+            <section class="tx-card-panel">
+                <div class="ta-panel-head">
+                    <h3>Recent Business Leads</h3>
+                    <a href="/seller/orders" class="tx-view-all">View All</a>
+                </div>
+                <div class="tx-table-wrapper">
+                    <table class="tx-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Buyer Name</th>
+                                <th>Fabric Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#BT-9901</td>
+                                <td>Rahul Sharma</td>
+                                <td>Premium Cotton</td>
+                                <td><span class="badge pending">Pending</span></td>
+                                <td>₹45,000</td>
+                            </tr>
+                            <tr>
+                                <td>#BT-9892</td>
+                                <td>Karan Mehta</td>
+                                <td>Denim Finish</td>
+                                <td><span class="badge success">Completed</span></td>
+                                <td>₹82,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Quick Tips/Notifications -->
+            <section class="tx-card-panel tx-tips">
+                <h3>Merchant Insights</h3>
+                <div class="tx-tip-item">
+                    <p>💡 <strong>Pro Tip:</strong> Polyester demand is up by 20% in Bhilwara region this week.</p>
+                </div>
+                <div class="tx-tip-item">
+                    <p>🔔 <strong>Notice:</strong> Complete your GST verification to unlock "Elite" badge.</p>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</main>
+
+<style>
+    :root {
+        --gold: #C9922A;
+        --dark-card: #111827;
+        --text-muted: #94a3b8;
+    }
+
+    .tx-main-wrapper { margin-left: 280px; padding: 40px; background: #08090a; min-height: 100vh; }
+    @media (max-width: 768px) { .tx-main-wrapper { margin-left: 0; padding: 80px 20px; } }
+
+    .gold-gradient { background: linear-gradient(to right, #C9922A, #f1c40f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Header */
+    .tx-dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+    .tx-welcome h1 { font-size: 32px; font-weight: 800; margin: 0; color: white; }
+    .tx-welcome p { color: var(--text-muted); margin-top: 5px; }
+    .tx-btn-gold { background: var(--gold); border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .tx-btn-outline { background: transparent; border: 1px solid #1f2937; color: white; padding: 12px 24px; border-radius: 12px; margin-right: 10px; cursor: pointer; }
+
+    /* Stats Box */
+    .tx-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
+    .tx-stat-box { background: var(--dark-card); padding: 30px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 20px; }
+    .tx-stat-icon { font-size: 35px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 20px; }
+    .tx-stat-label { color: var(--text-muted); font-size: 13px; font-weight: 700; text-transform: uppercase; }
+    .tx-stat-value { font-size: 28px; font-weight: 900; margin: 5px 0; color: white; }
+    .tx-stat-trend { font-size: 12px; font-weight: 600; }
+    .tx-stat-trend.up { color: #2ecc71; }
+    .tx-stat-trend.gold { color: var(--gold); }
+
+    /* Tables & Grid */
+    .tx-grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+    @media (max-width: 1100px) { .tx-grid-layout { grid-template-columns: 1fr; } }
+
+    .tx-card-panel { background: var(--dark-card); border-radius: 25px; padding: 30px; border: 1px solid rgba(255,255,255,0.05); }
+    .tx-panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .tx-view-all { color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 700; }
+
+    .tx-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .tx-table th { padding: 15px; border-bottom: 1px solid #1f2937; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+    .tx-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 14px; color: white; }
+
+    .badge { padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .badge.pending { background: rgba(241, 196, 15, 0.1); color: #f1c40f; }
+    .badge.success { background: rgba(46, 204, 113, 0.1); color: #2ecc71; }
+
+    .tx-tip-item { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--gold); }
+    .tx-tip-item p { margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.6; }
+</style>

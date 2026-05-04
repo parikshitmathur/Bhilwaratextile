@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Elite Merchants | Bhilwara Textile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tx-gold: #C9922A;
+            --tx-dark: #08090a;
+            --tx-card-bg: rgba(17, 24, 39, 0.85);
+            --tx-input-bg: #0b0f19;
+            --tx-text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at bottom left, #1e293b, var(--tx-dark));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Abstract Glows */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--tx-gold);
+            filter: blur(130px);
+            opacity: 0.08;
+            z-index: 0;
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -100px; left: -100px; }
+
+        .tx-container {
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .tx-card {
+            background: var(--tx-card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 45px 40px;
+            border-radius: 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .tx-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--tx-gold);
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .tx-subtitle {
+            color: var(--tx-text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 8px;
+            margin-bottom: 35px;
+        }
+
+        .tx-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .tx-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--tx-text-muted);
+            margin-bottom: 8px;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+
+        .tx-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--tx-input-bg);
+            border: 1px solid #1f2937;
+            border-radius: 15px;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .tx-input:focus {
+            border-color: var(--tx-gold);
+            box-shadow: 0 0 0 4px rgba(201, 146, 42, 0.1);
+        }
+
+        .tx-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--tx-gold), #A8761D);
+            border: none;
+            border-radius: 15px;
+            color: #000;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.4s;
+        }
+
+        .tx-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(201, 146, 42, 0.25);
+        }
+
+        .tx-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tx-link {
+            color: var(--tx-gold);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .tx-footer p {
+            color: var(--tx-text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <div class="tx-container">
+        <div class="tx-card">
+            <h1 class="tx-logo">REGISTER SELLER</h1>
+            <p class="tx-subtitle">Start your elite business journey</p>
+
+            <form action="/api/seller-admin/register" method="POST">
+                <div class="tx-group">
+                    <label class="tx-label">Full Name</label>
+                    <input name="name" class="tx-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="tx-group">
+                    <label class="tx-label">Email Address</label>
+                    <input name="email" type="email" class="tx-input" placeholder="name@example.com" required>
+                </div>
+
+                <div class="tx-group">
+                    <label class="tx-label">Password</label>
+                    <input name="password" type="password" class="tx-input" placeholder="••••••••" required>
+                </div>
+
+                <button class="tx-btn">Create Account</button>
+            </form>
+
+            <div class="tx-footer">
+                <p>Already have an account? <a href="/tx-login" class="tx-link">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

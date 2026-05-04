@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="/css/tx-style.css">
+
+<div class="tx-container">
+  <div class="tx-card">
+    <div class="tx-logo">NEW PASSWORD</div>
+
+    <form action="/api/seller-admin/reset-password" method="POST">
+      <input type="hidden" name="token" value="<%= token %>">
+
+      <input name="newPassword" type="password" class="tx-input" placeholder="New Password">
+      <input name="confirmPassword" type="password" class="tx-input" placeholder="Confirm Password">
+
+      <button class="tx-btn">UPDATE</button>
+    </form>
+  </div>
+</div>

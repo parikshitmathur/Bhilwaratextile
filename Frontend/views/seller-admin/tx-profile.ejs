@@ -1,0 +1,164 @@
+<%- include('./partials/Seller-Sidebar') %>
+
+<main class="pf-main-wrapper">
+    <div class="pf-container">
+        
+        <!-- Header Section -->
+        <div class="pf-header">
+            <div>
+                <h1 class="pf-title">Company <span class="gold-text">Profile</span></h1>
+                <p class="pf-subtitle">Manage your business identity and digital presence</p>
+            </div>
+            <div class="pf-badge-elite">Elite Merchant</div>
+        </div>
+
+        <!-- Main Profile Card -->
+        <div class="pf-glass-card">
+            <form action="/tx-profile/update" method="POST" enctype="multipart/form-data" class="pf-main-form">
+                
+                <div class="pf-layout-grid">
+                    
+                    <!-- Left Side: Logo & Quick Info -->
+                    <div class="pf-left-panel">
+                        <div class="pf-logo-section">
+                            <label class="pf-label-center">Company Logo</label>
+                            <div class="pf-logo-preview-box">
+                                <% if(user.logo){ %>
+                                    <img src="<%= user.logo %>" id="imgView" alt="Logo">
+                                <% } else { %>
+                                    <div class="pf-no-img" id="imgView">No Logo</div>
+                                <% } %>
+                                <label for="logo-input" class="pf-upload-icon">📸</label>
+                            </div>
+                            <input type="file" name="logo" id="logo-input" hidden onchange="previewFile()">
+                            <p class="pf-hint">Click icon to change</p>
+                        </div>
+
+                        <div class="pf-info-box">
+                            <small>Account Status</small>
+                            <p style="color:#2ecc71; font-weight:800; margin:5px 0;">● ACTIVE</p>
+                            <hr style="border:0; border-top:1px solid #1f2937; margin:10px 0;">
+                            <small>Member Since</small>
+                            <p style="font-size:13px;"><%= new Date(user.createdAt).toLocaleDateString() %></p>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Form Fields -->
+                    <div class="pf-right-panel">
+                        <div class="pf-section-title">Business Details</div>
+                        
+                        <div class="pf-fields-grid">
+                            <div class="pf-input-group">
+                                <label>Company Name</label>
+                                <input type="text" name="companyName" value="<%= user.companyName || '' %>" required>
+                            </div>
+                            <div class="pf-input-group">
+                                <label>Short Name</label>
+                                <input type="text" name="shortName" value="<%= user.shortName || '' %>">
+                            </div>
+                            <div class="pf-input-group">
+                                <label>Owner Name</label>
+                                <input type="text" name="ownerName" value="<%= user.ownerName || '' %>">
+                            </div>
+                            <div class="pf-input-group">
+                                <label>Mobile Number</label>
+                                <input type="tel" name="mobile" value="<%= user.mobile || '' %>" required>
+                            </div>
+                            <div class="pf-input-group pf-span-2">
+                                <label>Business Address</label>
+                                <input type="text" name="address" value="<%= user.address || '' %>">
+                            </div>
+                            <div class="pf-input-group">
+                                <label>City</label>
+                                <input type="text" name="city" value="<%= user.city || '' %>">
+                            </div>
+                            <div class="pf-input-group">
+                                <label>State</label>
+                                <input type="text" name="state" value="<%= user.state || '' %>">
+                            </div>
+                        </div>
+
+                        <div class="pf-input-group" style="margin-top:20px;">
+                            <label>About Company</label>
+                            <textarea name="description" rows="4"><%= user.description || '' %></textarea>
+                        </div>
+
+                        <div class="pf-footer-btns">
+                            <button type="submit" class="pf-save-btn">Update Profile Details</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<style>
+    :root { --gold: #C9922A; --bg: #08090a; --card: #111827; }
+    body { background: var(--bg); color: white; font-family: sans-serif; }
+
+    .pf-main-wrapper { margin-left: 280px; padding: 40px; }
+    @media (max-width:768px) { .pf-main-wrapper { margin-left: 0; padding: 80px 20px; } }
+
+    .pf-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
+    .pf-title { font-size: 30px; font-weight: 900; margin: 0; }
+    .gold-text { color: var(--gold); }
+    .pf-subtitle { color: #64748b; font-size: 14px; margin: 5px 0; }
+    .pf-badge-elite { background: rgba(201,146,42,0.1); color: var(--gold); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 50px; font-weight: 800; font-size: 11px; height: fit-content; }
+
+    .pf-glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 30px; padding: 30px; }
+    .pf-layout-grid { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+    @media (max-width:900px) { .pf-layout-grid { grid-template-columns: 1fr; } }
+
+    /* Left Side Logo Style */
+    .pf-left-panel { border-right: 1px solid rgba(255,255,255,0.05); padding-right: 30px; }
+    @media (max-width:900px) { .pf-left-panel { border: 0; padding: 0; margin-bottom: 30px; } }
+
+    .pf-logo-section { text-align: center; margin-bottom: 30px; }
+    .pf-label-center { display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 15px; }
+    
+    .pf-logo-preview-box { width: 180px; height: 180px; margin: 0 auto; background: #000; border-radius: 20px; border: 2px solid var(--gold); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .pf-logo-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .pf-no-img { color: #2d3748; font-weight: 800; }
+    
+    .pf-upload-icon { position: absolute; bottom: 10px; right: 10px; background: var(--gold); width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+    .pf-hint { font-size: 10px; color: #475569; margin-top: 10px; }
+
+    .pf-info-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; text-align: center; }
+    .pf-info-box small { color: #64748b; font-size: 10px; text-transform: uppercase; }
+
+    /* Right Side Form Style */
+    .pf-section-title { font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 25px; border-bottom: 1px solid rgba(201,146,42,0.2); padding-bottom: 10px; }
+    .pf-fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .pf-span-2 { grid-column: span 2; }
+
+    .pf-input-group label { display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+    .pf-input-group input, .pf-input-group textarea { width: 100%; padding: 12px 15px; background: #0b0f19; border: 1px solid #1f2937; border-radius: 12px; color: white; outline: none; transition: 0.3s; }
+    .pf-input-group input:focus { border-color: var(--gold); background: #0d1421; }
+
+    .pf-footer-btns { margin-top: 30px; text-align: right; }
+    .pf-save-btn { background: var(--gold); border: none; padding: 15px 40px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .pf-save-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(201,146,42,0.2); }
+</style>
+
+<script>
+    function previewFile() {
+        const preview = document.getElementById('imgView');
+        const file = document.getElementById('logo-input').files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            if(preview.tagName === 'IMG') {
+                preview.src = reader.result;
+            } else {
+                const img = document.createElement("img");
+                img.src = reader.result;
+                img.id = "imgView";
+                preview.replaceWith(img);
+            }
+        }
+
+        if (file) { reader.readAsDataURL(file); }
+    }
+</script>
