@@ -16,7 +16,6 @@ require('dotenv').config();
 const app = express();
 
 // ===== [02] DATABASE CONNECTION =====
-// Database Name: bhilwaratextile
 const dbURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/bhilwaratextile';
 
 mongoose.connect(dbURI)
@@ -24,57 +23,81 @@ mongoose.connect(dbURI)
   .catch(err => console.log('❌ DB Connection Error:', err));
 
 // ===== [03] ENGINE & MIDDLEWARE SETTINGS =====
-// View Engine Setup (Frontend views path)
 app.set('views', path.join(__dirname, '../Frontend/views'));
 app.set('view engine', 'ejs');
 
-// Static Files (CSS, JS, Images)
+// Static Files Configuration
 app.use(express.static(path.join(__dirname, '../Frontend/public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Global Variables (Available in all EJS files)
+// Global Variables for EJS
 app.use((req, res, next) => {
     res.locals.title = "Bhilwara Textile | Elite Marketplace";
     next();
 });
 
+
+// ✅ FINAL FIX
+app.use((req, res, next) => {
+    res.locals.title = "Bhilwara Textile | Elite Marketplace";
+    res.locals.user = null;   // 🔥 FORCE DEFINE
+    next();
+});
+
+
 // ===== [04] MODELS (Database Schemas) =====
 const Category = require('./models/Category');
 const Inquiry = require('./models/Inquiry');
 const Requirement = require('./models/Requirement');
-const Seller = require('./models/Seller'); // Main Seller Model
-const SellerAdmin = require('./models/seller-admin-model'); // Unique Seller Admin Model
+const SellerAdmin = require('./models/seller-admin-model'); 
 const QuickRegistration = require('./models/QuickRegistration');
+const Product = require('./models/Product');
+const HeroSlider = require('./models/HeroSlider'); 
 
-// ===== [05] ROUTES IMPORT & MOUNTING =====
-const buyerRoutes = require('./routes/buyerRoutes');
-const sellerRoutes = require('./routes/sellerRoutes'); 
-const authRoutes = require('./routes/authRoutes');
-const sellerAdminRoutes = require('./routes/seller-admin-routes'); // Unique Seller Admin Routes
+// ===== [05] CUSTOM AUTH MIDDLEWARES =====
+// 🔐 Textile Seller Auth Check
+const isTxAuthenticated = (req, res, next) => {
+    if (req.cookies && req.cookies.sellerId) {
+        next();
+    } else {
+        res.redirect('/tx-login');
+    }
+};
 
-// Base Route Groups
-app.use('/', buyerRoutes);
-app.use('/', sellerRoutes);
-app.use('/', authRoutes);
-app.use('/', sellerAdminRoutes); // Mounting Seller Admin (Login/Signup/Reset)
+// ===== [06] ROUTES MOUNTING (External Files) =====
+app.use('/', require('./routes/buyerRoutes'));
+app.use('/', require('./routes/sellerRoutes')); 
+app.use('/', require('./routes/authRoutes'));
+app.use('/', require('./routes/seller-admin-routes')); 
+app.use('/', require('./routes/admin-slider-routes'));
 
 // API Route Groups
 app.use('/api/category', require('./routes/category'));
 app.use('/api/inquiry', require('./routes/inquiry'));
 
-
 // ============================================================
-// [06] SECTION: FRONTEND (USER) ROUTES
+// [07] SECTION: FRONTEND (USER) ROUTES
 // ============================================================
 
+// 🏠 MAIN HOME ROUTE (With Hero Slider & Categories)
 app.get('/', async (req, res) => {
     try {
-        const categories = await Category.find().sort({ createdAt: -1 });
-        res.render('user/home', { categories });
+        // Parallel data fetching for performance
+        const [slides, categories] = await Promise.all([
+            HeroSlider.find().sort({ slideNumber: 1 }),
+            Category.find().sort({ createdAt: -1 })
+        ]);
+
+        res.render('user/home', { 
+            slides, 
+            categories,
+            title: "Bhilwara Textile | Home" 
+        });
     } catch (err) {
-        res.render('user/home', { categories: [] });
+        console.error("❌ Home Route Error:", err);
+        res.render('user/home', { slides: [], categories: [] });
     }
 });
 
@@ -92,7 +115,7 @@ app.get('/buyer', async (req, res) => {
     }
 });
 
-// User Auth Endpoints
+// User Auth Rendering
 app.get('/join-free', (req, res) => res.render('user/join-free'));
 app.get('/login', (req, res) => res.render('user/login'));
 app.get('/register', (req, res) => res.render('user/register'));
@@ -101,68 +124,27 @@ app.get('/reset-password', (req, res) => res.render('user/reset-password'));
 
 
 // ============================================================
-// [07] SECTION: SELLER ADMIN ROUTES (Merchant Dashboard)
+// [08] SECTION: SELLER ADMIN (Merchant Dashboard)
 // ============================================================
 
-// Unique Seller Auth Pages (Managed via sellerAdminRoutes)
-// These are: /seller/signup, /seller/signin, /seller/reset/:token
-
-// 1. PEHLE DEFINE KARO (Middleware)
-// ============================================================
-// CUSTOM MIDDLEWARE: SELLER AUTH CHECK
-// ============================================================
-const isSellerAuthenticated = (req, res, next) => {
-    // Check karna ki cookie mein sellerId hai ya nahi
-    if (req.cookies && req.cookies.sellerId) {
-        next(); // Agar hai toh aage badhne do
-    } else {
-        // Agar nahi hai toh login page par bhej do
-        res.redirect('/seller/signin');
-    }
-};
-
-// 2. PHIR USE KARO (Routes)
-// 🔐 TEXTILE SELLER AUTH CHECK
-const isTxAuthenticated = (req, res, next) => {
-    if (req.cookies && req.cookies.sellerId) {
-        next();
-    } else {
-        res.redirect('/tx-login');
-    }
-};
-
-
-// 🎯 TEXTILE DASHBOARD
 app.get('/tx-dashboard', isTxAuthenticated, async (req, res) => {
     try {
-        // 1. Database se user ka data nikalo (Cookie mein save sellerId se)
         const userData = await SellerAdmin.findById(req.cookies.sellerId);
-
-        // 2. Render karte waqt 'user' variable bhejo
         res.render('seller-admin/tx-dashboard', { user: userData });
     } catch (err) {
-        console.log("Dashboard Data Error:", err);
         res.redirect('/tx-login');
     }
 });
+
 // ============================================================
-// [08] SECTION: MAIN ADMIN PANEL ROUTES (Owner/Authority)
+// [09] SECTION: MAIN ADMIN PANEL (Authority)
 // ============================================================
 
-// ===============================
-// 📄 ADMIN PAGE
-// ===============================
+// Seller Requests Management
 app.get('/admin/seller-requests', async (req, res) => {
-    try {
-        res.render('admin-panel/Seller-Requests'); // frontend fetch karega
-    } catch (err) {
-        res.status(500).send("Error loading page");
-    }
+    res.render('admin-panel/Seller-Requests');
 });
 
-// ===============================
-// 📊 DATA API (ONLY ONE)
-// ===============================
 app.get('/admin/seller-requests/data', async (req, res) => {
     try {
         const data = await SellerAdmin.find().sort({ createdAt: -1 });
@@ -171,6 +153,8 @@ app.get('/admin/seller-requests/data', async (req, res) => {
         res.status(500).json({ error: 'failed' });
     }
 });
+
+// Buyer Inquiries Management
 app.get('/admin/buyer-inquiries', async (req, res) => {
     try {
         const inquiries = await Requirement.find().sort({ createdAt: -1 });
@@ -180,7 +164,54 @@ app.get('/admin/buyer-inquiries', async (req, res) => {
     }
 });
 
+// Marketplace Authority (Product Management)
+app.get('/admin/all-products', (req, res) => res.render('admin-panel/All-Products'));
 
+app.get('/api/admin/all-products', async (req, res) => {
+    try {
+        const products = await Product.find()
+            .populate('sellerId', 'companyName city') 
+            .sort({ createdAt: -1 });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/admin/delete-product/:id', async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: "Product removed" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed" });
+    }
+});
+
+// Quick Leads / Registrations
+app.get('/admin/quick-registrations', async (req, res) => {
+    try {
+        const registrations = await QuickRegistration.find().sort({ createdAt: -1 });
+        res.render('admin-panel/Quick-Registrations', { registrations });
+    } catch (err) {
+        res.status(500).send("Error");
+    }
+});
+
+// 🖼️ MANAGE HERO SLIDER (Admin Tool)
+app.get('/admin/admin-add-silder', async (req, res) => {
+    try {
+        const slides = await HeroSlider.find().sort({ slideNumber: 1 });
+        res.render('admin-panel/admin-add-silder', { 
+            slides, 
+            title: 'Manage Hero Slider' 
+        });
+    } catch (err) {
+        res.status(500).send("Slider Page Error");
+    }
+});
+
+
+// Status Updates API
 app.post('/api/seller/update-status/:id', async (req, res) => {
     try {
         await SellerAdmin.findByIdAndUpdate(req.params.id, {
@@ -193,42 +224,29 @@ app.post('/api/seller/update-status/:id', async (req, res) => {
     }
 });
 
-
-
-
-app.get('/admin/quick-registrations', async (req, res) => {
-    try {
-        const registrations = await QuickRegistration.find().sort({ createdAt: -1 });
-        res.render('admin-panel/Quick-Registrations', { registrations });
-    } catch (err) {
-        res.status(500).send("Error loading registrations");
-    }
-});
-
-
 // ============================================================
-// [09] SECTION: MISC & GLOBAL ERROR HANDLERS
+// [10] SECTION: MISC & ERROR HANDLING
 // ============================================================
 
 app.post('/api/quick-register', async (req, res) => {
     try {
-        if (!req.body.mobile) return res.status(400).send("Mobile number required");
+        if (!req.body.mobile) return res.status(400).send("Mobile required");
         await QuickRegistration.create({ mobile: req.body.mobile });
         res.redirect('/join-free?success=true');
     } catch (err) {
-        res.status(500).send("Server Error");
+        res.status(500).send("Error");
     }
 });
 
-// 404 Handler - Keep at the end
+// 404 Handler
 app.use((req, res) => {
     res.status(404).render('user/404', { title: "404 - Not Found" });
 });
 
-// ============================================================
-// [10] SECTION: SERVER BOOTSTRAP
-// ============================================================
 
+// ============================================================
+// [11] SECTION: SERVER BOOTSTRAP
+// ============================================================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`

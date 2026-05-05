@@ -1,15 +1,15 @@
-<!-- MOBILE OVERLAY: Side-menu toggle ke liye background blur -->
+<!-- MOBILE OVERLAY -->
 <div id="bt-mobile-blur" class="fixed inset-0 bg-black/80 z-40 hidden md:hidden transition-all duration-500 backdrop-blur-md" onclick="toggleSidebar()"></div>
 
 <!-- SIDEBAR FRAME -->
-<aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-72 bg-[#08090a] transform -translate-x-full md:translate-x-0 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
+<aside id="sidebar" class="fixed md:sticky top-0 inset-y-0 left-0 z-50 w-72 bg-[#08090a] h-screen transform -translate-x-full md:translate-x-0 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
     
     <!-- BRAND LOGO SECTION -->
-    <div class="flex items-center justify-between h-24 px-8 border-b border-white/5 bg-gradient-to-b from-white/5 to-transparent">
+    <div class="flex items-center justify-between h-24 px-8 border-b border-white/5 bg-gradient-to-b from-white/5 to-transparent flex-shrink-0">
         <div class="flex items-center gap-3 group">
             <div class="w-10 h-10 bg-[#C9922A] rounded-xl flex items-center justify-center font-black text-black text-lg shadow-[0_0_20px_rgba(201,146,42,0.3)]">BT</div>
             <div>
-                <h2 class="text-sm font-black tracking-[0.3em] text-white leading-none">BHILWARA</h2>
+                <h2 class="text-sm font-black tracking-[0.3em] text-white leading-none uppercase">Bhilwara</h2>
                 <p class="text-[9px] font-bold text-[#C9922A] tracking-[0.4em] uppercase mt-1 opacity-80">Elite Admin</p>
             </div>
         </div>
@@ -23,29 +23,35 @@
         
         <!-- DASHBOARD -->
         <a href="/admin/dashboard" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
-            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="text-sm font-bold tracking-wide">Main Dashboard</span>
         </a>
 
-        <!-- SELLER REQUESTS (Important highlight) -->
-        <a href="/admin/seller-requests" class="flex items-center justify-between px-5 py-4 rounded-2xl bg-[#C9922A]/10 text-white border border-[#C9922A]/20 shadow-[0_4px_20px_rgba(201,146,42,0.1)]">
+        <!-- SELLER REQUESTS -->
+        <a href="/admin/seller-requests" class="flex items-center justify-between px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
             <div class="flex items-center gap-4">
-                <svg class="w-5 h-5 text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <span class="text-sm font-bold tracking-wide text-[#C9922A]">New Requests</span>
+                <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                <span class="text-sm font-bold tracking-wide">Seller Requests</span>
             </div>
-            <span class="animate-pulse w-2 h-2 rounded-full bg-[#C9922A]"></span>
+            <span class="w-2 h-2 rounded-full bg-[#C9922A] animate-pulse"></span>
         </a>
 
-        <!-- ADD CATEGORY (Emoji replaced with SVG) -->
-        <a href="/admin/add-category" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
-            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
-            <span class="text-sm font-bold tracking-wide">Add Category</span>
+        <!-- ACTIVE MERCHANTS -->
+        <a href="/admin/sellers" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
+            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span class="text-sm font-bold tracking-wide">Active Merchants</span>
         </a>
 
-        <!-- MANAGE FABRICS -->
-        <a href="/admin/products" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
+        <!-- MANAGE FABRICS (Inventory) -->
+        <a href="/admin/all-products" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
             <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             <span class="text-sm font-bold tracking-wide">Manage Fabrics</span>
+        </a>
+
+        <!-- ADD CATEGORY -->
+        <a href="/admin/add-category" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
+            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="text-sm font-bold tracking-wide">Add Category</span>
         </a>
 
         <!-- BUYER INQUIRIES -->
@@ -54,33 +60,27 @@
             <span class="text-sm font-bold tracking-wide">Buyer Inquiries</span>
         </a>
 
-        <!-- REGISTERED SELLERS -->
-        <a href="/admin/sellers" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
-            <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-            <span class="text-sm font-bold tracking-wide">Active Merchants</span>
-        </a>
-
-        <!-- INQUIRIES (With Notification Tag) -->
-        <a href="/admin/inquiries" class="flex items-center justify-between px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
+        <!-- QUICK REGISTRATIONS -->
+        <a href="/admin/quick-registrations" class="flex items-center justify-between px-5 py-4 rounded-2xl text-gray-400 hover:text-white hover:bg-white/5 group transition-all duration-300">
             <div class="flex items-center gap-4">
-                <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"></path></svg>
-                <span class="text-sm font-bold tracking-wide">Global Leads</span>
+                <svg class="w-5 h-5 group-hover:text-[#C9922A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span class="text-sm font-bold tracking-wide">Quick Leads</span>
             </div>
             <span class="bg-red-500 text-[10px] text-white px-2 py-0.5 rounded-md font-black">NEW</span>
         </a>
+
     </nav>
     
     <!-- FOOTER: LOGOUT -->
-    <div class="p-6 bg-[#0b0f19] border-t border-white/5">
-        <button class="flex items-center justify-center gap-3 w-full px-4 py-4 text-red-500 bg-red-500/5 hover:bg-red-500 hover:text-white rounded-2xl transition-all duration-300 font-bold text-xs uppercase tracking-widest border border-red-500/20 group">
+    <div class="p-6 bg-[#0b0f19] border-t border-white/5 flex-shrink-0">
+        <a href="/tx-logout" class="flex items-center justify-center gap-3 w-full px-4 py-4 text-red-500 bg-red-500/5 hover:bg-red-500 hover:text-white rounded-2xl transition-all duration-300 font-bold text-xs uppercase tracking-widest border border-red-500/20 group">
             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             Secure Exit
-        </button>
+        </a>
     </div>
 </aside>
 
 <style>
-    /* Custom Scrollbar for Sidebar */
     .custom-scroll::-webkit-scrollbar { width: 3px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(201, 146, 42, 0.3); border-radius: 10px; }
 </style>
@@ -93,7 +93,3 @@
         blur.classList.toggle('hidden');
     }
 </script>
-
-
-
-

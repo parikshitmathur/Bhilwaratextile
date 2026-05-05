@@ -1,0 +1,140 @@
+<%- include('./partials/Seller-Sidebar') %>
+
+<main class="ap-main-wrapper">
+    <div class="ap-container">
+        <div class="ap-header">
+            <h1 class="ap-title">Inventory <span class="gold-text">Management</span></h1>
+            <p class="ap-subtitle">List your bulk fabrics and manage stock levels</p>
+        </div>
+
+        <div class="ap-glass-card">
+            <!-- Form Action as per your API -->
+            <form action="/api/seller/add-product" method="POST" enctype="multipart/form-data" class="ap-form">
+                
+                <!-- Section 1: Fabric Image -->
+                <div class="ap-upload-section">
+                    <label class="ap-label">FABRIC VISUAL (IMAGE)</label>
+                    <div class="ap-drop-zone">
+                        <input type="file" name="productImage" id="prodImg" hidden onchange="previewProd(this)" required>
+                        <div id="imgPreview" class="ap-preview-box">
+                            <span class="ap-plus">+</span>
+                            <p>Upload Fabric Photo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Details -->
+                <div class="ap-grid">
+                    <!-- 🆕 Product Name Field Added -->
+                    <div class="ap-group pf-full">
+                        <label class="ap-label">Product Name / Title</label>
+                        <input type="text" name="productName" class="ap-input" placeholder="e.g. Premium Cotton Shirting" required>
+                    </div>
+
+                    <div class="ap-group">
+                        <label class="ap-label">Select Category</label>
+                        <select name="category" class="ap-input" required>
+                            <option value="" disabled selected>-- Choose Category --</option>
+                            <% if(categories && categories.length > 0) { %>
+                                <% categories.forEach(function(cat) { %>
+                                    <option value="<%= cat.name %>"><%= cat.name %></option>
+                                <% }); %>
+                            <% } else { %>
+                                <option disabled>No categories found.</option>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="ap-group">
+                        <label class="ap-label">Fabric Material Type</label>
+                        <input type="text" name="fabricType" class="ap-input" placeholder="e.g. 60/60 Count, Lycra">
+                    </div>
+
+                    <div class="ap-group">
+                        <label class="ap-label">Bulk Stock (In Meters)</label>
+                        <input type="number" name="bulkStock" class="ap-input" placeholder="e.g. 5000" required>
+                    </div>
+
+                    <!-- 💰 Price Per Meter Update -->
+                    <div class="ap-group">
+                        <label class="ap-label">Price (Per Meter)</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b;">₹</span>
+                            <input type="number" name="pricePerUnit" class="ap-input" style="padding-left: 28px;" placeholder="0.00" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ap-group" style="margin-top: 20px;">
+                    <label class="ap-label">Bulk Supply Description</label>
+                    <textarea name="description" class="ap-input ap-textarea" placeholder="Describe quality, width (panna), and delivery terms..."></textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="ap-actions">
+                    <button type="submit" class="ap-btn-save">Publish to Marketplace</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+<style>
+    :root { --gold: #C9922A; --bg: #08090a; --card: rgba(255,255,255,0.02); }
+    .ap-main-wrapper { margin-left: 280px; padding: 50px; background: var(--bg); min-height: 100vh; transition: 0.3s; }
+    @media (max-width: 768px) { .ap-main-wrapper { margin-left: 0; padding: 100px 20px 40px; } }
+
+    .ap-glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 35px; backdrop-filter: blur(20px); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+    .ap-title { font-size: 32px; font-weight: 800; color: white; margin: 0; }
+    .gold-text { color: var(--gold); }
+    .ap-subtitle { color: #64748b; font-size: 14px; margin-top: 5px; }
+
+    /* Upload Style */
+    .ap-drop-zone { border: 2px dashed rgba(201, 146, 42, 0.3); border-radius: 20px; height: 180px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; margin-bottom: 30px; overflow: hidden; }
+    .ap-drop-zone:hover { border-color: var(--gold); background: rgba(201, 146, 42, 0.05); }
+    .ap-preview-box { text-align: center; color: #64748b; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ap-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .ap-plus { font-size: 40px; display: block; color: var(--gold); line-height: 1; }
+
+    /* Form Grid */
+    .ap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    .pf-full { grid-column: span 2; }
+    .ap-label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: block; padding-left: 5px; }
+    
+    .ap-input { 
+        width: 100%; 
+        padding: 14px 18px; 
+        background: #0b111a; 
+        border: 1px solid rgba(255,255,255,0.07); 
+        border-radius: 14px; 
+        color: white; 
+        font-size: 14px;
+        outline: none; 
+        transition: 0.3s; 
+        box-sizing: border-box; 
+    }
+    .ap-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(201, 146, 42, 0.1); background: #0d1421; }
+    
+    .ap-textarea { height: 120px; resize: none; line-height: 1.6; }
+
+    .ap-btn-save { background: var(--gold); color: black; border: none; padding: 18px; border-radius: 15px; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 25px; transition: 0.3s; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
+    .ap-btn-save:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(201, 146, 42, 0.3); }
+</style>
+
+<script>
+    const zone = document.querySelector('.ap-drop-zone');
+    const input = document.getElementById('prodImg');
+    zone.onclick = () => input.click();
+
+    function previewProd(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imgPreview').innerHTML = `<img src="${e.target.result}">`;
+                document.getElementById('imgPreview').style.padding = "0";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

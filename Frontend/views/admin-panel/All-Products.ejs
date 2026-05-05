@@ -1,0 +1,112 @@
+
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="flex min-h-screen bg-[#08090a]">
+    <%- include('./partials/sidebar') %>
+
+    <main class="flex-1 p-6 md:p-10 ml-0 ">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-black text-white">Marketplace <span class="text-[#C9922A]">Inventory</span></h1>
+            <div class="bg-white/5 px-4 py-2 rounded-xl border border-white/10 text-xs font-bold text-gray-400">
+                Total Live Products: <span id="prodCount" class="text-[#C9922A]">0</span>
+            </div>
+        </div>
+
+        <!-- Filter & Search -->
+        <input type="text" id="adminProdSearch" placeholder="Search by Product, Category or Seller Name..." 
+            class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl text-white mb-6 focus:border-[#C9922A] outline-none">
+
+        <div class="glass-card rounded-3xl overflow-hidden border border-white/10 bg-white/5">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-black/50 text-gray-400 uppercase text-[11px] font-black tracking-widest">
+                    <tr>
+                        <th class="p-5">Fabric</th>
+                        <th class="p-5">Product Details</th>
+                        <th class="p-5">Merchant (Seller)</th>
+                        <th class="p-5">Stock & Price</th>
+                        <th class="p-5 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProdTable" class="divide-y divide-white/5 text-white">
+                    <!-- Data loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<script>
+    async function loadAdminProducts() {
+        try {
+            console.log("Fetching products..."); // Debugging ke liye
+            const res = await fetch('/api/admin/all-products');
+            
+            if (!res.ok) throw new Error("Server responded with error");
+
+            const products = await res.json();
+            console.log("Products received:", products); // Check karo data aa raha hai ya nahi
+
+            const table = document.getElementById('adminProdTable');
+            const countLabel = document.getElementById('prodCount');
+
+            if (!products || products.length === 0) {
+                table.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-gray-500">Bhai, marketplace mein koi product nahi mila!</td></tr>`;
+                countLabel.innerText = "0";
+                return;
+            }
+
+            countLabel.innerText = products.length;
+
+            table.innerHTML = products.map(p => {
+                // Seller details safe check
+                const company = p.sellerId ? p.sellerId.companyName : 'Bhilwara Merchant';
+                const city = p.sellerId ? p.sellerId.city : 'Rajasthan';
+
+                return `
+                <tr class="hover:bg-white/[0.02] transition-all border-b border-white/5">
+                    <td class="p-5">
+                        <img src="${p.fabricImage || '/images/no-image.png'}" 
+                             onerror="this.src='/images/no-image.png'"
+                             class="w-16 h-16 rounded-lg object-cover border border-white/10 shadow-lg">
+                    </td>
+                    <td class="p-5">
+                        <div class="font-bold text-base text-gray-100">${p.productName || 'Unnamed Fabric'}</div>
+                        <div class="text-[#C9922A] text-[10px] font-black uppercase tracking-wider">${p.category || 'General'}</div>
+                        <div class="text-gray-500 text-xs mt-1">${p.fabricType || 'Premium Quality'}</div>
+                    </td>
+                    <td class="p-5">
+                        <div class="font-bold text-gray-200">${company}</div>
+                        <div class="text-xs text-gray-400 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${city}</div>
+                    </td>
+                    <td class="p-5">
+                        <div class="text-green-500 font-black text-lg">${p.bulkStock || 0} <span class="text-[10px] text-gray-500">MTRS</span></div>
+                        <div class="text-gray-400 text-xs font-bold">₹${p.pricePerUnit || 0}/mtr</div>
+                    </td>
+                    <td class="p-5 text-right">
+                        <button onclick="deleteProduct('${p._id}')" class="bg-red-500/10 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all duration-300">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error("Frontend Error:", error);
+            document.getElementById('adminProdTable').innerHTML = `<tr><td colspan="5" class="p-10 text-center text-red-500 font-bold">Data load karne mein fat gaya! Console check karo.</td></tr>`;
+        }
+    }
+
+    // Delete functionality
+    async function deleteProduct(id) {
+        if(confirm("Bhai, Admin ho... pakka delete kar doon?")) {
+            const res = await fetch(`/api/admin/delete-product/${id}`, { method: 'POST' });
+            if(res.ok) {
+                alert("Product saaf!");
+                loadAdminProducts();
+            }
+        }
+    }
+
+    // Initial Load
+    loadAdminProducts();
+</script>
