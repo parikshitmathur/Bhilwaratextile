@@ -1,136 +1,386 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title><%= typeof title !== 'undefined' ? title : "Bhilwara Textile" %></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/main.js" defer></script>
-    
-    <style> 
-        @keyframes fadeInDown {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-\[fadeInDown_1s_ease-in-out\] {
-            animation: fadeInDown 1s ease-in-out;
-        }
-        /* Mega menu smooth appearance */
-        .mega-menu {
-            transition: all 0.3s ease-in-out;
-            transform-origin: top;
-        }
-        .group:hover .mega-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
+<!-- 
+============================================================
+BHILWARA TEXTILE - ULTRA PREMIUM NAVBAR
+FULLY UNIQUE IDS + CLASSES VERSION
+AUTHOR : PARIKSHIT MATHUR
+============================================================
+-->
 
-    <nav class="fixed w-full z-50 top-0 left-0 bg-white border-b border-gray-200 transition-all duration-300 shadow-sm relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div class="flex justify-between items-center h-20">
-                
-                <div class="flex-shrink-0 transition-transform duration-300 hover:scale-105 cursor-pointer">
-                    <a href="/">
-                        <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
-                            BHILWARA<span class="text-yellow-600">TEXTILE</span>
-                        </h2>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    background:#f3f3f3;
+}
+
+/* =========================================
+MAIN GLASS EFFECT
+========================================= */
+.btx_qv_main_glass{
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
+}
+
+/* =========================================
+NAV LINKS
+========================================= */
+.btx_qv_nav_link{
+    position:relative;
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:#1f2937;
+    transition:.35s ease;
+    white-space:nowrap;
+}
+
+.btx_qv_nav_link:hover{
+    color:#d97706;
+}
+
+.btx_qv_nav_link::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-7px;
+    width:0%;
+    height:2px;
+    background:#d97706;
+    transition:.35s ease;
+}
+
+.btx_qv_nav_link:hover::after{
+    width:100%;
+}
+
+/* =========================================
+CENTER LINKS FIX
+========================================= */
+#btx_qv_center_links{
+    display:flex !important;
+    align-items:center !important;
+    gap:42px;
+}
+
+/* =========================================
+DROPDOWN
+========================================= */
+#btx_qv_portal_dropdown{
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(20px);
+    transition:.45s ease;
+}
+
+#btx_qv_portal_dropdown.btx_qv_dropdown_active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0px);
+}
+
+/* =========================================
+RESPONSIVE
+========================================= */
+@media(max-width:767px){
+
+    #btx_qv_center_links{
+        display:none !important;
+    }
+
+    #btx_qv_quote_btn{
+        display:none !important;
+    }
+
+    #btx_qv_shell{
+        padding-left:18px !important;
+        padding-right:18px !important;
+    }
+
+    #btx_qv_logo_text{
+        font-size:20px !important;
+    }
+}
+
+@media(min-width:768px) and (max-width:1024px){
+
+    #btx_qv_center_links{
+        gap:24px !important;
+    }
+}
+
+</style>
+
+<!-- =========================================
+NAVBAR START
+========================================= -->
+<nav 
+id="btx_qv_main_navbar"
+class="fixed top-0 left-0 w-full z-[99999] px-4 md:px-6 py-6 transition-all duration-500"
+>
+
+    <div class="max-w-[1440px] mx-auto">
+
+        <!-- SHELL -->
+        <div 
+        id="btx_qv_shell"
+        class="btx_qv_main_glass border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[40px] h-24 px-10 transition-all duration-500"
+        >
+
+            <!-- FLEX -->
+            <div class="flex items-center justify-between w-full h-full">
+
+                <!-- =========================================
+                LOGO
+                ========================================= -->
+                <div class="flex-shrink-0">
+
+                    <a href="/" class="group">
+
+                        <h1 
+                        id="btx_qv_logo_text"
+                        class="text-[22px] md:text-[30px] font-black uppercase tracking-[-1px] leading-none"
+                        >
+                            Bhilwara
+                            <span class="text-amber-600 italic">
+                                Textile
+                            </span>
+                        </h1>
+
+                        <p class="text-[9px] font-bold uppercase tracking-[0.45em] text-gray-400 mt-1">
+                            Authority Hub
+                        </p>
+
                     </a>
+
                 </div>
 
-                <div class="hidden md:flex items-center space-x-8 h-full">
-                    <a href="/" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition">Home</a>
-                    
-                    <div class="group h-full flex items-center cursor-pointer">
-                        <a href="/categories" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                            All Categories
+                <!-- =========================================
+                CENTER LINKS
+                ========================================= -->
+                <div class="flex-1 flex justify-center">
+
+                    <div id="btx_qv_center_links">
+
+                        <a href="/" class="btx_qv_nav_link">
+                            Home
                         </a>
 
-                        <div class="mega-menu invisible opacity-0 translate-y-4 absolute left-0 top-full w-full bg-white border-t border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.1)] z-50 p-8">
-                            <div class="max-w-7xl mx-auto grid grid-cols-4 gap-8">
-                                
-                                <div>
-                                    <h3 class="text-xs font-bold text-gray-900 mb-4 uppercase tracking-wider border-b pb-2">Sarees</h3>
-                                    <ul class="space-y-3">
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Designer Sarees</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Wedding Sarees</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Cotton Sarees</a></li>
-                                    </ul>
-                                </div>
+                        <a href="/fabrics" class="btx_qv_nav_link">
+                            Fabrics
+                        </a>
 
-                                <div>
-                                    <h3 class="text-xs font-bold text-gray-900 mb-4 uppercase tracking-wider border-b pb-2">Dress</h3>
-                                    <ul class="space-y-3">
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Designer Suits</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Anarkali Suits</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Party Wear</a></li>
-                                    </ul>
-                                </div>
+                        <a href="/about" class="btx_qv_nav_link">
+                            Our Bhilwara
+                        </a>
 
-                                <div>
-                                    <h3 class="text-xs font-bold text-gray-900 mb-4 uppercase tracking-wider border-b pb-2">Fabrics</h3>
-                                    <ul class="space-y-3">
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Fancy Fabric</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Cotton Fabric</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Silk Fabric</a></li>
-                                    </ul>
-                                </div>
+                        <a href="/contact" class="btx_qv_nav_link">
+                            Contact
+                        </a>
 
-                                <div>
-                                    <h3 class="text-xs font-bold text-gray-900 mb-4 uppercase tracking-wider border-b pb-2">Machinery</h3>
-                                    <ul class="space-y-3">
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Embroidery Machines</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Water Jet Loom</a></li>
-                                        <li><a href="#" class="text-gray-500 text-sm hover:text-yellow-600 hover:translate-x-1 inline-block transition-transform duration-200">› Spare Parts</a></li>
-                                    </ul>
-                                </div>
+                    </div>
+
+                </div>
+
+                <!-- =========================================
+                RIGHT SIDE
+                ========================================= -->
+                <div class="flex items-center gap-4 md:gap-6">
+
+                    <!-- =========================================
+                    PORTAL WRAPPER
+                    ========================================= -->
+                    <div class="relative">
+
+                        <!-- BUTTON -->
+                        <button 
+                        id="btx_qv_portal_button"
+                        class="flex items-center gap-3 bg-black p-1.5 pr-5 rounded-full hover:bg-zinc-900 transition-all duration-300 shadow-xl"
+                        >
+
+                            <div class="w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-black">
+                                <i class="fa-solid fa-shield-halved text-xs"></i>
+                            </div>
+
+                            <span class="hidden lg:block text-[10px] font-black uppercase tracking-[0.25em] text-white">
+                                Portal
+                            </span>
+
+                        </button>
+
+                        <!-- =========================================
+                        DROPDOWN
+                        ========================================= -->
+                        <div 
+                        id="btx_qv_portal_dropdown"
+                        class="absolute right-0 top-full mt-5 w-72 bg-white border border-gray-100 shadow-[0_30px_70px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden z-[999999]"
+                        >
+
+                            <!-- TOP -->
+                            <div class="p-8 bg-zinc-900 text-white text-center">
+
+                                <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest">
+                                    Bhilwara Authority
+                                </p>
+
+                                <h3 class="text-sm font-bold mt-2">
+                                    Manage Empire
+                                </h3>
 
                             </div>
-                        </div>
-                    </div>
-                    
-                    <a href="/seller" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition">For Sellers</a>
-                    
-                    <a href="/about" class="text-sm font-semibold text-gray-700 hover:text-yellow-600 transition">Our Story</a>
-                    
-                    <div class="flex items-center space-x-4 pl-4 border-l border-gray-300">
-                        <div class="text-blue-500">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex items-center space-x-2 text-sm font-bold text-gray-800">
-                                <a href="/login" class="hover:text-blue-600 transition">Sign In</a>
-                                <span class="text-gray-400">|</span>
-                                <a href="/join-free" class="hover:text-blue-600 transition flex items-center gap-1">
-                                    Free Join
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+
+                            <!-- LINKS -->
+                            <div class="p-4 space-y-1">
+
+                                <a 
+                                href="/login"
+                                class="flex items-center gap-4 px-6 py-4 text-xs font-black text-gray-700 hover:bg-amber-50 rounded-3xl transition-all duration-300"
+                                >
+                                    <i class="fa-solid fa-fingerprint opacity-30"></i>
+                                    Sign In
                                 </a>
+
+                                <a 
+                                href="/join-free"
+                                class="flex items-center gap-4 px-6 py-4 text-xs font-black text-gray-700 hover:bg-amber-50 rounded-3xl transition-all duration-300"
+                                >
+                                    <i class="fa-solid fa-crown text-amber-600"></i>
+                                    Join Free
+                                </a>
+
+                                <hr class="my-2 border-gray-100">
+
+                                <a 
+                                href="/tx-logout"
+                                class="flex items-center gap-4 px-6 py-4 text-[10px] font-black text-red-600 hover:bg-red-50 rounded-3xl transition-all duration-300"
+                                >
+                                    <i class="fa-solid fa-power-off"></i>
+                                    Secure Exit
+                                </a>
+
                             </div>
-                            <span class="text-xs text-gray-500 mt-0.5">My Account</span>
+
                         </div>
+
                     </div>
 
-                    <a href="/buyer" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-gray-900 rounded-lg hover:bg-yellow-600">
-                        GET QUOTE
+                    <!-- =========================================
+                    QUOTE BUTTON
+                    ========================================= -->
+                    <a 
+                    href="/buyer"
+                    id="btx_qv_quote_btn"
+                    class="bg-amber-600 hover:bg-black text-white px-7 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg"
+                    >
+                        Quote
                     </a>
+
                 </div>
 
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
-                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                    </button>
-                </div>
             </div>
-        </div>
-    </nav>
-    <div class="pt-20"></div>
 
-</body>
-</html>
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- SPACER -->
+<div class="h-32 md:h-36"></div>
+
+<!-- =========================================
+SCRIPTS
+========================================= -->
+<script>
+
+/* =========================================
+SCROLL EFFECT
+========================================= */
+
+const btxQvShell = document.getElementById('btx_qv_shell');
+const btxQvNavbar = document.getElementById('btx_qv_main_navbar');
+
+window.addEventListener('scroll', () => {
+
+    if(window.scrollY > 40){
+
+        btxQvNavbar.style.paddingTop = '10px';
+        btxQvNavbar.style.paddingBottom = '10px';
+
+        btxQvShell.style.height = '72px';
+
+        btxQvShell.style.borderRadius = '28px';
+
+    }else{
+
+        btxQvNavbar.style.paddingTop = '24px';
+        btxQvNavbar.style.paddingBottom = '24px';
+
+        btxQvShell.style.height = '96px';
+
+        btxQvShell.style.borderRadius = '40px';
+    }
+});
+
+
+/* =========================================
+PORTAL DROPDOWN
+========================================= */
+
+const btxQvPortalBtn = document.getElementById('btx_qv_portal_button');
+
+const btxQvDropdown = document.getElementById('btx_qv_portal_dropdown');
+
+let btxQvDropdownStatus = false;
+
+
+/* TOGGLE */
+btxQvPortalBtn.addEventListener('click', (event) => {
+
+    event.stopPropagation();
+
+    btxQvDropdownStatus = !btxQvDropdownStatus;
+
+    if(btxQvDropdownStatus){
+
+        btxQvDropdown.classList.add('btx_qv_dropdown_active');
+
+    }else{
+
+        btxQvDropdown.classList.remove('btx_qv_dropdown_active');
+    }
+
+});
+
+
+/* OUTSIDE CLICK */
+document.addEventListener('click', (event) => {
+
+    if(
+        !btxQvDropdown.contains(event.target) &&
+        !btxQvPortalBtn.contains(event.target)
+    ){
+
+        btxQvDropdown.classList.remove('btx_qv_dropdown_active');
+
+        btxQvDropdownStatus = false;
+    }
+
+});
+
+</script>

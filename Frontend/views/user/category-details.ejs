@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<section class="py-20 bg-[#050505] text-white">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <div class="mb-16 border-l-4 border-amber-600 pl-6">
+            <p class="text-amber-500 uppercase tracking-[0.4em] text-xs font-bold mb-2">Bhilwara Authority Hub</p>
+            <h1 class="text-4xl md:text-6xl font-black uppercase italic"><%= category.name %> <span class="text-gray-500">Inventory</span></h1>
+        </div>
+
+        <div class="space-y-20">
+            <% /* Maan lo category.subcategories ek array hai */ %>
+            <% category.subcategories.forEach(sub => { %>
+                <div class="sub-cat-block">
+                    <div class="flex items-center gap-4 mb-8">
+                        <h2 class="text-2xl font-black uppercase tracking-wider"><%= sub.name %></h2>
+                        <div class="flex-1 h-px bg-white/10"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <% /* Filter products jo is subcategory mein hain */ %>
+                        <% const subProducts = category.products.filter(p => p.subCategory === sub.name); %>
+                        
+                        <% if(subProducts.length > 0) { %>
+                            <% subProducts.forEach(prod => { %>
+                                <div class="bg-white/5 border border-white/10 rounded-3xl p-6 hover:border-amber-600/50 transition-all group">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="text-lg font-bold text-white group-hover:text-amber-500"><%= prod.productName %></h4>
+                                        <span class="text-[10px] bg-amber-600 text-black px-2 py-1 rounded font-black">GSM: <%= prod.gsm || 'N/A' %></span>
+                                    </div>
+
+                                    <p class="text-gray-400 text-sm mb-6 leading-relaxed"><%= prod.description %></p>
+
+                                    <div class="bg-black/40 border border-white/5 rounded-2xl p-4 flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-amber-500">
+                                            <i class="fa-solid fa-industry"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Provided By</p>
+                                            <h5 class="text-xs font-black text-white"><%= prod.sellerId.companyName %></h5>
+                                            <p class="text-[9px] text-amber-600"><i class="fa-solid fa-location-dot mr-1"></i><%= prod.sellerId.location %></p>
+                                        </div>
+                                    </div>
+
+                                    <a href="/inquiry?prod=<%= prod._id %>" class="mt-6 block w-full text-center py-3 rounded-xl border border-white/10 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                                        Request Quotation
+                                    </a>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-gray-500 italic text-sm">No products currently listed in this segment.</p>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

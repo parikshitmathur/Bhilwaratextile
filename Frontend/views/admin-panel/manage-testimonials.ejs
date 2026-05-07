@@ -1,0 +1,240 @@
+x
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+    body{
+        background:#0a0a0a;
+        color:white;
+        font-family:Arial, Helvetica, sans-serif;
+    }
+
+    .card{
+        background:#111;
+        border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .input{
+        width:100%;
+        padding:14px;
+        border-radius:12px;
+        background:#181818;
+        border:1px solid rgba(255,255,255,0.08);
+        outline:none;
+        color:white;
+        font-size:14px;
+    }
+
+    .input:focus{
+        border-color:#d97706;
+    }
+
+    textarea{
+        resize:none;
+    }
+
+</style>
+
+<div class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <%- include('partials/sidebar') %>
+
+    <!-- MAIN -->
+    <main class="flex-1 p-6 md:p-10">
+
+        <!-- HEADER -->
+        <div class="mb-10 flex items-center justify-between flex-wrap gap-4">
+
+            <div>
+                <h1 class="text-3xl font-bold">
+                    Testimonials
+                </h1>
+
+                <p class="text-sm text-gray-400 mt-1">
+                    Manage customer reviews
+                </p>
+            </div>
+
+            <div class="bg-amber-600 text-black px-5 py-2 rounded-xl font-bold text-sm">
+                Total : <%= list.length %>
+            </div>
+
+        </div>
+
+        <!-- GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- FORM -->
+            <div class="lg:col-span-1">
+
+                <div class="card p-6 rounded-2xl sticky top-6">
+
+                    <h2 class="text-xl font-semibold mb-6">
+                        Add Testimonial
+                    </h2>
+
+                    <form action="/api/admin/add-testimonial" method="POST" class="space-y-5">
+
+                        <!-- NAME -->
+                        <div>
+
+                            <label class="text-sm text-gray-400 block mb-2">
+                                Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Enter Name"
+                                required
+                                class="input"
+                            >
+
+                        </div>
+
+                        <!-- RATING -->
+                        <div>
+
+                            <label class="text-sm text-gray-400 block mb-2">
+                                Rating
+                            </label>
+
+                            <select name="rating" class="input">
+
+                                <option value="5">
+                                    ⭐⭐⭐⭐⭐
+                                </option>
+
+                                <option value="4">
+                                    ⭐⭐⭐⭐
+                                </option>
+
+                                <option value="3">
+                                    ⭐⭐⭐
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        <div>
+
+                            <label class="text-sm text-gray-400 block mb-2">
+                                Description
+                            </label>
+
+                            <textarea
+                                name="description"
+                                placeholder="Write review..."
+                                required
+                                class="input h-32"
+                            ></textarea>
+
+                        </div>
+
+                        <!-- BUTTON -->
+                        <button
+                            type="submit"
+                            class="w-full bg-amber-600 hover:bg-amber-500 text-black font-bold py-3 rounded-xl transition-all"
+                        >
+                            Add Testimonial
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- TESTIMONIALS -->
+            <div class="lg:col-span-2">
+
+                <% if(list && list.length > 0){ %>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        <% list.forEach(t => { %>
+
+                            <div class="card p-5 rounded-2xl relative">
+
+                                <!-- DELETE ICON -->
+                                <a
+                                    href="/admin/delete-testimonial/<%= t._id %>"
+                                    onclick="return confirm('Delete testimonial?')"
+                                    class="absolute top-4 right-4 w-9 h-9 rounded-full bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white flex items-center justify-center transition-all duration-300"
+                                >
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+
+                                <!-- STARS -->
+                                <div class="flex gap-1 text-amber-500 text-sm mb-4">
+
+                                    <% for(let i = 0; i < t.rating; i++) { %>
+
+                                        <i class="fa-solid fa-star"></i>
+
+                                    <% } %>
+
+                                </div>
+
+                                <!-- REVIEW -->
+                                <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                    "<%= t.description %>"
+                                </p>
+
+                                <!-- USER -->
+                                <div class="flex items-center gap-3 border-t border-white/10 pt-4">
+
+                                    <div class="w-10 h-10 rounded-full bg-amber-600 text-black flex items-center justify-center font-bold uppercase">
+                                        <%= t.name.charAt(0) %>
+                                    </div>
+
+                                    <div>
+
+                                        <h3 class="font-semibold text-sm uppercase">
+                                            <%= t.name %>
+                                        </h3>
+
+                                        <p class="text-xs text-gray-500">
+                                            Verified Buyer
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+                <% } else { %>
+
+                    <!-- EMPTY -->
+                    <div class="card p-10 rounded-2xl text-center">
+
+                        <i class="fa-solid fa-comments text-4xl text-gray-600 mb-4"></i>
+
+                        <h2 class="text-xl font-semibold mb-2">
+                            No Testimonials Found
+                        </h2>
+
+                        <p class="text-gray-500 text-sm">
+                            Add your first testimonial
+                        </p>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

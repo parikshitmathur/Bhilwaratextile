@@ -1,644 +1,2146 @@
 <%- include('partials/header') %>
 
+<!-- ═══════════════════════════════════════════
+  BHILWARA TEXTILE AUTHORITY — HOMEPAGE
+  Author: Premium UI Redesign
+  Classes/IDs: All renamed with "btx-" prefix
+═══════════════════════════════════════════ -->
 
-
-<!-- Floating Textile Icons Background -->
-<div class="floating-icons" id="floatingIcons"></div>
-
-<!-- Custom Cursor -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- ══════════ ABOUT ══════════ -->
-
-<!-- ══════════ HERO ══════════ -->
-
-
-
-<section class="hero relative overflow-hidden bg-[#08090a] min-h-screen flex items-center" id="home">
-    <div class="hero-bg-pattern opacity-20"></div>
-    <canvas id="thread-canvas" class="absolute inset-0 pointer-events-none"></canvas>
-
-    <div class="hero-slider-container w-full relative">
-
-        <!-- 🚀 Check if slides exist -->
-        <% if (typeof slides !== 'undefined' && slides.length > 0) { %>
-            
-            <% slides.forEach((slide, index) => { %>
-                <!-- Slide Content: index 0 will be visible by default -->
-                <div class="hero-content <%= index === 0 ? 'active flex' : 'hidden' %> flex-col md:flex-row items-center justify-between px-6 md:px-20 transition-all duration-1000 ease-in-out" 
-                     id="slide-<%= index %>" 
-                     data-hero-slide>
-                    
-                    <!-- [LEFT] TEXT SIDE -->
-                    <div class="hero-text max-w-2xl z-10">
-                        <p class="hero-eyebrow text-[#C9922A] font-bold tracking-widest uppercase text-xs mb-4">
-                            Bhilwara, Rajasthan · Est. 1975
-                        </p>
-
-                        <h1 class="hero-title text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-                            <%- slide.title || 'Where Threads<br><em>Become Legacy</em>' %>
-                        </h1>
-
-                        <p class="hero-sub text-gray-400 text-lg mb-8 leading-relaxed">
-                            <%= slide.subtitle || "India's textile capital, woven into every metre. Premium suitings and shirtings crafted with mastery." %>
-                        </p>
-
-                        <div class="hero-cta flex flex-wrap gap-4">
-                            <a href="/fabrics" class="bg-[#C9922A] text-black px-8 py-4 rounded-xl font-black hover:scale-105 transition-all uppercase tracking-widest text-sm">
-                                Explore Collection
-                            </a>
-                            <a href="https://wa.me/91XXXXXXXXXX" class="border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/5 transition-all text-sm">
-                                💬 WhatsApp Us
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- [RIGHT] VISUAL SIDE -->
-                    <div class="hero-visual relative mt-12 md:mt-0">
-                        <div class="hero-img-frame w-[300px] h-[400px] md:w-[450px] md:h-[550px] rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(201,146,42,0.1)]">
-                            <img src="<%= slide.imagePath %>" alt="Fabric" class="w-full h-full object-cover">
-                        </div>
-
-                        <!-- Excellence Badge -->
-                        <div class="hero-badge absolute -bottom-6 -left-6 bg-[#C9922A] p-6 rounded-3xl text-black shadow-2xl">
-                            <span class="block text-3xl font-black">50+</span>
-                            <span class="block text-[10px] font-black uppercase tracking-tighter leading-none">Years of<br>Excellence</span>
-                        </div>
-                    </div>
-
-                </div>
-            <% }) %>
-
-        <% } else { %>
-
-            <!-- ⚠️ DEFAULT FALLBACK (Agar DB khali ho) -->
-          
-
-        <% } %>
-
-    </div>
-</section>
-
-<!-- 🧠 AUTO-SLIDER LOGIC -->
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const allSlides = document.querySelectorAll('[data-hero-slide]');
-        if (allSlides.length <= 1) return;
-
-        let current = 0;
-
-        setInterval(() => {
-            // Current slide hide karo
-            allSlides[current].classList.remove('active', 'flex');
-            allSlides[current].classList.add('hidden');
-
-            // Next slide calculate karo
-            current = (current + 1) % allSlides.length;
-
-            // Next slide show karo
-            allSlides[current].classList.remove('hidden');
-            allSlides[current].classList.add('active', 'flex');
-        }, 5000); // 5 Seconds interval
-    });
-</script>
+<!-- ── GOOGLE FONTS ── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,500;0,700;1,300;1,700&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
 <style>
-    /* CSS for active state transitions */
-    .hero-content.active {
-        animation: slideIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+/* ══════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════ */
+:root {
+  --gold:      #C9922A;
+  --gold-lt:   #f5c163;
+  --gold-dk:   #9a6c18;
+  --ink:       #0a0a0b;
+  --ink-soft:  #111318;
+  --slate:     #1c1f26;
+  --off-white: #f6f3ee;
+  --muted:     #6b7280;
+  --border:    rgba(255,255,255,0.08);
+  --font-hero: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-italic: 'Playfair Display', serif;
+}
 
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .hidden { display: none !important; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--ink);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.btx-hero {
+  position: relative;
+  min-height: 100svh;
+  background: var(--ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* noise grain overlay */
+.btx-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* diagonal gold accent */
+.btx-hero::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 55%;
+  height: 140%;
+  background: linear-gradient(135deg, rgba(201,146,42,0.06) 0%, transparent 60%);
+  transform: skewX(-8deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btx-hero-slider-wrap {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.btx-hero-slide {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 6% 80px;
+  gap: 40px;
+  min-height: 100svh;
+}
+
+.btx-hero-slide.btx-active {
+  display: flex;
+  animation: btxHeroIn 1s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes btxHeroIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* TEXT SIDE */
+.btx-hero-text {
+  flex: 1;
+  max-width: 620px;
+}
+
+.btx-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+}
+
+.btx-hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.btx-hero-title {
+  font-family: var(--font-hero);
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.btx-hero-title em {
+  font-family: var(--font-italic);
+  color: var(--gold);
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.btx-hero-sub {
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  max-width: 480px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.btx-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.btx-btn-primary {
+  background: var(--gold);
+  color: #000;
+  padding: 16px 36px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  border: 2px solid var(--gold);
+}
+
+.btx-btn-primary:hover {
+  background: transparent;
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btx-btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btx-btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* VISUAL SIDE */
+.btx-hero-visual {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.btx-hero-img-wrap {
+  width: clamp(260px, 32vw, 440px);
+  height: clamp(340px, 42vw, 570px);
+  border-radius: 40px;
+  overflow: hidden;
+  border: 1px solid rgba(201,146,42,0.2);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 60px rgba(201,146,42,0.08);
+  position: relative;
+}
+
+.btx-hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.btx-hero-img-wrap:hover img { transform: scale(1.04); }
+
+.btx-hero-badge {
+  position: absolute;
+  bottom: -24px;
+  left: -24px;
+  background: var(--gold);
+  color: #000;
+  padding: 22px 24px;
+  border-radius: 24px;
+  font-family: var(--font-hero);
+  box-shadow: 0 20px 40px rgba(201,146,42,0.3);
+  text-align: center;
+  z-index: 3;
+}
+
+.btx-hero-badge strong {
+  display: block;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.btx-hero-badge span {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-body);
+}
+
+/* slide dots */
+.btx-hero-dots {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.btx-hero-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.btx-hero-dot.btx-active {
+  width: 28px;
+  background: var(--gold);
+}
+
+/* RESPONSIVE HERO */
+@media (max-width: 768px) {
+  .btx-hero-slide {
+    flex-direction: column;
+    padding: 100px 5% 80px;
+    justify-content: center;
+    text-align: center;
+    gap: 36px;
+  }
+  .btx-hero-eyebrow { justify-content: center; }
+  .btx-hero-sub { margin-inline: auto; }
+  .btx-hero-cta { justify-content: center; }
+  .btx-hero-visual { width: 100%; display: flex; justify-content: center; }
+  .btx-hero-img-wrap { width: 260px; height: 320px; }
+  .btx-hero-badge { left: -10px; }
+}
+
+/* ══════════════════════════════════════
+   MARQUEE
+══════════════════════════════════════ */
+.btx-marquee-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: var(--gold);
+  padding: 14px 0;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.btx-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 60px;
+  animation: btxMarquee 30s linear infinite;
+}
+
+.btx-marquee-wrap:hover .btx-marquee-track { animation-play-state: paused; }
+
+@keyframes btxMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.btx-marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.btx-marquee-item svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .btx-marquee-item { font-size: 10px; gap: 10px; }
+  .btx-marquee-track { gap: 40px; animation-duration: 18s; }
+}
+
+/* ══════════════════════════════════════
+   QUICK ACCESS CARDS
+══════════════════════════════════════ */
+.btx-access-section {
+  background: var(--off-white);
+  padding: 80px 5%;
+}
+
+.btx-access-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.btx-access-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 44px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+
+.btx-access-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.btx-access-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+}
+
+.btx-access-card:hover::after { transform: scaleX(1); }
+
+.btx-access-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  transition: transform 0.3s ease;
+}
+
+.btx-access-card:hover .btx-access-icon { transform: scale(1.1) rotate(4deg); }
+
+.btx-access-icon svg { width: 28px; height: 28px; }
+
+.btx-access-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.btx-access-divider {
+  width: 32px;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 0 auto 14px;
+  border-radius: 999px;
+  transition: all 0.4s ease;
+}
+
+.btx-access-card:hover .btx-access-divider {
+  width: 56px;
+  background: var(--gold);
+}
+
+.btx-access-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .btx-access-grid { grid-template-columns: 1fr; gap: 16px; }
+  .btx-access-section { padding: 60px 5%; }
+}
+
+/* ══════════════════════════════════════
+   CATEGORY SLIDER
+══════════════════════════════════════ */
+.btx-cat-section {
+  background: var(--off-white);
+  padding: 20px 0 60px;
+}
+
+.btx-cat-inner {
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 5%;
+}
+
+.btx-cat-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.btx-section-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.btx-section-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #111;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.btx-section-title span { color: var(--gold); }
+
+.btx-section-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+.btx-nav-pair {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btx-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
+  color: #555;
+}
+
+.btx-nav-btn:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  transform: translateY(-2px);
+}
+
+/* Category card */
+.btx-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.35s ease;
+}
+
+.btx-cat-card:hover { transform: translateY(-6px); }
+
+.btx-cat-img-ring {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  padding: 3px;
+  border: 2px solid transparent;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.btx-cat-card:hover .btx-cat-img-ring {
+  border-color: var(--gold);
+  box-shadow: 0 12px 32px rgba(201,146,42,0.25);
+}
+
+.btx-cat-img-ring img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.btx-cat-card:hover .btx-cat-img-ring img { transform: scale(1.1); }
+
+.btx-cat-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.35s ease;
+  color: #fff;
+  font-size: 15px;
+}
+
+.btx-cat-card:hover .btx-cat-overlay { opacity: 1; }
+
+.btx-cat-name {
+  margin-top: 16px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #111;
+  text-align: center;
+}
+
+.btx-cat-sub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+/* Modal */
+.btx-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+
+.btx-modal-overlay.btx-open { display: flex; }
+
+.btx-modal-box {
+  background: #fff;
+  width: 92%;
+  max-width: 480px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+  transform: scale(0.93);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.btx-modal-overlay.btx-open .btx-modal-box {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.btx-modal-head {
+  background: #111;
+  color: #fff;
+  padding: 28px 28px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btx-modal-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.btx-modal-title {
+  font-family: var(--font-hero);
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+}
+
+.btx-modal-close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.btx-modal-close:hover { background: var(--gold); color: #000; }
+
+.btx-modal-body {
+  padding: 28px;
+}
+
+.btx-modal-sub-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 18px;
+}
+
+.btx-subcat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.btx-subcat-item {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.btx-subcat-item:hover {
+  background: #fff8ed;
+  border-color: var(--gold);
+  color: var(--gold-dk);
+}
+
+/* ══════════════════════════════════════
+   HERITAGE SECTION
+══════════════════════════════════════ */
+.btx-heritage {
+  background: var(--ink);
+  padding: 100px 5%;
+  overflow: hidden;
+}
+
+.btx-heritage-inner {
+  max-width: 1280px;
+  margin: auto;
+}
+
+.btx-heritage-header { margin-bottom: 70px; }
+
+.btx-heritage-pre {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.45em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.btx-heritage-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 0.9;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.btx-heritage-title em {
+  font-family: var(--font-italic);
+  color: var(--gold);
+  font-style: italic;
+}
+
+.btx-heritage-rule {
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  margin-top: 24px;
+  border-radius: 2px;
+}
+
+.btx-heritage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* image side */
+.btx-heritage-img-col { position: relative; }
+
+.btx-heritage-img-frame {
+  position: relative;
+  z-index: 2;
+  border-radius: 40px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.btx-heritage-img-frame img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.8s ease;
+  display: block;
+}
+
+.btx-heritage-img-frame:hover img { filter: grayscale(0); }
+
+.btx-heritage-img-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,11,0.6) 0%, transparent 60%);
+}
+
+.btx-heritage-stat-card {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  z-index: 10;
+  background: #fff;
+  padding: 28px 32px;
+  border-radius: 24px;
+  text-align: center;
+  border: 3px solid var(--gold);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  color: #000;
+}
+
+.btx-heritage-stat-card strong {
+  font-family: var(--font-hero);
+  font-size: 3rem;
+  color: var(--gold-dk);
+  display: block;
+  line-height: 1;
+}
+
+.btx-heritage-stat-card span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  display: block;
+  margin-top: 6px;
+  color: #555;
+}
+
+.btx-heritage-glow {
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.12);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* text side */
+.btx-heritage-text-col { color: #fff; }
+
+.btx-heritage-text-col h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #fff;
+}
+
+.btx-heritage-text-col p {
+  color: rgba(255,255,255,0.5);
+  line-height: 1.9;
+  font-size: 14px;
+  font-weight: 300;
+  margin-bottom: 32px;
+}
+
+.btx-feature-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.btx-feat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px 20px;
+  transition: all 0.35s ease;
+}
+
+.btx-feat-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(201,146,42,0.3);
+}
+
+.btx-feat-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--gold);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btx-feat-card:hover .btx-feat-icon { transform: rotate(8deg) scale(1.05); }
+
+.btx-feat-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.btx-feat-body {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.btx-brands-row {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+}
+
+.btx-brands-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.btx-brands-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  opacity: 0.35;
+  filter: grayscale(1);
+  transition: all 0.5s ease;
+}
+
+.btx-brands-list:hover { opacity: 0.8; filter: none; }
+
+.btx-brands-list span {
+  font-size: 12px;
+  font-weight: 800;
+  font-style: italic;
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .btx-heritage-grid { grid-template-columns: 1fr; gap: 60px; }
+  .btx-heritage-stat-card { right: 0; }
+  .btx-feature-cards { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════
+   WEAVE SECTION
+══════════════════════════════════════ */
+.btx-weave-section {
+  position: relative;
+  padding: 100px 5%;
+  overflow: hidden;
+  background: radial-gradient(circle at 20% 30%, rgba(201,146,42,0.1), transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(245,158,11,0.07), transparent 40%),
+              #0e1520;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.btx-weave-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.btx-weave-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.12);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.btx-weave-inner {
+  max-width: 860px;
+  margin: auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.btx-weave-inner .btx-section-eyebrow { display: block; margin-bottom: 14px; }
+
+.btx-weave-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2.5rem, 5.5vw, 5.2rem);
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.btx-weave-title em {
+  font-family: var(--font-italic);
+  color: var(--gold);
+  font-style: italic;
+}
+
+.btx-weave-sub {
+  color: rgba(255,255,255,0.45);
+  font-size: 14px;
+  line-height: 1.9;
+  max-width: 680px;
+  margin: 22px auto 0;
+  font-weight: 300;
+}
+
+.btx-weave-svg-wrap {
+  margin: 40px 0;
+  position: relative;
+}
+
+.btx-weave-svg-wrap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.15);
+  filter: blur(60px);
+  z-index: -1;
+}
+
+.btx-weave-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  padding: 18px 36px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(16px);
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btx-weave-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btx-weave-stat-num {
+  font-family: var(--font-hero);
+  font-size: 1.8rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.btx-weave-stat-text { text-align: left; }
+
+.btx-weave-stat-text p:first-child {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.btx-weave-stat-text p:last-child {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btx-weave-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,0.1);
+}
+
+/* ══════════════════════════════════════
+   PROCESS SECTION
+══════════════════════════════════════ */
+.btx-process-section {
+  position: relative;
+  padding: 100px 5%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.btx-process-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.btx-process-inner {
+  max-width: 1350px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.btx-process-header { text-align: center; margin-bottom: 80px; }
+
+.btx-process-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: rgba(201,146,42,0.08);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  margin-bottom: 22px;
+}
+
+.btx-process-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  color: #111;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  max-width: 760px;
+  margin: auto;
+}
+
+.btx-process-title span { color: var(--gold); font-style: italic; }
+
+.btx-process-sub {
+  max-width: 640px;
+  margin: 20px auto 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.85;
+  font-weight: 300;
+}
+
+.btx-process-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+.btx-process-steps::before {
+  content: '';
+  position: absolute;
+  top: 58px;
+  left: 9%;
+  width: 82%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(201,146,42,0.4), transparent);
+  z-index: 0;
+}
+
+.btx-process-card {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 24px;
+  padding: 34px 22px;
+  text-align: center;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.04);
+}
+
+.btx-process-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.07);
+  filter: blur(50px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.btx-process-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(201,146,42,0.25);
+  box-shadow: 0 24px 56px rgba(201,146,42,0.12);
+}
+
+.btx-process-card:hover::before { opacity: 1; }
+
+.btx-process-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #111, #1f2937);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  transition: all 0.4s ease;
+}
+
+.btx-process-card:hover .btx-process-icon {
+  transform: scale(1.08) rotate(6deg);
+  background: linear-gradient(145deg, var(--gold), var(--gold-lt));
+}
+
+.btx-process-step-num {
+  margin-top: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.btx-process-card-title {
+  margin-top: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+
+.btx-process-card-body {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+@media (max-width: 1100px) {
+  .btx-process-steps { grid-template-columns: repeat(3,1fr); }
+  .btx-process-steps::before { display: none; }
+}
+
+@media (max-width: 640px) {
+  .btx-process-steps { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════ */
+.btx-reviews-section {
+  background: #050505;
+  padding: 100px 5%;
+  position: relative;
+  overflow: hidden;
+}
+
+.btx-reviews-glow-l {
+  position: absolute;
+  top: 0; left: 0;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.08);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.btx-reviews-glow-r {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.08);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.btx-reviews-inner {
+  max-width: 1300px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.btx-reviews-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.btx-reviews-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+.btx-reviews-title em { font-family: var(--font-italic); color: var(--gold); font-style: italic; }
+
+.btx-reviews-rule {
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin: 20px auto 0;
+}
+
+.btx-reviews-swiper { overflow: hidden; padding-bottom: 56px !important; }
+
+.btx-reviews-swiper .swiper-wrapper { align-items: stretch; }
+
+.btx-reviews-swiper .swiper-slide { height: auto !important; display: flex; }
+
+.btx-review-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.btx-review-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(130deg, transparent, rgba(245,158,11,0.06), transparent);
+  transform: translateX(-100%);
+  transition: 0.8s ease;
+}
+
+.btx-review-card:hover::before { transform: translateX(100%); }
+
+.btx-review-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201,146,42,0.2);
+  box-shadow: 0 16px 40px rgba(201,146,42,0.1);
+}
+
+.btx-review-quote { font-size: 2rem; color: rgba(201,146,42,0.25); margin-bottom: 16px; }
+
+.btx-review-stars { display: flex; gap: 4px; margin-bottom: 18px; color: #f59e0b; font-size: 13px; }
+
+.btx-review-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.85;
+  font-style: italic;
+  font-weight: 300;
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.btx-review-footer {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btx-review-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #000;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.btx-review-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.btx-review-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 3px;
+}
+
+.btx-reviews-swiper .swiper-pagination-bullet-active {
+  background: var(--gold) !important;
+  width: 24px;
+  border-radius: 999px;
+}
+
+.btx-reviews-swiper .swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.3;
+}
+
+.btx-reviews-swiper .swiper-button-next,
+.btx-reviews-swiper .swiper-button-prev {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.3s ease;
+}
+
+.btx-reviews-swiper .swiper-button-next:hover,
+.btx-reviews-swiper .swiper-button-prev:hover {
+  background: var(--gold);
+}
+
+.btx-reviews-swiper .swiper-button-next::after,
+.btx-reviews-swiper .swiper-button-prev::after {
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* ══════════════════════════════════════
+   INQUIRY SECTION
+══════════════════════════════════════ */
+.btx-inquiry-section {
+  background: var(--off-white);
+  padding: 100px 5%;
+}
+
+.btx-inquiry-inner {
+  max-width: 900px;
+  margin: auto;
+}
+
+.btx-inquiry-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.btx-inquiry-title {
+  font-family: var(--font-hero);
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  color: #111;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.btx-inquiry-title em { font-family: var(--font-italic); color: var(--gold-dk); font-style: italic; }
+
+.btx-inquiry-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 14px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.btx-inquiry-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.btx-form-group { display: flex; flex-direction: column; gap: 8px; }
+.btx-form-group.btx-full { grid-column: 1 / -1; }
+
+.btx-form-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.btx-form-input,
+.btx-form-select,
+.btx-form-textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1.5px solid #e0ddd8;
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #111;
+  outline: none;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+.btx-form-input:focus,
+.btx-form-select:focus,
+.btx-form-textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,146,42,0.1);
+}
+
+.btx-form-textarea { min-height: 130px; resize: vertical; }
+
+.btx-submit-btn {
+  grid-column: 1 / -1;
+  padding: 18px 48px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btx-submit-btn:hover {
+  background: var(--gold);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(201,146,42,0.3);
+}
+
+@media (max-width: 640px) {
+  .btx-inquiry-form { grid-template-columns: 1fr; }
+  .btx-form-group.btx-full { grid-column: 1; }
+  .btx-submit-btn { grid-column: 1; }
+}
 </style>
 
-<!-- ══════════ MARQUEE ══════════ -->
-<div class="marquee-strip">
-  <div class="marquee-track" id="marqueeTrack">
-    <div class="marquee-item"><span class="marquee-dot"></span>Cotton Suitings</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Poly-Viscose Blends</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Premium Shirtings</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Uniform Fabrics</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Woolen Blends</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Industrial Textiles</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Bulk Wholesale</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Direct from Mill</div>
-    <!-- Duplicate for seamless loop -->
-    <div class="marquee-item"><span class="marquee-dot"></span>Cotton Suitings</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Poly-Viscose Blends</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Premium Shirtings</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Uniform Fabrics</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Woolen Blends</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Industrial Textiles</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Bulk Wholesale</div>
-    <div class="marquee-item"><span class="marquee-dot"></span>Direct from Mill</div>
+
+<!-- ═══════════════════════════════════════════
+  HERO
+═══════════════════════════════════════════ -->
+<section class="btx-hero" id="btx-home">
+
+  <div class="btx-hero-slider-wrap">
+
+    <% if (typeof slides !== 'undefined' && slides.length > 0) { %>
+      <% slides.forEach((slide, i) => { %>
+        <div class="btx-hero-slide <%= i === 0 ? 'btx-active' : '' %>" data-btx-slide>
+
+          <!-- TEXT -->
+          <div class="btx-hero-text">
+            <p class="btx-hero-eyebrow">Bhilwara, Rajasthan · Est. 1975</p>
+
+            <h1 class="btx-hero-title">
+              <%- slide.title || 'Where Threads<br><em>Become Legacy</em>' %>
+            </h1>
+
+            <p class="btx-hero-sub">
+              <%= slide.subtitle || "India's textile capital, woven into every metre. Premium suitings & shirtings crafted with mastery." %>
+            </p>
+
+            <div class="btx-hero-cta">
+              <a href="/fabrics" class="btx-btn-primary">
+                <i class="fa-solid fa-arrow-right"></i> Explore Collection
+              </a>
+              <a href="https://wa.me/91XXXXXXXXXX" class="btx-btn-ghost">
+                💬 WhatsApp Us
+              </a>
+            </div>
+          </div>
+
+          <!-- VISUAL -->
+          <div class="btx-hero-visual">
+            <div class="btx-hero-img-wrap">
+              <img src="<%= slide.imagePath %>" alt="<%= slide.title || 'Fabric' %>">
+            </div>
+            <div class="btx-hero-badge">
+              <strong>50+</strong>
+              <span>Years of<br>Excellence</span>
+            </div>
+          </div>
+
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="btx-hero-slide btx-active" data-btx-slide>
+        <div class="btx-hero-text">
+          <p class="btx-hero-eyebrow">Bhilwara, Rajasthan · Est. 1975</p>
+          <h1 class="btx-hero-title">Where Threads<br><em>Become Legacy</em></h1>
+          <p class="btx-hero-sub">India's textile capital, woven into every metre. Premium suitings and shirtings crafted with mastery.</p>
+          <div class="btx-hero-cta">
+            <a href="/fabrics" class="btx-btn-primary"><i class="fa-solid fa-arrow-right"></i> Explore Collection</a>
+            <a href="https://wa.me/91XXXXXXXXXX" class="btx-btn-ghost">💬 WhatsApp Us</a>
+          </div>
+        </div>
+        <div class="btx-hero-visual">
+          <div class="btx-hero-img-wrap">
+            <img src="/images/hero-default.jpg" alt="Textile">
+          </div>
+          <div class="btx-hero-badge"><strong>50+</strong><span>Years of<br>Excellence</span></div>
+        </div>
+      </div>
+    <% } %>
+
+  </div>
+
+  <!-- DOTS -->
+  <div class="btx-hero-dots" id="btxHeroDots"></div>
+
+</section>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('[data-btx-slide]');
+  if (slides.length < 2) return;
+
+  const dotsWrap = document.getElementById('btxHeroDots');
+  let current = 0;
+
+  // build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'btx-hero-dot' + (i === 0 ? ' btx-active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(idx) {
+    slides[current].classList.remove('btx-active');
+    dotsWrap.children[current].classList.remove('btx-active');
+    current = idx;
+    slides[current].classList.add('btx-active');
+    dotsWrap.children[current].classList.add('btx-active');
+  }
+
+  setInterval(() => goTo((current + 1) % slides.length), 5000);
+})();
+</script>
+
+
+<!-- ═══════════════════════════════════════════
+  MARQUEE
+═══════════════════════════════════════════ -->
+<div class="btx-marquee-wrap">
+  <div class="btx-marquee-track" id="btxMarqueeTrack">
+    <%
+      const btxItems = ['Cotton Suitings','Poly-Viscose Blends','Premium Shirtings','Uniform Fabrics','Woolen Blends','Industrial Textiles','Bulk Wholesale','Direct from Mill'];
+      const doubled = [...btxItems, ...btxItems];
+    %>
+    <% doubled.forEach(item => { %>
+      <div class="btx-marquee-item">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="2"/></svg>
+        <%= item %>
+      </div>
+    <% }) %>
   </div>
 </div>
 
 
-<!-- ══════════ ABOUT ══════════ -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Card 1: For Buyers -->
-            <!-- Link to buyer.ejs -->
-            <a href="/buyer" class="block cursor-pointer">
-                <div class="group relative bg-white p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:-translate-y-2 overflow-hidden h-full">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-50 rounded-full blur-3xl group-hover:bg-yellow-100 transition-colors duration-500"></div>
-                    <div class="relative z-10 text-center">
-                        <div class="mb-6 inline-block p-4 rounded-full bg-blue-50 text-blue-600 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-yellow-600 transition-colors">For Buyers</h3>
-                        <div class="w-12 h-1 bg-gray-200 mx-auto mb-4 group-hover:w-20 transition-all duration-500 group-hover:bg-yellow-500"></div>
-                        <p class="text-gray-600 text-sm leading-relaxed">Looking for any textile products? Get the right suppliers for your need.</p>
-                    </div>
-                </div>
-            </a>
+<!-- ═══════════════════════════════════════════
+  QUICK ACCESS
+═══════════════════════════════════════════ -->
+<section class="btx-access-section">
+  <div class="btx-access-grid">
 
-            <!-- Card 2: For Sellers -->
-            <!-- Link to seller.ejs -->
-            <!-- Make sure server.js has app.get('/seller', ...) -->
-            <a href="/seller" class="block cursor-pointer">
-                <div class="group relative bg-white p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:-translate-y-2 overflow-hidden h-full">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-orange-50 rounded-full blur-3xl group-hover:bg-orange-100 transition-colors"></div>
-                    <div class="relative z-10 text-center">
-                        <div class="mb-6 inline-block p-4 rounded-full bg-orange-50 text-orange-600 group-hover:scale-110 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-yellow-600 transition-colors">For Sellers</h3>
-                        <div class="w-12 h-1 bg-gray-200 mx-auto mb-4 group-hover:w-20 transition-all duration-500 group-hover:bg-yellow-500"></div>
-                        <p class="text-gray-600 text-sm leading-relaxed">Looking for new Buyers? Go with us and get new buyers for your products.</p>
-                    </div>
-                </div>
-            </a>
+    <a href="/buyer" class="btx-access-card">
+      <div class="btx-access-icon" style="background:#eff6ff;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <h3 class="btx-access-title">For Buyers</h3>
+      <div class="btx-access-divider"></div>
+      <p class="btx-access-desc">Looking for any textile products? Get the right suppliers for your need.</p>
+    </a>
 
-            <!-- Card 3: Join Free -->
-            <!-- Link to join-free.ejs -->
-            <a href="/join-free" class="block cursor-pointer">
-                <div class="group relative bg-white p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:-translate-y-2 overflow-hidden h-full">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-red-50 rounded-full blur-3xl group-hover:bg-red-100 transition-colors"></div>
-                    <div class="relative z-10 text-center">
-                        <div class="mb-6 inline-block p-4 rounded-full bg-red-50 text-red-600 group-hover:scale-110 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-yellow-600 transition-colors">New to Us?</h3>
-                        <div class="w-12 h-1 bg-gray-200 mx-auto mb-4 group-hover:w-20 transition-all duration-500 group-hover:bg-yellow-500"></div>
-                        <p class="text-gray-600 text-sm leading-relaxed">Join with us and register your business free on our Premium Portal.</p>
-                    </div>
-                </div>
-            </a>
+    <a href="/become-seller" class="btx-access-card">
+      <div class="btx-access-icon" style="background:#fff7ed;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+        </svg>
+      </div>
+      <h3 class="btx-access-title">For Sellers</h3>
+      <div class="btx-access-divider"></div>
+      <p class="btx-access-desc">Looking for new Buyers? Go with us and get new buyers for your products.</p>
+    </a>
 
-        </div>
-    </div>
+    <a href="/join-free" class="btx-access-card">
+      <div class="btx-access-icon" style="background:#fef2f2;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#ef4444" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <h3 class="btx-access-title">New to Us?</h3>
+      <div class="btx-access-divider"></div>
+      <p class="btx-access-desc">Join with us and register your business free on our Premium Portal.</p>
+    </a>
+
+  </div>
 </section>
 
 
-<section id="bhilwara-featured-categories" class="py-16 bg-white relative">
-    
-    <div class="text-center mb-10 reveal">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 font-['Playfair_Display']">Most Popular Categories</h2>
-        <p class="text-gray-500 mt-2 text-sm md:text-base font-['Lato']">Browse the most desirable categories</p>
+
+
+
+
+
+
+<!-- kaam -->
+<div class="swiper-wrapper">
+
+    <% if (locals.categories && categories.length > 0) { %>
+
+        <% categories.forEach((cat, index) => { %>
+
+            <div class="swiper-slide h-auto py-4 flex justify-center">
+
+                <!-- CATEGORY LINK -->
+                <a
+                    href="/category/<%= encodeURIComponent(cat.name) %>"
+                    class="btx-elite-card group block text-center"
+                >
+
+                    <!-- IMAGE -->
+                    <div class="btx-thumb-wrap relative mx-auto mb-5 <%= index % 2 === 1 ? 'shape-alt' : 'shape-std' %>">
+
+                        <img
+                            src="<%= cat.image || '/images/default.jpg' %>"
+                            alt="<%= cat.name %>"
+                            class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        >
+
+                        <!-- OVERLAY -->
+                        <div class="btx-elite-overlay">
+
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-xl scale-0 group-hover:scale-100 transition-all duration-500">
+
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TEXT -->
+                    <div class="px-2">
+
+                        <h3 class="text-[12px] font-black uppercase tracking-[0.1em] text-gray-900 group-hover:text-black transition-all duration-300 mb-1">
+
+                            <%= cat.name %>
+
+                        </h3>
+
+                        <div class="flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+
+                            <span class="h-[1px] w-4 bg-black"></span>
+
+                            <p class="text-[8px] font-black text-black uppercase tracking-tighter">
+                                View Collection
+                            </p>
+
+                            <span class="h-[1px] w-4 bg-black"></span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <div class="w-full text-center py-10">
+
+            <p class="text-gray-400 italic text-sm">
+                No collections available at the moment.
+            </p>
+
+        </div>
+
+    <% } %>
+
+</div>
+
+<style>
+
+/* SWIPER FIX */
+.btx-auto-slider-22{
+    overflow:visible !important;
+}
+
+.btx-auto-slider-22 .swiper-slide{
+    height:auto !important;
+}
+
+/* CARD */
+.btx-elite-card{
+    width:100%;
+    max-width:140px;
+    text-decoration:none;
+}
+
+/* IMAGE WRAP */
+.btx-thumb-wrap{
+    width:110px;
+    height:150px;
+    position:relative;
+    overflow:hidden;
+    background:#fff;
+    border:1px solid rgba(0,0,0,0.05);
+    transition:all .6s cubic-bezier(.23,1,.32,1);
+    box-shadow:0 10px 25px -10px rgba(0,0,0,0.08);
+}
+
+/* SHAPES */
+.shape-std{
+    border-radius:3rem .8rem 3rem .8rem;
+}
+
+.shape-alt{
+    border-radius:.8rem 3rem .8rem 3rem;
+}
+
+/* HOVER */
+.btx-elite-card:hover .btx-thumb-wrap{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px -15px rgba(0,0,0,.15);
+}
+
+/* OVERLAY */
+.btx-elite-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(255,255,255,.35), transparent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transition:.4s;
+}
+
+.btx-elite-card:hover .btx-elite-overlay{
+    opacity:1;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .btx-thumb-wrap{
+        width:95px;
+        height:130px;
+    }
+
+}
+
+</style>
+
+
+
+
+
+
+
+
+
+<!-- ═══════════════════════════════════════════
+  HERITAGE SECTION
+═══════════════════════════════════════════ -->
+<section class="btx-heritage" id="btx-about">
+  <div class="btx-heritage-inner">
+
+    <div class="btx-heritage-header">
+      <p class="btx-heritage-pre">Established Legacy 1975</p>
+      <h2 class="btx-heritage-title">The Global <em>Suiting Capital</em></h2>
+      <div class="btx-heritage-rule"></div>
     </div>
 
-    <div class="bt-circle-slider-wrapper max-w-7xl mx-auto px-4 reveal delay-1">
+    <div class="btx-heritage-grid">
+
+      <!-- IMAGE -->
+      <div class="btx-heritage-img-col">
+        <div class="btx-heritage-glow"></div>
+        <div class="btx-heritage-img-frame">
+          <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=1000" alt="Bhilwara Textile Mill">
+        </div>
+        <div class="btx-heritage-stat-card">
+          <strong>40%</strong>
+          <span>Total Suiting<br>India's Production</span>
+        </div>
+      </div>
+
+      <!-- TEXT -->
+      <div class="btx-heritage-text-col">
+        <h3>Why Bhilwara Rules the Looms?</h3>
+        <p>Bhilwara ko "Manchester of India" yuhi nahi kaha jata. Yahan ki zameen par Sangam India, RSWM (Mayur Suitings), BSL Ltd., aur Suzuki jaise global titans ne apni legacy likhi hai. Har saal yahan 1 billion metre se zyada fabric produce hota hai.</p>
+
+        <div class="btx-feature-cards">
+          <div class="btx-feat-card">
+            <div class="btx-feat-icon"><i class="fa-solid fa-industry" style="color:#000;font-size:16px;"></i></div>
+            <p class="btx-feat-label">Direct Mill Access</p>
+            <p class="btx-feat-body">Middlemen ko bypass karein. Pure factory rate par bulk supply, direct from Bhilwara's hub.</p>
+          </div>
+          <div class="btx-feat-card">
+            <div class="btx-feat-icon"><i class="fa-solid fa-medal" style="color:#000;font-size:16px;"></i></div>
+            <p class="btx-feat-label">ISO Standardized</p>
+            <p class="btx-feat-body">GSM test se lekar colorfastness tak — har metre international quality standards par khara utarta hai.</p>
+          </div>
+        </div>
+
+        <div class="btx-brands-row">
+          <p class="btx-brands-label">Inspired by the Industry Giants</p>
+          <div class="btx-brands-list">
+            <span>SANGAM</span>
+            <span>MAYUR (RSWM)</span>
+            <span>BSL LTD</span>
+            <span>SUZUKI</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+  WEAVE SECTION
+═══════════════════════════════════════════ -->
+<section class="btx-weave-section">
+  <div class="btx-weave-glow"></div>
+  <div class="btx-weave-inner">
+
+    <p class="btx-section-eyebrow">14-Stage Precision Craft</p>
+    <h2 class="btx-weave-title">The Soul of <em>Bhilwara Looms</em></h2>
+    <p class="btx-weave-sub">From precision spinning to world-class finishing, every thread woven in Bhilwara carries generations of craftsmanship, industrial excellence, and global textile authority.</p>
+
+    <div class="btx-weave-svg-wrap">
+      <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:80px;drop-shadow:0 0 25px rgba(201,146,42,0.5);">
+        <path d="M0,50 Q175,10 350,50 T700,50" stroke="#C9922A" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="25,20">
+          <animate attributeName="stroke-dashoffset" from="0" to="-400" dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path d="M0,50 Q175,90 350,50 T700,50" stroke="#f5c163" stroke-width="2" fill="none" opacity="0.4" stroke-dasharray="18,24">
+          <animate attributeName="stroke-dashoffset" from="0" to="400" dur="6s" repeatCount="indefinite"/>
+        </path>
+        <path d="M0,50 L700,50" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="5,12"/>
+        <% for (let i = 50; i <= 650; i += 100) { %>
+          <line x1="<%= i %>" y1="18" x2="<%= i %>" y2="82" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <% } %>
+      </svg>
+    </div>
+
+    <div class="btx-weave-stats">
+      <div class="btx-weave-stat">
+        <span class="btx-weave-stat-num">1B+</span>
+        <div class="btx-weave-stat-text">
+          <p>Metres</p>
+          <p>Produced Yearly</p>
+        </div>
+      </div>
+      <div class="btx-weave-divider"></div>
+      <div class="btx-weave-stat">
+        <span class="btx-weave-stat-num">ISO</span>
+        <div class="btx-weave-stat-text">
+          <p>Certified</p>
+          <p>Manufacturing Units</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+  PROCESS SECTION
+═══════════════════════════════════════════ -->
+<style>
+    :root {
+        --amber-glow: #d97706;
+        --card-bg: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Section padding 80px se ghata kar 40px kar di */
+    .bt-elite-slider {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background: #050505;
+        padding: 40px 0; 
+    }
+
+    .slider__nav { display: none; }
+
+    .slider__inner {
+        display: flex;
+        transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+        width: 100%;
+    }
+
+    /* Horizontal gap kam karne ke liye padding 10px ki */
+    .slider__contents {
+        min-width: 100%;
+        padding: 0 10px; 
+        box-sizing: border-box;
+    }
+
+    @media (min-width: 1024px) {
+        .slider__contents { min-width: 33.33%; }
+    }
+
+    /* Dots ka top margin 40px se 20px kiya */
+    .slider__dots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .slider__label {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #s1:checked ~ .slider__inner { transform: translateX(0%); }
+    #s2:checked ~ .slider__inner { transform: translateX(-100%); }
+    #s3:checked ~ .slider__inner { transform: translateX(-200%); }
+    #s4:checked ~ .slider__inner { transform: translateX(-300%); }
+
+    #s1:checked ~ .slider__dots label[for="s1"],
+    #s2:checked ~ .slider__dots label[for="s2"],
+    #s3:checked ~ .slider__dots label[for="s3"],
+    #s4:checked ~ .slider__dots label[for="s4"] {
+        background: var(--amber-glow);
+        transform: scale(1.2);
+    }
+
+    /* Card padding 40px se 24px (p-6 equivalent) kar di */
+    .elite-review-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.5rem;
+        padding: 24px; 
+        height: 100%;
+        backdrop-filter: blur(10px);
+        transition: 0.4s;
+    }
+
+    .elite-review-card:hover {
+        border-color: var(--amber-glow);
+    }
+</style>
+
+<section class="bt-elite-slider">
+    <div class="max-w-7xl mx-auto px-6">
         
-        <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+        <div class="mb-6 text-center md:text-left">
+            <h2 class="text-2xl font-black text-white uppercase italic">Elite <span class="text-amber-600">Reviews</span></h2>
+            <p class="text-gray-500 text-[9px] uppercase tracking-[0.2em] mt-1">Woven with trust since 1975</p>
+        </div>
 
-        <div class="bt-circle-track">
-            
-            <% if (categories && categories.length > 0) { %>
-                
-                <% categories.forEach(function(cat) { %>
-                    <a href="/fabrics?cat=<%= cat.name.toLowerCase().replace(/\s+/g, '-') %>" class="group flex flex-col items-center min-w-[140px] cursor-pointer">
-                        
-                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-50 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-[#c8962a] group-hover:shadow-[0_0_20px_rgba(200,150,42,0.2)] transition-all duration-300 overflow-hidden relative">
-                            <% if (cat.image) { %>
-                                <img src="<%= cat.image %>" alt="<%= cat.name %>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                            <% } else { %>
-                                <span class="text-3xl transform group-hover:scale-110 transition-transform duration-300">🧵</span>
-                            <% } %>
+        <input type="radio" name="slider" id="s1" checked class="slider__nav">
+        <input type="radio" name="slider" id="s2" class="slider__nav">
+        <input type="radio" name="slider" id="s3" class="slider__nav">
+        <input type="radio" name="slider" id="s4" class="slider__nav">
+
+        <div class="slider__inner">
+            <% if (testimonials && testimonials.length > 0) { %>
+                <% testimonials.forEach((t, index) => { %>
+                    <div class="slider__contents">
+                        <div class="elite-review-card">
+                            <div class="flex gap-1 mb-3">
+                                <% for(let i=0; i < (t.rating || 5); i++) { %>
+                                    <i class="fa-solid fa-star text-amber-500 text-[8px]"></i>
+                                <% } %>
+                            </div>
+                            
+                            <p class="text-gray-300 text-sm italic leading-snug mb-4">
+                                "<%= t.description %>"
+                            </p>
+
+                            <div class="flex items-center gap-3 border-t border-white/5 pt-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center font-black text-black text-xs">
+                                    <%= t.name.charAt(0) %>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold uppercase text-[10px] tracking-wider"><%= t.name %></h4>
+                                    <p class="text-amber-600 text-[7px] font-black uppercase">Verified Buyer</p>
+                                </div>
+                            </div>
                         </div>
-
-                        <span class="mt-4 text-sm font-bold text-gray-700 group-hover:text-[#c8962a] transition-colors text-center w-full px-2 font-['Lato']">
-                            <%= cat.name %>
-                        </span>
-                    </a>
-                <% }); %>
-
-                <% categories.forEach(function(cat) { %>
-                    <a href="/fabrics?cat=<%= cat.name.toLowerCase().replace(/\s+/g, '-') %>" class="group flex flex-col items-center min-w-[140px] cursor-pointer">
-                        <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-50 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.05)] border-2 border-transparent group-hover:border-[#c8962a] group-hover:shadow-[0_0_20px_rgba(200,150,42,0.2)] transition-all duration-300 overflow-hidden relative">
-                            <% if (cat.image) { %>
-                                <img src="<%= cat.image %>" alt="<%= cat.name %>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                            <% } else { %>
-                                <span class="text-3xl transform group-hover:scale-110 transition-transform duration-300">🧵</span>
-                            <% } %>
-                        </div>
-                        <span class="mt-4 text-sm font-bold text-gray-700 group-hover:text-[#c8962a] transition-colors text-center w-full px-2 font-['Lato']">
-                            <%= cat.name %>
-                        </span>
-                    </a>
-                <% }); %>
-
-            <% } else { %>
-                <div class="text-center w-full py-10 text-gray-500 font-bold w-full">
-                    No categories found.
-                </div>
+                    </div>
+                <% }) %>
             <% } %>
-
         </div>
-    </div>
-</section>   
 
-
-
-
-
-
-
-
-
-<!-- ══════════ for buyer ══════════ -->
-
-
-<!-- ══════════ ABOUT ══════════ -->
-<section>
-  <div class="about-section">
-    <div class="about-images reveal-left">
-      <div class="about-img-1">
-        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=700" alt="Fabric weaving loom Bhilwara">
-      </div>
-      <div class="about-img-2">
-        <img src="https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=500" alt="Textile manufacturing">
-      </div>
-      <div class="about-years reveal-scale">
-        <span>50+</span>
-        <span>Years of Craft</span>
-      </div>
-    </div>
-    <div class="reveal-right">
-      <p class="section-label">Our Heritage</p>
-      <h2 class="section-title">Bhilwara — The <em>Manchester of India</em></h2>
-      <p class="section-body">
-        Bhilwara produces over 40% of India's total suiting fabric. Nestled in the heart of Rajasthan, our city's looms run day and night to clothe the nation — from corporate boardrooms to school corridors, from courtrooms to military barracks.
-      </p>
-      <p class="section-body">
-        We are direct manufacturers — no middlemen, no compromises. When you order from us, you're tapping straight into the source of India's textile power, backed by ISO-certified quality controls and a legacy built over five decades.
-      </p>
-      <div class="feature-list">
-        <div class="feature-item reveal delay-1">
-          <div class="feature-icon">🏭</div>
-          <div class="feature-text">
-            <strong>Direct Mill Supply</strong>
-            <span>Cut out middlemen. Factory-to-door pricing that bulk buyers love.</span>
-          </div>
+        <div class="slider__dots">
+            <label for="s1" class="slider__label"></label>
+            <label for="s2" class="slider__label"></label>
+            <label for="s3" class="slider__label"></label>
+            <label for="s4" class="slider__label"></label>
         </div>
-        <div class="feature-item reveal delay-2">
-          <div class="feature-icon">✅</div>
-          <div class="feature-text">
-            <strong>ISO Certified Quality</strong>
-            <span>Every metre tested for GSM, colourfastness, shrinkage and tensile strength.</span>
-          </div>
-        </div>
-        <div class="feature-item reveal delay-3">
-          <div class="feature-icon">🚚</div>
-          <div class="feature-text">
-            <strong>Pan-India Delivery</strong>
-            <span>Dispatching to 500+ cities. Bulk orders shipped within 72 hours.</span>
-          </div>
-        </div>
-      </div>
+
     </div>
-  </div>
 </section>
 
-<!-- ══════════ STATS ══════════ -->
-<section class="stats-section">
-  <div class="stats-grid">
-    <div class="stat-item reveal delay-1">
-      <div class="stat-number" data-count="50">0</div>
-      <div class="stat-label">Years of Excellence</div>
-    </div>
-    <div class="stat-item reveal delay-2">
-      <div class="stat-number" data-count="1200">0</div>
-      <div class="stat-label">Fabric Patterns</div>
-    </div>
-    <div class="stat-item reveal delay-3">
-      <div class="stat-number" data-count="800">0</div>
-      <div class="stat-label">Happy Clients</div>
-    </div>
-    <div class="stat-item reveal delay-4">
-      <div class="stat-number" data-count="40">0</div>
-      <div class="stat-label">% of India's Suiting Output</div>
-    </div>
-  </div>
-</section>
 
-<!-- ══════════ FABRICS ══════════ -->
-<section class="fabrics-section" id="fabrics">
-  <div class="fabrics-header">
-    <div class="reveal">
-      <p class="section-label">Our Collection</p>
-      <h2 class="section-title">Fabrics Built for <em>Every Occasion</em></h2>
-    </div>
-    <div class="reveal delay-2">
-      <a href="/fabrics" class="btn-primary">View All Fabrics</a>
-    </div>
-  </div>
+<!-- ═══════════════════════════════════════════
+  INQUIRY SECTION
+═══════════════════════════════════════════ -->
 
-  <div class="fabrics-grid">
-    <div class="fabric-card reveal delay-1">
-      <img class="fabric-img" src="https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=700" alt="Premium Suiting">
-      <div class="fabric-overlay">
-        <div class="fabric-tag">Bestseller</div>
-        <div class="fabric-name">Premium Poly-Viscose Suiting</div>
-        <div class="fabric-desc">The backbone of Indian formals. Wrinkle-resistant, richly textured, available in 200+ shades. Ideal for corporate wear & uniforms.</div>
-      </div>
-      <div class="fabric-arrow">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </div>
-    </div>
-
-    <div class="fabric-card reveal delay-2">
-      <img class="fabric-img" src="https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&q=80&w=600" alt="Cotton Shirting">
-      <div class="fabric-overlay">
-        <div class="fabric-tag">Popular</div>
-        <div class="fabric-name">Pure Cotton Shirtings</div>
-        <div class="fabric-desc">Breathable, soft, and timeless. For premium shirt manufacturers & exporters.</div>
-      </div>
-      <div class="fabric-arrow">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </div>
-    </div>
-
-    <div class="fabric-card reveal delay-3">
-      <img class="fabric-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=600" alt="Uniform Fabric">
-      <div class="fabric-overlay">
-        <div class="fabric-tag">Bulk Preferred</div>
-        <div class="fabric-name">Uniform Grade Fabrics</div>
-        <div class="fabric-desc">Schools, defence, hospitality & corporate. Durable blends with colour retention guaranteed.</div>
-      </div>
-      <div class="fabric-arrow">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </div>
-    </div>
-
-    <div class="fabric-card reveal delay-4">
-      <img class="fabric-img" src="https://images.unsplash.com/photo-1544441892-794166f1e3be?auto=format&fit=crop&q=80&w=600" alt="Woolen Suiting">
-      <div class="fabric-overlay">
-        <div class="fabric-tag">Winter Range</div>
-        <div class="fabric-name">Woolen Blend Suitings</div>
-        <div class="fabric-desc">Luxurious warmth, sharp drape. Perfect for North Indian winters and formal suiting needs.</div>
-      </div>
-      <div class="fabric-arrow">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ ANIMATED WEAVE ══════════ -->
-<section class="weave-section">
-  <p class="section-label reveal" style="justify-content:center">The Art of Weaving</p>
-  <h2 class="section-title reveal" style="color:#fff; text-align:center; max-width:600px; margin:0 auto 1rem;">
-    Every Thread Tells a <em style="color:var(--gold-light)">Story</em>
-  </h2>
-  <p style="color:rgba(255,255,255,0.5); font-family:'Cormorant Garamond',serif; font-size:1.1rem; text-align:center; max-width:500px; margin:0 auto; font-weight:300;" class="reveal">
-    Our fabrics pass through 14 stages of precision manufacturing — from raw fibre to finished metre — before they reach you.
-  </p>
-  <div class="weave-svg-wrap reveal">
-    <svg viewBox="0 0 700 120" xmlns="http://www.w3.org/2000/svg" width="100%" height="120">
-      <!-- Animated sine wave threads -->
-      <path id="t1" d="M0,60 Q175,10 350,60 T700,60" stroke="#c8962a" stroke-width="2" fill="none" stroke-dasharray="8,6" stroke-linecap="round">
-        <animate attributeName="stroke-dashoffset" from="0" to="-400" dur="3s" repeatCount="indefinite"/>
-      </path>
-      <path id="t2" d="M0,60 Q175,110 350,60 T700,60" stroke="#e8b84b" stroke-width="1.5" fill="none" stroke-dasharray="5,8" opacity="0.6">
-        <animate attributeName="stroke-dashoffset" from="-400" to="0" dur="4s" repeatCount="indefinite"/>
-      </path>
-      <path id="t3" d="M0,40 Q175,90 350,40 T700,40" stroke="rgba(200,150,42,0.4)" stroke-width="1" fill="none" stroke-dasharray="3,10">
-        <animate attributeName="stroke-dashoffset" from="0" to="-300" dur="5s" repeatCount="indefinite"/>
-      </path>
-      <path id="t4" d="M0,80 Q175,30 350,80 T700,80" stroke="rgba(232,184,75,0.3)" stroke-width="1" fill="none" stroke-dasharray="3,10">
-        <animate attributeName="stroke-dashoffset" from="-300" to="0" dur="5.5s" repeatCount="indefinite"/>
-      </path>
-      <!-- Vertical warp threads -->
-      <line x1="100" y1="20" x2="100" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-      <line x1="200" y1="20" x2="200" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-      <line x1="300" y1="20" x2="300" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-      <line x1="400" y1="20" x2="400" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-      <line x1="500" y1="20" x2="500" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-      <line x1="600" y1="20" x2="600" y2="100" stroke="rgba(200,150,42,0.15)" stroke-width="1"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ══════════ WHY US ══════════ -->
-<section class="why-section" id="about">
-  <div class="why-inner">
-    <div style="text-align:center" class="reveal">
-      <p class="section-label" style="justify-content:center">Why Choose Us</p>
-      <h2 class="section-title" style="max-width:550px;margin:0 auto">The Bhilwara <em>Advantage</em></h2>
-    </div>
-    <div class="why-grid">
-      <div class="why-card reveal delay-1">
-        <div class="why-number">01</div>
-        <span class="why-icon">🧵</span>
-        <div class="why-title">Mill-Direct Pricing</div>
-        <p class="why-body">We are the manufacturer, not a reseller. Get wholesale prices that your competitors can't match. Minimum order from just 100 metres.</p>
-      </div>
-      <div class="why-card reveal delay-2">
-        <div class="why-number">02</div>
-        <span class="why-icon">🔬</span>
-        <div class="why-title">Rigorous Quality Testing</div>
-        <p class="why-body">Every batch undergoes shrinkage, GSM, colourfastness and tensile testing. Our lab is NABL accredited. Zero compromise, always.</p>
-      </div>
-      <div class="why-card reveal delay-3">
-        <div class="why-number">03</div>
-        <span class="why-icon">📦</span>
-        <div class="why-title">Reliable Bulk Dispatch</div>
-        <p class="why-body">10,000+ metres shipped daily. We have a dedicated logistics team ensuring your order reaches on time, every time.</p>
-      </div>
-      <div class="why-card reveal delay-2">
-        <div class="why-number">04</div>
-        <span class="why-icon">🎨</span>
-        <div class="why-title">Custom Dyeing & Weaving</div>
-        <p class="why-body">Want a specific Pantone shade or a custom pattern woven? Our design team handles MOQ-based custom orders with precision.</p>
-      </div>
-      <div class="why-card reveal delay-3">
-        <div class="why-number">05</div>
-        <span class="why-icon">🌿</span>
-        <div class="why-title">Eco-Conscious Production</div>
-        <p class="why-body">Waterless dyeing technology, solar-powered units, and GOTS-certified organic cotton ranges for the conscious buyer.</p>
-      </div>
-      <div class="why-card reveal delay-4">
-        <div class="why-number">06</div>
-        <span class="why-icon">🤝</span>
-        <div class="why-title">Trusted by 800+ Brands</div>
-        <p class="why-body">From school uniform suppliers in Kerala to corporate garment houses in Delhi — our fabric is the silent backbone of Indian fashion.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ PROCESS ══════════ -->
-<section class="process-section">
-  <div class="process-inner">
-    <div style="text-align:center" class="reveal">
-      <p class="section-label" style="justify-content:center">Our Process</p>
-      <h2 class="section-title" style="max-width:500px;margin:0 auto">From Raw Fibre to <em>Finished Fabric</em></h2>
-    </div>
-    <div class="process-steps">
-      <div class="process-step reveal delay-1">
-        <div class="step-circle">🌾</div>
-        <div class="step-num">Step 01</div>
-        <div class="step-title">Fibre Sourcing</div>
-        <p class="step-body">Premium raw cotton & polyester sourced directly from certified farms and petrochemical plants.</p>
-      </div>
-      <div class="process-step reveal delay-2">
-        <div class="step-circle">🔄</div>
-        <div class="step-num">Step 02</div>
-        <div class="step-title">Spinning</div>
-        <p class="step-body">State-of-the-art spinning machines produce ultra-fine, uniform yarn for consistent weave quality.</p>
-      </div>
-      <div class="process-step reveal delay-3">
-        <div class="step-circle">🧶</div>
-        <div class="step-num">Step 03</div>
-        <div class="step-title">Weaving</div>
-        <p class="step-body">Rapier and air-jet looms weave precise patterns at 400+ picks per minute for flawless fabric construction.</p>
-      </div>
-      <div class="process-step reveal delay-4">
-        <div class="step-circle">🎨</div>
-        <div class="step-num">Step 04</div>
-        <div class="step-title">Dyeing & Finishing</div>
-        <p class="step-body">Eco-safe reactive dyes. Heat-setting, calendering and anti-shrink finishing for a premium hand-feel.</p>
-      </div>
-      <div class="process-step reveal delay-5">
-        <div class="step-circle">✅</div>
-        <div class="step-num">Step 05</div>
-        <div class="step-title">QC & Dispatch</div>
-        <p class="step-body">Multi-point lab testing, final inspection, roll packing and dispatch to your doorstep.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ TESTIMONIALS ══════════ -->
-<section class="testimonials-section">
-  <div style="max-width:1280px;margin:0 auto;padding:0 2rem" class="reveal">
-    <p class="section-label" style="color:rgba(255,255,255,0.5)">What Our Clients Say</p>
-    <h2 class="section-title" style="color:#fff">Trusted Across <em>India</em></h2>
-  </div>
-  <div class="testimonials-track-wrap">
-    <div class="testimonials-track" id="testimonialTrack">
-      <% 
-      const testimonials = [
-        { text: "Been ordering suiting fabrics from Bhilwara Textile for 6 years. Their Poly-Viscose blend is unmatched — the drape, the finish, the consistency. No one else comes close.", name: "Rajesh Agarwal", city: "Delhi, School Uniform Supplier", init: "RA" },
-        { text: "We supply uniforms to 40 corporate clients across Pune. Bhilwara Textile is our go-to — reliable quality and the best bulk pricing we've found anywhere in India.", name: "Sunita Mehta", city: "Pune, Corporate Uniform Manufacturer", init: "SM" },
-        { text: "Visited the factory in Bhilwara and was blown away. The scale of operations is incredible. The quality controls they have in place give me full confidence in every order.", name: "Mohammed Farooq", city: "Hyderabad, Fabric Exporter", init: "MF" },
-        { text: "The custom dyeing service is outstanding. We gave them a specific Pantone code and they nailed it on the first sample. Will definitely be a repeat customer.", name: "Ananya Sharma", city: "Mumbai, Fashion Brand", init: "AS" },
-        { text: "Delivery is always on time and the packing is excellent. As a retailer in a small town, getting consistent B2B service is rare — Bhilwara Textile has never let me down.", name: "Vikram Singh", city: "Jodhpur, Fabric Retailer", init: "VS" },
-        { text: "We source fabrics from many mills. For suiting-grade materials, Bhilwara Textile is simply the best value proposition in the entire country. Period.", name: "Deepak Goyal", city: "Ludhiana, Garment Exporter", init: "DG" }
-      ];
-      %>
-      <% testimonials.forEach(t => { %>
-      <div class="testi-card">
-        <div class="testi-quote">"</div>
-        <p class="testi-text"><%= t.text %></p>
-        <div class="testi-author">
-          <div class="testi-avatar"><%= t.init %></div>
-          <div>
-            <div class="testi-name"><%= t.name %></div>
-            <div class="testi-city"><%= t.city %></div>
-          </div>
-        </div>
-      </div>
-      <% }) %>
-      <!-- Duplicate for seamless loop -->
-      <% testimonials.forEach(t => { %>
-      <div class="testi-card">
-        <div class="testi-quote">"</div>
-        <p class="testi-text"><%= t.text %></p>
-        <div class="testi-author">
-          <div class="testi-avatar"><%= t.init %></div>
-          <div>
-            <div class="testi-name"><%= t.name %></div>
-            <div class="testi-city"><%= t.city %></div>
-          </div>
-        </div>
-      </div>
-      <% }) %>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ INQUIRY ══════════ -->
-<section class="inquiry-section" id="inquiry">
-  <div class="inquiry-inner">
-    <div class="reveal">
-      <p class="section-label" style="justify-content:center">Get in Touch</p>
-      <h2 class="section-title">Send a Bulk <em>Enquiry</em></h2>
-      <p class="section-body" style="text-align:center;max-width:500px;margin:1rem auto 0">
-        Tell us your requirements. Our team gets back within 4 business hours with samples, pricing, and availability.
-      </p>
-    </div>
-    <form class="inquiry-form reveal" action="/inquiry" method="POST">
-      <div class="form-group">
-        <label class="form-label">Your Name *</label>
-        <input class="form-input" type="text" name="name" placeholder="Rajesh Agarwal" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Company / Business Name</label>
-        <input class="form-input" type="text" name="company" placeholder="Agarwal Garments Pvt. Ltd.">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone / WhatsApp *</label>
-        <input class="form-input" type="tel" name="phone" placeholder="+91 98765 XXXXX" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" name="email" placeholder="you@company.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Fabric Type Required *</label>
-        <select class="form-select" name="fabric" required>
-          <option value="">— Select Fabric Type —</option>
-          <option>Poly-Viscose Suiting</option>
-          <option>Pure Cotton Shirting</option>
-          <option>Uniform Grade Fabric</option>
-          <option>Woolen Blend Suiting</option>
-          <option>Custom / Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Quantity Required (Metres) *</label>
-        <input class="form-input" type="text" name="quantity" placeholder="e.g. 500 metres" required>
-      </div>
-      <div class="form-group full">
-        <label class="form-label">Additional Requirements</label>
-        <textarea class="form-textarea" name="message" placeholder="Shade, GSM, end-use, delivery timeline, custom requirements..."></textarea>
-      </div>
-      <button class="btn-submit" type="submit"><span>📩 &nbsp;Submit Enquiry</span></button>
-    </form>
-  </div>
-</section>
 
 <%- include('partials/footer') %>
-

@@ -55,6 +55,7 @@ const SellerAdmin = require('./models/seller-admin-model');
 const QuickRegistration = require('./models/QuickRegistration');
 const Product = require('./models/Product');
 const HeroSlider = require('./models/HeroSlider'); 
+const Testimonial = require('./models/Testimonial');
 
 // ===== [05] CUSTOM AUTH MIDDLEWARES =====
 // 🔐 Textile Seller Auth Check
@@ -82,29 +83,55 @@ app.use('/api/inquiry', require('./routes/inquiry'));
 // ============================================================
 
 // 🏠 MAIN HOME ROUTE (With Hero Slider & Categories)
-app.get('/', async (req, res) => {
-    try {
-        // Parallel data fetching for performance
-        const [slides, categories] = await Promise.all([
-            HeroSlider.find().sort({ slideNumber: 1 }),
-            Category.find().sort({ createdAt: -1 })
-        ]);
 
-        res.render('user/home', { 
-            slides, 
-            categories,
-            title: "Bhilwara Textile | Home" 
+
+app.get('/category/:catName', async (req, res) => {
+
+    try {
+
+        const categoryName = decodeURIComponent(req.params.catName);
+
+        const categoryData = await Category.findOne({
+            name: categoryName
+        }).populate({
+            path: 'products',
+            populate: {
+                path: 'sellerId',
+                select: 'companyName location'
+            }
         });
+
+        if (!categoryData) {
+
+            return res.status(404).send("Category not found");
+
+        }
+
+        res.render('category-details', {
+
+            category: categoryData,
+
+            title: `${categoryName} - Bhilwara Textile Authority`
+
+        });
+
     } catch (err) {
-        console.error("❌ Home Route Error:", err);
-        res.render('user/home', { slides: [], categories: [] });
+
+        console.error(err);
+
+        res.redirect('/');
+
     }
+
 });
+
 
 app.get('/fabrics', (req, res) => res.render('user/fabrics'));
 app.get('/products', (req, res) => res.render('user/products'));
 app.get('/about', (req, res) => res.render('user/about'));
-app.get('/become-seller', (req, res) => res.render('user/seller-registration'));
+app.get('/become-seller', (req, res) => {
+    res.render('user/become-seller');
+});
 
 app.get('/buyer', async (req, res) => {
     try {
@@ -187,6 +214,30 @@ app.post('/api/admin/delete-product/:id', async (req, res) => {
     }
 });
 
+/* =========================
+ADD CATEGORY PAGE
+========================= */
+// [ADMIN] Add Category Page Render
+app.get('/admin/add-category', async (req, res) => {
+    try {
+        // Data fetch kar rahe hain categories ka
+        const categories = await Category.find().sort({ createdAt: -1 });
+
+        // View render karte waat title aur categories bhej rahe hain
+        res.render('admin-panel/add-category', {
+            categories,
+            title: "Manage Categories | Admin Authority"
+        });
+
+    } catch (err) {
+        console.error("❌ Admin Category Error:", err);
+        res.render('admin-panel/add-category', {
+            categories: [],
+            title: "Error | Admin Authority"
+        });
+    }
+});
+
 // Quick Leads / Registrations
 app.get('/admin/quick-registrations', async (req, res) => {
     try {
@@ -224,6 +275,124 @@ app.post('/api/seller/update-status/:id', async (req, res) => {
     }
 });
 
+
+
+/////// testimonilas ka work
+
+/* ============================================================
+MODELS IMPORT
+============================================================ */
+
+/* ============================================================
+   [SECTION] TESTIMONIAL MANAGEMENT (DYNAMIC)
+   ============================================================ */
+
+// 1. ADMIN PAGE: Manage Testimonials
+app.get('/admin/testimonials', async (req, res) => {
+    try {
+        // Fetching testimonials from DB
+        const list = await Testimonial.find().sort({ createdAt: -1 });
+
+        // Rendering the admin panel view
+        res.render('admin-panel/manage-testimonials', {
+            title: "Manage Testimonials | Bhilwara Textile",
+            list: list
+        });
+    } catch (error) {
+        console.error("❌ ADMIN TESTIMONIAL GET ERROR:", error);
+        res.status(500).send("Server Error: " + error.message);
+    }
+});
+
+// 2. API: Add New Testimonial (POST)
+app.post('/api/admin/add-testimonial', async (req, res) => {
+    try {
+        const { description, name, rating } = req.body;
+
+        // Validation: Check if data exists
+        if (!description || !name) {
+            return res.status(400).send("Bhai, description aur name zaruri hai!");
+        }
+
+        await Testimonial.create({
+            description,
+            name,
+            rating: rating || 5
+        });
+
+        console.log("✅ New Testimonial Added");
+        res.redirect('/admin/testimonials');
+    } catch (error) {
+        console.error("❌ ADD TESTIMONIAL POST ERROR:", error);
+        res.status(500).send("Error saving data");
+    }
+});
+
+// 3. ADMIN: Delete Testimonial
+app.get('/admin/delete-testimonial/:id', async (req, res) => {
+    try {
+        await Testimonial.findByIdAndDelete(req.params.id);
+        console.log("🗑️ Testimonial Deleted:", req.params.id);
+        res.redirect('/admin/testimonials');
+    } catch (error) {
+        console.error("❌ DELETE TESTIMONIAL ERROR:", error);
+        res.status(500).send("Error deleting data");
+    }
+});
+// 🏠 MAIN HOME ROUTE (With Hero Slider & Categories)
+// 🏠 MAIN HOME ROUTE
+app.get('/', async (req, res) => {
+
+    try {
+
+        /* FETCH ALL DATA */
+        const [
+            slides,
+            categories,
+            testimonials
+        ] = await Promise.all([
+
+            HeroSlider.find()
+            .sort({ slideNumber: 1 }),
+
+            Category.find()
+            .sort({ createdAt: -1 }),
+
+            Testimonial.find()
+            .sort({ createdAt: -1 })
+
+        ]);
+
+        /* RENDER HOME PAGE */
+        res.render('user/home', {
+
+            slides,
+            categories,
+            testimonials,
+
+            title: "Bhilwara Textile | Home"
+
+        });
+
+    } catch (err) {
+
+        console.error("❌ Home Route Error:", err);
+
+        res.render('user/home', {
+
+            slides: [],
+            categories: [],
+            testimonials: [],
+
+            title: "Bhilwara Textile | Home"
+
+        });
+
+    }
+
+});
+
+
 // ============================================================
 // [10] SECTION: MISC & ERROR HANDLING
 // ============================================================
@@ -242,6 +411,8 @@ app.post('/api/quick-register', async (req, res) => {
 app.use((req, res) => {
     res.status(404).render('user/404', { title: "404 - Not Found" });
 });
+
+
 
 
 // ============================================================
