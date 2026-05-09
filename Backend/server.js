@@ -48,10 +48,10 @@ app.use((req, res, next) => {
 
 
 // ===== [04] MODELS (Database Schemas) =====
+const SellerAdmin = require('./models/seller-admin-model');
 const Category = require('./models/Category');
 const Inquiry = require('./models/Inquiry');
 const Requirement = require('./models/Requirement');
-const SellerAdmin = require('./models/seller-admin-model'); 
 const QuickRegistration = require('./models/QuickRegistration');
 const Product = require('./models/Product');
 const HeroSlider = require('./models/HeroSlider'); 
@@ -84,47 +84,63 @@ app.use('/api/inquiry', require('./routes/inquiry'));
 
 // 🏠 MAIN HOME ROUTE (With Hero Slider & Categories)
 
+    app.get('/category/:catName', async (req, res) => {
 
-app.get('/category/:catName', async (req, res) => {
+        try {
 
-    try {
+            const categoryName = decodeURIComponent(req.params.catName);
 
-        const categoryName = decodeURIComponent(req.params.catName);
+            // CATEGORY
+            const categoryData = await Category.findOne({
+                name: categoryName
+            }).lean();
 
-        const categoryData = await Category.findOne({
-            name: categoryName
-        }).populate({
-            path: 'products',
-            populate: {
-                path: 'sellerId',
-                select: 'companyName location'
+            if (!categoryData) {
+                return res.status(404).send("Category not found");
             }
-        });
 
-        if (!categoryData) {
+            // PRODUCTS
+            const productsList = await Product.find({
+                category: categoryData._id
+            })
+            .populate('sellerId')
+            .lean();
 
-            return res.status(404).send("Category not found");
+            // ADD PRODUCTS
+            categoryData.products = productsList;
+
+            // RENDER
+            res.render('user/category-details', {
+                category: categoryData
+            });
+
+        } catch (err) {
+
+            console.error(err);
+            res.redirect('/');
 
         }
 
-        res.render('category-details', {
+    });
 
-            category: categoryData,
 
-            title: `${categoryName} - Bhilwara Textile Authority`
 
+// 🏷️ ALL CATEGORIES PAGE (Bhilwara Textile Special)
+app.get('/all-categories', async (req, res) => {
+    try {
+        // Database se saari categories fetch karein
+        const categories = await Category.find().sort({ createdAt: -1 });
+
+        // 'user/all-categrou' render karein (vahi naam jo aapne file ka rakha hai)
+        res.render('user/all-categrou', {
+            categories,
+            title: "All Categories | Bhilwara Textile"
         });
-
     } catch (err) {
-
-        console.error(err);
-
-        res.redirect('/');
-
+        console.error("❌ Categories Page Error:", err);
+        res.redirect('/'); // Error aaye toh home pe bhej do
     }
-
 });
-
 
 app.get('/fabrics', (req, res) => res.render('user/fabrics'));
 app.get('/products', (req, res) => res.render('user/products'));
@@ -214,6 +230,50 @@ app.post('/api/admin/delete-product/:id', async (req, res) => {
     }
 });
 
+
+// 1. User Side Page Render
+app.get('/verified-sellers', (req, res) => {
+    res.render('user/verified-sellers', { title: "Verified Partners | Bhilwara Textile" });
+});
+
+// 2. API: Sirf 'Approved' sellers ka data nikaalne ke liye
+app.get('/api/merchants/list', async (req, res) => {
+    try {
+        // Status 'Approved' filter lagana zaroori hai bhai!
+        const sellers = await SellerAdmin.find({ status: 'Approved' }).select('-password').sort({ companyName: 1 });
+        res.json(sellers);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to load directory" });
+    }
+});
+
+// 1. Merchant Profile Page Route
+app.get('/merchant/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Seller ka data fetch karo
+        const merchant = await SellerAdmin.findById(id).select('-password').lean();
+        
+        if (!merchant) {
+            return res.status(404).render('user/404', { title: "Merchant Not Found" });
+        }
+
+        // Us seller ke saare products bhi nikaal lo
+        const products = await Product.find({ sellerId: id }).sort({ createdAt: -1 }).lean();
+
+        res.render('user/merchant-profile', { 
+            title: merchant.companyName + " | Profile",
+            merchant,
+            products
+        });
+    } catch (err) {
+        console.error(err);
+        res.redirect('/verified-sellers');
+    }
+});
+
+
 /* =========================
 ADD CATEGORY PAGE
 ========================= */
@@ -263,20 +323,36 @@ app.get('/admin/admin-add-silder', async (req, res) => {
 
 
 // Status Updates API
+// Status Updates API
+// Status Updates API
+// Status Update API ko aise likhein
+// [09] Authority Update API
 app.post('/api/seller/update-status/:id', async (req, res) => {
     try {
-        await SellerAdmin.findByIdAndUpdate(req.params.id, {
-            status: req.body.status,
-            isVerified: req.body.status === 'Approved'
-        });
-        res.sendStatus(200);
-    } catch (err) {
-        res.status(500).send("Error");
+        const { id } = req.params;
+        const { status } = req.body;
+
+        // Check if ID is valid MongoDB ID format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: 'Invalid ID Format' });
+        }
+
+        const updatedSeller = await SellerAdmin.findByIdAndUpdate(
+            id,
+            { status: status },
+            { new: true }
+        );
+
+        if (!updatedSeller) {
+            return res.status(404).json({ success: false, message: 'Seller not found in DB' });
+        }
+
+        res.json({ success: true, message: 'Authority Status Updated' });
+    } catch (error) {
+        console.error("❌ Authority Error:", error.message);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
-
-
-
 /////// testimonilas ka work
 
 /* ============================================================

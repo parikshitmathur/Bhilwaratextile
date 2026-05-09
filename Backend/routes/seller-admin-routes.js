@@ -13,7 +13,6 @@ const fs = require('fs');
 // 📁 MULTER CONFIGURATIONS (Dual Storage)
 // ==========================================
 
-// 1. Profile Logo Storage Path
 const profilePath = path.join(__dirname, '../../Frontend/public/images/seller-profile-img');
 if (!fs.existsSync(profilePath)) fs.mkdirSync(profilePath, { recursive: true });
 
@@ -22,7 +21,6 @@ const profileStorage = multer.diskStorage({
     filename: (req, file, cb) => cb(null, 'LOGO-' + Date.now() + path.extname(file.originalname))
 });
 
-// 2. Product Images Storage Path
 const productPath = path.join(__dirname, '../../Frontend/public/images/seller-products');
 if (!fs.existsSync(productPath)) fs.mkdirSync(productPath, { recursive: true });
 
@@ -97,10 +95,9 @@ router.post('/tx-profile/update', uploadLogo.single('logo'), async (req, res) =>
 });
 
 // ==========================================
-// 🔹 PRODUCT MANAGEMENT (Add, List, Edit, Delete)
+// 🔹 PRODUCT MANAGEMENT
 // ==========================================
 
-// 1. ADD PRODUCT PAGE
 router.get('/seller/add-product', async (req, res) => {
     if (!req.cookies.sellerId) return res.redirect('/tx-login');
     try {
@@ -110,73 +107,83 @@ router.get('/seller/add-product', async (req, res) => {
     } catch (err) { res.status(500).send("Error loading categories"); }
 });
 
-// 2. SAVE PRODUCT API
+// 2. SAVE PRODUCT API (Logic fixed with Category Push)
+// ISME TABDEELI KAREIN:
 router.post('/api/seller/add-product', uploadProduct.single('productImage'), async (req, res) => {
     try {
-        const { productName, category, fabricType, bulkStock, pricePerUnit, description } = req.body;
+        const { productName, category, subCategory, customSubCategory, fabricType, bulkStock, pricePerUnit, gsm, description } = req.body;
+        
+        // 1. Category ka asli data nikaalo (ID ke liye)
+        const categoryDoc = await Category.findOne({ name: category });
+        if (!categoryDoc) return res.status(400).send("Category nahi mili!");
+
+        const finalSubCategory = (subCategory === "ADD_NEW_CUSTOM") ? customSubCategory : subCategory;
+
+        // 2. Product save karte waqt ID ka use karein
         const newProduct = new Product({
             sellerId: req.cookies.sellerId,
             productName,
-            category,
+            category: categoryDoc._id, // 🔥 Name ki jagah ID save karein
+            subCategory: finalSubCategory,
             fabricType,
+            gsm,
             bulkStock,
             pricePerUnit,
             description,
             fabricImage: req.file ? '/images/seller-products/' + req.file.filename : ''
         });
+
         await newProduct.save();
-        res.send("<script>alert('Product Added Successfully!'); window.location='/seller/my-products';</script>");
-    } catch (err) { res.status(500).send("Error saving product: " + err.message); }
+
+        // 3. Category ke array mein bhi ID push karein
+        await Category.findByIdAndUpdate(categoryDoc._id, { 
+            $push: { products: newProduct._id } 
+        });
+
+        res.send("<script>alert('Product Added!'); window.location='/seller/my-products';</script>");
+        
+    } catch (err) {
+        res.status(500).send("Error: " + err.message);
+    }
 });
 
-// 3. MY PRODUCTS LIST (Inventory)
-// 3. MY PRODUCTS LIST (Inventory) - Fully Dynamic with Categories
+
+
+
+
 router.get('/seller/my-products', async (req, res) => {
     if (!req.cookies.sellerId) return res.redirect('/tx-login');
     try {
-        // 1. Seller ka data lo
         const user = await Seller.findById(req.cookies.sellerId);
-        
-        // 2. Seller ke products lo
         const products = await Product.find({ sellerId: req.cookies.sellerId }).sort({ createdAt: -1 });
-        
-        // 3. 🆕 Sabhi categories fetch karo taaki filter dynamic ho jaye
         const categories = await Category.find().sort({ name: 1 });
 
-        // 4. Render karo saare data ke saath
         res.render('seller-admin/my-products', { 
             user, 
             products, 
-            categories, // Isse aapka dynamic filter aur modal dropdown chalega
+            categories, 
             title: "My Inventory" 
         });
-    } catch (err) { 
-        console.error("Inventory Fetch Error:", err);
-        res.status(500).send("Error fetching inventory data"); 
-    }
+    } catch (err) { res.status(500).send("Error fetching inventory"); }
 });
-// 4. EDIT PRODUCT PAGE (Render) -> Isse 404 error solve hogi
+
 router.get('/seller/edit-product/:id', async (req, res) => {
     if (!req.cookies.sellerId) return res.redirect('/tx-login');
     try {
         const user = await Seller.findById(req.cookies.sellerId);
         const product = await Product.findById(req.params.id);
         const categories = await Category.find().sort({ name: 1 });
-        
         if (!product) return res.send("Product not found!");
-        
         res.render('seller-admin/edit-product', { user, product, categories });
     } catch (err) { res.status(500).send("Error loading edit page"); }
 });
 
-// 5. UPDATE PRODUCT API
 router.post('/api/seller/update-product/:id', uploadProduct.single('productImage'), async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         let updateData = { ...req.body };
 
         if (req.file) {
-            // Delete old product image
             if (product.fabricImage) {
                 const oldPath = path.join(__dirname, '../../Frontend/public', product.fabricImage);
                 if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
@@ -189,21 +196,55 @@ router.post('/api/seller/update-product/:id', uploadProduct.single('productImage
     } catch (err) { res.status(500).send("Update Error: " + err.message); }
 });
 
-// 6. DELETE PRODUCT API
 router.post('/api/seller/delete-product/:id', async (req, res) => {
     try {
         if (!req.cookies.sellerId) return res.sendStatus(401);
         const product = await Product.findById(req.params.id);
         
-        // Clean up image file before deleting record
         if (product.fabricImage) {
             const imgPath = path.join(__dirname, '../../Frontend/public', product.fabricImage);
             if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
         }
 
+        // Category se bhi ID remove kardo delete ke waqt
+       await Category.findOneAndUpdate(
+    { name: product.category },
+    {
+        $pull: { products: product._id }
+    }
+);
         await Product.findByIdAndDelete(req.params.id);
         res.sendStatus(200);
     } catch (err) { res.status(500).send(err.message); }
 });
 
+// ✅ CATEGORY DETAILS ROUTE (Fixed 'app' to 'router')
+router.get('/category-details/:catName', async (req, res) => {
+    try {
+        const categoryName = decodeURIComponent(req.params.catName);
+
+        // 1. Pehle category dhoondo
+        const categoryData = await Category.findOne({ name: categoryName }).lean();
+
+        if (!categoryData) {
+            return res.status(404).send("Category not found");
+        }
+
+        // 2. Products wahi uthao jinki category ID match kare 🔥
+        const products = await Product.find({
+            category: categoryData._id 
+        })
+        .populate('sellerId')
+        .lean();
+
+        // 3. View render (Path sahi check kar lena)
+        res.render('user/category-details', { 
+            category: { ...categoryData, products }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.redirect('/');
+    }
+});
 module.exports = router;

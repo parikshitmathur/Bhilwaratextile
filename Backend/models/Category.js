@@ -1,33 +1,28 @@
 // models/Category.js
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // <--- Yeh line check karo, 'mongoose' define hona chahiye
 
-// Schema: Yeh database ko batata hai ki data kaisa dikhega
 const categorySchema = new mongoose.Schema({
-  
-  // Category ka naam (e.g., "Cotton Suitings")
   name: { 
     type: String, 
-    required: true, // Yeh field khali nahi chhod sakte
-    unique: true    // Ek naam ki 2 category nahi ban sakti
+    required: true, 
+    unique: true 
   },
-  
-  // Category ki thodi details (e.g., "Best for summer wear")
   description: { 
     type: String 
   },
-// 📸 NAYA FIELD: Image ka path save karne ke liye
   image: { 
     type: String 
   },
-  // 🆕 NAYA FIELD: Sub-categories save karne ke liye
   subcategories: [{
     type: String,
     trim: true
+  }],
+  // Agar Step 1 follow kar rahe ho toh ye add karna:
+  products: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
   }]
+}, { timestamps: true });
 
-
-}, { timestamps: true }); // timestamps se 'kab bani' aur 'kab update hui' apne aap save ho jayega
-
-// Is model ko export kar rahe hain taaki routes mein use kar sakein
 module.exports = mongoose.model('Category', categorySchema);
