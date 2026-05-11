@@ -56,7 +56,7 @@ const QuickRegistration = require('./models/QuickRegistration');
 const Product = require('./models/Product');
 const HeroSlider = require('./models/HeroSlider'); 
 const Testimonial = require('./models/Testimonial');
-
+const fabricSliderRoutes = require('./routes/fabricSliderRoutes');
 // ===== [05] CUSTOM AUTH MIDDLEWARES =====
 // 🔐 Textile Seller Auth Check
 const isTxAuthenticated = (req, res, next) => {
@@ -73,7 +73,8 @@ app.use('/', require('./routes/sellerRoutes'));
 app.use('/', require('./routes/authRoutes'));
 app.use('/', require('./routes/seller-admin-routes')); 
 app.use('/', require('./routes/admin-slider-routes'));
-
+// Routes Integration
+app.use('/admin/fabric-slider', fabricSliderRoutes);
 // API Route Groups
 app.use('/api/category', require('./routes/category'));
 app.use('/api/inquiry', require('./routes/inquiry'));
@@ -83,6 +84,29 @@ app.use('/api/inquiry', require('./routes/inquiry'));
 // ============================================================
 
 // 🏠 MAIN HOME ROUTE (With Hero Slider & Categories)
+
+
+const FabricSlider = require('./models/FabricSlider'); // Model import karna mat bhulna
+
+app.get('/fabrics', async (req, res) => {
+    try {
+        const slides = await FabricSlider.find(); // Database se data uthao
+        res.render('user/fabrics', { 
+            slides: slides || [], // Slides bhej rahe hain (agar empty ho toh empty array)
+            title: "Fabrics | Bhilwara Textile" 
+        });
+    } catch (err) {
+        console.error("Error loading fabrics:", err);
+        res.render('user/fabrics', { slides: [], title: "Fabrics" });
+    }
+});
+
+
+
+
+
+
+
 
     app.get('/category/:catName', async (req, res) => {
 
@@ -467,6 +491,83 @@ app.get('/', async (req, res) => {
     }
 
 });
+
+// Pehle check karo ki 'ContactInfo' model upar require hai ya nahi
+const ContactInfo = require('./models/ContactInfo'); 
+
+// 📞 Contact Page Render Route
+app.get('/contact', async (req, res) => {
+    try {
+        // Inquiry model yahan require karne ki zaroorat nahi, wo upar ho chuka hai
+        const info = await ContactInfo.findOne() || {
+            address: "Bhilwara, Rajasthan",
+            email: "admin@bhilwaratextile.com",
+            phone: "+91 00000-00000"
+        };
+        res.render('user/contact', { info, title: "Contact Us | Bhilwara Textile" });
+    } catch (err) {
+        console.error("Contact Page Error:", err);
+        res.status(500).send("Error loading contact page");
+    }
+});
+
+// 📩 Inquiry Submit Route
+// 📩 Inquiry Submit Route (server.js mein update karein)
+app.post('/api/contact/submit', async (req, res) => {
+    try {
+        const { name, email, subject, message } = req.body;
+
+        // Hum Requirement model mein data save kar rahe hain 
+        // taaki ye aapke existing admin dashboard par show ho
+        await Requirement.create({
+            name: name,
+            email: email,
+            // Hum subject aur message ko jod kar dikha rahe hain
+            message: `[CONTACT FORM] Subject: ${subject} | Message: ${message}`,
+            mobile: "Not Provided" // Agar form mein mobile nahi hai toh
+        });
+
+        res.redirect('/contact?success=true');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/contact?error=failed');
+    }
+});
+// GET: Admin Contact Details Page
+app.get('/admin/contact-details', async (req, res) => {
+    try {
+        // Yahan hum wahi Requirement model se data uthayenge
+        const allInquiries = await Requirement.find().sort({ createdAt: -1 });
+        
+        // Website ki settings ke liye ContactInfo bhi utha lo
+        const info = await ContactInfo.findOne() || {};
+
+        res.render('admin-panel/contact-details', { 
+            info, 
+            inquiries: allInquiries, // Ye data page par jayega
+            title: "Contact Authority" 
+        });
+    } catch (err) {
+        res.status(500).send("Error fetching details");
+    }
+});
+// POST: Update Contact Details
+app.post('/admin/contact-details/update', async (req, res) => {
+    try {
+        const { address, email, phone, mapEmbedUrl } = req.body;
+        let info = await ContactInfo.findOne();
+
+        if (info) {
+            await ContactInfo.findOneAndUpdate({}, { address, email, phone, mapEmbedUrl });
+        } else {
+            await ContactInfo.create({ address, email, phone, mapEmbedUrl });
+        }
+        res.redirect('/admin/contact-details?success=true');
+    } catch (err) {
+        res.status(500).send("Update failed");
+    }
+});
+
 
 
 // ============================================================
