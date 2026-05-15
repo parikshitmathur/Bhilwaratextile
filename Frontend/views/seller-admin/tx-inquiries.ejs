@@ -1,0 +1,83 @@
+<%- include('./partials/Seller-Sidebar') %>
+
+<main class="pf-main-wrapper" style="margin-left: 280px; padding: 40px; background: #08090a; color: white; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div class="pf-container" style="max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Header Section -->
+        <div style="margin-bottom: 30px; border-bottom: 1px solid #1f2937; padding-bottom: 20px;">
+            <h1 style="font-size: 30px; font-weight: 900; margin: 0;">My <span style="color: #C9922A;">Leads & Inquiries</span></h1>
+            <p style="color: #9ca3af; margin-top: 8px; font-size: 15px;">Manage all direct messages and requirements from buyers.</p>
+        </div>
+
+        <!-- Inquiries Table -->
+        <div style="background: #111827; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                
+                <!-- Table Headings -->
+                <thead style="background: #1f2937;">
+                    <tr>
+                        <th style="padding: 18px 20px; color: #C9922A; font-weight: 700; font-size: 13px; text-transform: uppercase;">Date & Status</th>
+                        <th style="padding: 18px 20px; color: #C9922A; font-weight: 700; font-size: 13px; text-transform: uppercase;">Buyer Details</th>
+                        <th style="padding: 18px 20px; color: #C9922A; font-weight: 700; font-size: 13px; text-transform: uppercase;">Product Name</th>
+                        <th style="padding: 18px 20px; color: #C9922A; font-weight: 700; font-size: 13px; text-transform: uppercase;">Message / Needs</th>
+                    </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    <% if(inquiries && inquiries.length > 0) { %>
+                        <% inquiries.forEach(lead => { %>
+                            
+                            <!-- Single Row -->
+                            <tr style="border-bottom: 1px solid #1f2937; transition: background 0.3s ease;" onmouseover="this.style.background='rgba(201,146,42,0.05)'" onmouseout="this.style.background='transparent'">
+                                
+                                <!-- Date & Status -->
+                                <td style="padding: 15px 20px; width: 140px; vertical-align: top;">
+                                    <div style="font-size: 12px; color: #9ca3af; margin-bottom: 8px;">
+                                        📅 <%= new Date(lead.createdAt).toLocaleDateString('en-GB') %>
+                                    </div>
+                                    <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; background: rgba(201,146,42,0.15); color: #C9922A; border: 1px solid rgba(201,146,42,0.3); text-transform: uppercase;">
+                                        <%= lead.status || 'NEW LEAD' %>
+                                    </span>
+                                </td>
+
+                                <!-- Buyer Info -->
+                                <td style="padding: 15px 20px; vertical-align: top;">
+                                    <div style="font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
+                                        👤 <%= lead.buyerName %>
+                                    </div>
+                                    <a href="tel:<%= lead.buyerPhone %>" style="display: inline-block; font-size: 13px; color: #60a5fa; text-decoration: none; background: rgba(59, 130, 246, 0.1); padding: 4px 10px; border-radius: 4px;">
+                                        📞 <%= lead.buyerPhone %>
+                                    </a>
+                                </td>
+
+                                <!-- Product Interested -->
+                                <td style="padding: 15px 20px; color: #e5e7eb; font-size: 14px; font-weight: 600; vertical-align: top;">
+                                    📦 <%= lead.productName %>
+                                </td>
+
+                                <!-- Message -->
+                                <td style="padding: 15px 20px; color: #9ca3af; font-size: 13px; max-width: 250px; line-height: 1.5; vertical-align: top;">
+                                    💬 <%= lead.message %>
+                                </td>
+                                
+                            </tr>
+
+                        <% }) %>
+                    <% } else { %>
+                        <!-- Empty State -->
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 80px 20px;">
+                                <div style="font-size: 40px; margin-bottom: 15px;">📭</div>
+                                <div style="color: #ffffff; font-size: 18px; font-weight: bold; margin-bottom: 8px;">No Inquiries Yet</div>
+                                <div style="color: #64748b; font-size: 14px;">Keep uploading premium products to attract more B2B buyers!</div>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</main>

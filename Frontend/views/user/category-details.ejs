@@ -1,60 +1,327 @@
-<%- include('partials/header') %>
+<%- include('./partials/header') %>
 
-<section class="py-20 bg-[#050505] text-white">
-    <div class="max-w-7xl mx-auto px-6">
+<style>
+    /* Base Dark Theme & Navbar Fix */
+    .bt-category-main {
+        background-color: #08090a;
+        min-height: 100vh;
+        padding-top: 140px; /* Navbar ke overlap ko roklega */
+        padding-bottom: 60px;
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .bt-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header Title */
+    .bt-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(201,146,42,0.2); }
+    .bt-title { font-size: 38px; color: #ffffff; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
+    .bt-title span { color: #C9922A; }
+    .bt-desc { color: #9ca3af; font-size: 16px; }
+    
+    /* Horizontal Card Design */
+    .bt-list { display: flex; flex-direction: column; gap: 25px; }
+    .bt-horizontal-card { 
+        display: flex; 
+        background: #111827; 
+        border: 1px solid #1f2937; 
+        border-radius: 12px; 
+        overflow: hidden; 
+        transition: 0.3s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .bt-horizontal-card:hover { border-color: #C9922A; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(201,146,42,0.15); }
+    
+    .bt-card-img { width: 280px; flex-shrink: 0; background: #000; position: relative; }
+    .bt-card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+    .bt-horizontal-card:hover .bt-card-img img { transform: scale(1.05); }
+    
+    .bt-card-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    
+    .bt-company-name { font-size: 22px; font-weight: 900; color: #fff; margin: 0 0 5px 0; text-transform: uppercase; }
+    .bt-product-name { font-size: 15px; color: #C9922A; margin: 0 0 12px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+    
+    .bt-address { font-size: 13px; color: #9ca3af; margin: 4px 0; display: flex; align-items: center; gap: 8px; }
+    .bt-description { font-size: 14px; color: #d1d5db; margin: 15px 0; line-height: 1.6; }
+    
+    .bt-tags { margin: 10px 0; font-size: 13px; color: #e5e7eb; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px; display: inline-block; border: 1px solid rgba(255,255,255,0.05); }
+    .bt-tags strong { color: #C9922A; }
+    
+    .bt-footer-info { display: flex; align-items: center; gap: 15px; font-size: 13px; color: #9ca3af; margin-bottom: 20px; }
+    
+    /* Action Buttons */
+    .bt-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .bt-btn { padding: 12px 24px; border: none; border-radius: 6px; font-weight: 800; color: #fff; cursor: pointer; transition: 0.3s; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-green { background-color: #22c55e; color: #000; } .btn-green:hover { background-color: #16a34a; transform: translateY(-2px); }
+    .btn-pink { background-color: transparent; border: 2px solid #C9922A; color: #C9922A; } .btn-pink:hover { background-color: #C9922A; color: #000; transform: translateY(-2px); }
+    .btn-blue { background-color: #3b82f6; } .btn-blue:hover { background-color: #2563eb; transform: translateY(-2px); }
+
+    /* =========================================
+       RELATED SECTION (IS SE SAMBANDHIT)
+    ========================================== */
+    .bt-related-section {
+        margin-top: 80px;
+        padding-top: 50px;
+        border-top: 1px dashed rgba(201,146,42,0.3);
+        text-align: center;
+    }
+    .bt-related-title { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
+    .bt-related-title span { color: #C9922A; }
+    .bt-related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+    }
+    .bt-rel-card {
+        background: #111827; border: 1px solid #1f2937; padding: 30px 20px; border-radius: 12px; text-decoration: none; transition: 0.3s;
+    }
+    .bt-rel-card:hover { border-color: #C9922A; background: #161e2e; transform: translateY(-5px); }
+    .bt-rel-icon { font-size: 30px; color: #C9922A; margin-bottom: 15px; }
+    .bt-rel-name { color: #fff; font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; }
+    .bt-rel-sub { color: #6b7280; font-size: 12px; margin-top: 5px; }
+
+    /* Modal (Popup) Styling */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-content { background: #08090a; padding: 40px; border-radius: 16px; width: 100%; max-width: 450px; border: 1px solid #C9922A; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .modal-header { margin-bottom: 25px; border-bottom: 1px solid #1f2937; padding-bottom: 15px; }
+    .modal-header h3 { margin: 0; color: #C9922A; font-size: 24px; text-transform: uppercase; font-weight: 900;}
+    .modal-header p { margin: 8px 0 0 0; font-size: 14px; color: #d1d5db; }
+    
+    .bt-form-group { margin-bottom: 20px; }
+    .bt-form-group input, .bt-form-group textarea { width: 100%; padding: 14px; background: #111827; border: 1px solid #374151; color: white; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+    .bt-form-group textarea { height: 100px; resize: none; }
+    .bt-form-group input:focus, .bt-form-group textarea:focus { outline: none; border-color: #C9922A; box-shadow: 0 0 0 2px rgba(201,146,42,0.2); }
+    
+    .modal-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 25px; }
+    .btn-close { background: transparent; border: 1px solid #6b7280; color: #d1d5db; } .btn-close:hover { background: #1f2937; color: #fff;}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .bt-horizontal-card { flex-direction: column; }
+        .bt-card-img { width: 100%; height: 250px; }
+        .bt-category-main { padding-top: 110px; }
+    }
+</style>
+
+
+
+<main class="bt-category-main">
+    <div class="bt-container">
         
-        <div class="mb-16 border-l-4 border-amber-600 pl-6">
-            <p class="text-amber-500 uppercase tracking-[0.4em] text-xs font-bold mb-2">Bhilwara Authority Hub</p>
-            <h1 class="text-4xl md:text-6xl font-black uppercase italic"><%= category.name %> <span class="text-gray-500">Inventory</span></h1>
+<div class="bt-filter-container" style="margin: -10px auto 40px auto; max-width: 800px;">
+    <div style="display: flex; align-items: center; background: #111827; border-radius: 50px; border: 1px solid #1f2937; padding: 5px 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: 0.3s;" id="filterParent">
+        
+        <div style="padding: 0 15px; color: #C9922A;">
+            <i class="fa-solid fa-filter"></i>
         </div>
 
-        <div class="space-y-20">
-            <% /* Maan lo category.subcategories ek array hai */ %>
-            <% category.subcategories.forEach(sub => { %>
-                <div class="sub-cat-block">
-                    <div class="flex items-center gap-4 mb-8">
-                        <h2 class="text-2xl font-black uppercase tracking-wider"><%= sub.name %></h2>
-                        <div class="flex-1 h-px bg-white/10"></div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <% /* Filter products jo is subcategory mein hain */ %>
-                        <% const subProducts = category.products.filter(p => p.subCategory === sub.name); %>
-                        
-                        <% if(subProducts.length > 0) { %>
-                            <% subProducts.forEach(prod => { %>
-                                <div class="bg-white/5 border border-white/10 rounded-3xl p-6 hover:border-amber-600/50 transition-all group">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <h4 class="text-lg font-bold text-white group-hover:text-amber-500"><%= prod.productName %></h4>
-                                        <span class="text-[10px] bg-amber-600 text-black px-2 py-1 rounded font-black">GSM: <%= prod.gsm || 'N/A' %></span>
-                                    </div>
-
-                                    <p class="text-gray-400 text-sm mb-6 leading-relaxed"><%= prod.description %></p>
-
-                                    <div class="bg-black/40 border border-white/5 rounded-2xl p-4 flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-amber-500">
-                                            <i class="fa-solid fa-industry"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Provided By</p>
-                                            <h5 class="text-xs font-black text-white"><%= prod.sellerId.companyName %></h5>
-                                            <p class="text-[9px] text-amber-600"><i class="fa-solid fa-location-dot mr-1"></i><%= prod.sellerId.location %></p>
-                                        </div>
-                                    </div>
-
-                                    <a href="/inquiry?prod=<%= prod._id %>" class="mt-6 block w-full text-center py-3 rounded-xl border border-white/10 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                                        Request Quotation
-                                    </a>
-                                </div>
-                            <% }) %>
-                        <% } else { %>
-                            <p class="text-gray-500 italic text-sm">No products currently listed in this segment.</p>
-                        <% } %>
-                    </div>
-                </div>
-            <% }) %>
+        <input type="text" id="dynamicInput" placeholder="Filter by Product, Manufacturer or Tags..." 
+               style="flex-grow: 1; background: transparent; border: none; outline: none; padding: 12px 10px; color: white; font-size: 15px;">
+        
+        <div id="filterCount" style="background: rgba(201,146,42,0.1); color: #C9922A; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 800; border: 1px solid rgba(201,146,42,0.2);">
+            LIVE FILTER
         </div>
     </div>
-</section>
+</div>
 
-<%- include('partials/footer') %>
+<style>
+    #filterParent:focus-within {
+        border-color: #C9922A !important;
+        box-shadow: 0 0 15px rgba(201,146,42,0.15) !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterInput = document.getElementById('dynamicInput');
+        const cards = document.querySelectorAll('.bt-horizontal-card');
+        const countBadge = document.getElementById('filterCount');
+
+        if (filterInput) {
+            filterInput.addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const text = card.innerText.toLowerCase();
+
+                    if (text.includes(searchValue)) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                        card.style.animation = 'fadeIn 0.3s ease'; 
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Badge Text Update
+                if(searchValue.length > 0) {
+                    countBadge.innerText = visibleCount + ' MATCHED';
+                } else {
+                    countBadge.innerText = 'LIVE FILTER';
+                }
+            });
+        }
+    });
+</script>
+
+        <!-- Breadcrumb / Back button -->
+        <a href="/all-categories" style="color: #9ca3af; text-decoration: none; margin-bottom: 30px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; transition: 0.3s;" onmouseover="this.style.color='#C9922A'" onmouseout="this.style.color='#9ca3af'">
+            <i class="fa-solid fa-arrow-left"></i> Back to Directory
+        </a>
+        
+        <div class="bt-header">
+            <h1 class="bt-title">Category: <span><%= category.name %></span></h1>
+            <p class="bt-desc"><%= category.description || 'Explore the finest and premium collection of ' + category.name + ' from our verified B2B sellers.' %></p>
+        </div>
+
+        <div class="bt-list">
+            <% if (category.products && category.products.length > 0) { %>
+                <% category.products.forEach(product => { %>
+                    <div class="bt-horizontal-card">
+                        
+                        <!-- Left Side Image -->
+                        <div class="bt-card-img">
+                            <img src="<%= product.fabricImage || '/images/default-fabric.jpg' %>" alt="<%= product.productName %>" onerror="this.src='https://via.placeholder.com/400x400?text=Premium+Fabric'">
+                        </div>
+                        
+                        <!-- Right Side Details -->
+                        <div class="bt-card-info">
+                            <div>
+                                <h2 class="bt-company-name"><%= product.sellerId ? product.sellerId.companyName : 'Bhilwara Seller' %></h2>
+                                <h3 class="bt-product-name"><%= product.productName %></h3>
+                                
+                                <% if(product.sellerId) { %>
+                                    <p class="bt-address"><i class="fa-solid fa-location-dot" style="color:#C9922A"></i> <%= product.sellerId.city %>, <%= product.sellerId.state %>, India</p>
+                                    <p class="bt-address"><i class="fa-solid fa-building" style="color:#C9922A"></i> <%= product.sellerId.address %></p>
+                                <% } %>
+                                
+                                <p class="bt-description"><%= product.description || 'Premium quality textile manufacturer and supplier. Connect directly for bulk orders.' %></p>
+                                
+                                <div class="bt-tags">
+                                    <strong>Type:</strong> <%= product.fabricType %> &nbsp;|&nbsp; <strong>Price:</strong> ₹<%= product.pricePerUnit || 'On Request' %> / unit
+                                </div>
+                                
+                                <div class="bt-footer-info">
+                                    <span><i class="fa-solid fa-user-tie"></i> <%= product.sellerId ? product.sellerId.ownerName : 'Authorized Owner' %></span>
+                                    <span style="background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(34,197,94,0.2);">
+                                        <i class="fa-solid fa-check-circle"></i> Verified Seller
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="bt-actions">
+                                <button class="bt-btn btn-green" onclick="openModal('<%= product._id %>', '<%= product.productName %>', '<%= product.sellerId ? product.sellerId._id : `` %>', '<%= product.sellerId ? product.sellerId.companyName : `Supplier` %>')">Contact Now</button>
+                                
+                                <button class="bt-btn btn-pink" onclick="openModal('<%= product._id %>', '<%= product.productName %>', '<%= product.sellerId ? product.sellerId._id : `` %>', '<%= product.sellerId ? product.sellerId.companyName : `Supplier` %>')">Get Best Price</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div style="text-align: center; background: #111827; padding: 60px 20px; border-radius: 12px; border: 1px dashed #374151;">
+                    <i class="fa-solid fa-box-open" style="font-size: 50px; color: #374151; margin-bottom: 20px;"></i>
+                    <h3 style="color: #fff; font-size: 20px; margin: 0 0 10px 0;">No Products Found</h3>
+                    <p style="color: #888; font-size: 15px; margin: 0;">Sellers are yet to upload inventory in this category.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- ============================================
+             RELATED CATEGORIES SECTION (Naya Feature)
+        ============================================= -->
+        <div class="bt-related-section">
+            <h2 class="bt-related-title">Explore <span>More Fabrics</span></h2>
+            <p style="color: #9ca3af; font-size: 15px;">Didn't find what you were looking for? Browse other premium categories.</p>
+            
+            <div class="bt-related-grid">
+                <!-- Dummy Premium Cards directing to all categories -->
+                <a href="/all-categories" class="bt-rel-card">
+                    <i class="fa-solid fa-layer-group bt-rel-icon"></i>
+                    <h3 class="bt-rel-name">View Full Directory</h3>
+                    <p class="bt-rel-sub">Explore 50+ Fabric Types</p>
+                </a>
+                
+                <a href="/verified-sellers" class="bt-rel-card">
+                    <i class="fa-solid fa-industry bt-rel-icon"></i>
+                    <h3 class="bt-rel-name">Top Manufacturers</h3>
+                    <p class="bt-rel-sub">Connect with verified mills</p>
+                </a>
+
+                <a href="/tx-login" class="bt-rel-card" style="border-color: #C9922A; background: rgba(201,146,42,0.05);">
+                    <i class="fa-solid fa-store bt-rel-icon"></i>
+                    <h3 class="bt-rel-name" style="color: #C9922A;">Are you a Seller?</h3>
+                    <p class="bt-rel-sub" style="color: #d1d5db;">Join & Upload Products</p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================
+        INQUIRY MODAL POPUP
+    ============================================= -->
+    <div class="modal-overlay" id="inquiryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Direct Inquiry</h3>
+                <p>To: <strong id="displayCompanyName" style="color: #fff;"></strong></p>
+                <p style="font-size: 12px; margin-top: 5px;">Product: <span id="displayProductName" style="color: #C9922A; font-weight: bold;"></span></p>
+            </div>
+            
+            <form action="/api/send-product-inquiry" method="POST">
+                <input type="hidden" name="productId" id="inputProductId">
+                <input type="hidden" name="productName" id="inputProductName">
+                <input type="hidden" name="sellerId" id="inputSellerId">
+                <input type="hidden" name="sellerCompany" id="inputSellerCompany">
+
+                <div class="bt-form-group">
+                    <input type="text" name="buyerName" placeholder="Your Name / Company Name" required>
+                </div>
+                <div class="bt-form-group">
+      <input 
+    type="tel" 
+    name="buyerPhone" 
+    placeholder="Your Mobile Number" 
+    required
+    maxlength="10"
+    oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length > 0 && !['6','7','8','9'].includes(this.value[0])) { this.value = ''; }"
+    class="w-full px-4 py-3 focus:outline-none text-lg"
+    style="color: #ccc9c9 !important; border: 1px solid #ccc; border-radius: 5px;"
+>
+                </div>
+                <div class="bt-form-group">
+                    <textarea name="message" placeholder="Describe your requirement (Quantity, Customizations, Delivery timeframe, etc.)" required></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="bt-btn btn-close" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="bt-btn" style="background: #C9922A; color: #000;">Send Message <i class="fa-solid fa-paper-plane ml-1"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    function openModal(prodId, prodName, sellerId, companyName) {
+        document.getElementById('displayCompanyName').innerText = companyName;
+        document.getElementById('displayProductName').innerText = prodName;
+        
+        document.getElementById('inputProductId').value = prodId;
+        document.getElementById('inputProductName').value = prodName;
+        document.getElementById('inputSellerId').value = sellerId;
+        document.getElementById('inputSellerCompany').value = companyName;
+        
+        document.getElementById('inquiryModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('inquiryModal').style.display = 'none';
+    }
+</script>
+
+<%- include('./partials/footer') %>

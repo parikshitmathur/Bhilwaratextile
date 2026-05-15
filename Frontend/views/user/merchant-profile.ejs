@@ -1,0 +1,1853 @@
+  <%- include('partials/header') %>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+  /* ─── RESET & BASE ──────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #04040A;
+    color: #fff;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─────────────────────────────────────────────── */
+  #cursor-dot {
+    width: 8px; height: 8px;
+    background: #C9922A;
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(201,146,42,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+  }
+  body:hover #cursor-dot { transform: translate(-50%, -50%) scale(1); }
+
+  /* ─── CSS VARIABLES ─────────────────────────────────────────────── */
+  :root {
+    --gold: #C9922A;
+    --gold-light: #fde68a;
+    --gold-dim: rgba(201,146,42,0.15);
+    --surface: rgba(12, 12, 18, 0.7);
+    --border: rgba(255,255,255,0.06);
+    --border-gold: rgba(201,146,42,0.25);
+    --text-muted: #52525b;
+    --bebas: 'Bebas Neue', sans-serif;
+  }
+
+  /* ─── UTILS ─────────────────────────────────────────────────────── */
+  .gold-text { background: linear-gradient(135deg, #C9922A, #fde68a 60%, #C9922A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .glass { background: var(--surface); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border); }
+  .gold-border { border: 1px solid var(--border-gold); box-shadow: 0 0 30px rgba(201,146,42,0.08); }
+  .section-label { font-size: 9px; font-weight: 900; color: var(--gold); text-transform: uppercase; letter-spacing: 0.6em; display: block; margin-bottom: 1rem; }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── NOISE OVERLAY ─────────────────────────────────────────────── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9000; opacity: 0.4;
+  }
+
+  /* ─── STICKY NAV ────────────────────────────────────────────────── */
+  #main-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 1.25rem 2rem;
+    transition: all 0.4s ease;
+  }
+  #main-nav.scrolled {
+    background: rgba(4,4,10,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 0.9rem 2rem;
+  }
+  .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-family: var(--bebas); font-size: 1.6rem; letter-spacing: 0.1em; color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; color: #71717a; text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    padding: 0.6rem 1.5rem; border-radius: 50px;
+    background: var(--gold); color: #000;
+    font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.35em;
+    text-decoration: none; transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: scale(1.05); }
+  .nav-mobile-btn { display: none; background: none; border: none; color: var(--gold); font-size: 1.4rem; cursor: pointer; }
+
+  /* ─── HERO ──────────────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg-glow {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .hero-bg-glow::before {
+    content: '';
+    position: absolute; top: -20%; right: -10%;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(201,146,42,0.15) 0%, transparent 65%);
+    animation: pulse-glow 6s ease-in-out infinite alternate;
+  }
+  .hero-bg-glow::after {
+    content: '';
+    position: absolute; bottom: -20%; left: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,146,42,0.07) 0%, transparent 65%);
+    animation: pulse-glow 8s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes pulse-glow { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
+
+  /* Diagonal grid lines */
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.025; pointer-events: none;
+    background-image: linear-gradient(rgba(201,146,42,1) 1px, transparent 1px), linear-gradient(90deg, rgba(201,146,42,1) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .hero-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 8rem 2rem 4rem;
+    display: flex; align-items: center;
+    gap: 6rem; width: 100%;
+  }
+
+  /* Logo block */
+  .hero-logo-wrap { position: relative; flex-shrink: 0; }
+  .hero-logo-ring {
+    width: 220px; height: 220px;
+    border-radius: 50%; padding: 3px;
+    background: conic-gradient(#C9922A 0deg, #fde68a 90deg, #C9922A 180deg, transparent 360deg);
+    animation: spin-ring 8s linear infinite;
+    position: relative;
+  }
+  @keyframes spin-ring { to { transform: rotate(360deg); } }
+  .hero-logo-inner {
+    width: 100%; height: 100%;
+    background: #08080f;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-logo-inner img { width: 90%; height: 90%; object-fit: cover; border-radius: 50%; }
+  .hero-logo-initial { font-family: var(--bebas); font-size: 5rem; color: var(--gold); }
+
+  .hero-badge {
+    position: absolute; bottom: -10px; right: -10px;
+    background: #10b981; border: 2px solid #04040A;
+    border-radius: 50px; padding: 0.4rem 0.9rem;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em;
+  }
+  .hero-badge-dot { width: 7px; height: 7px; background: #fff; border-radius: 50%; animation: blink 1.5s ease infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Hero text */
+  .hero-text { flex: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0.4rem 1rem; border-radius: 50px;
+    border: 1px solid var(--border-gold);
+    background: var(--gold-dim);
+    font-size: 9px; font-weight: 900; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.45em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: var(--bebas);
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-desc {
+    font-size: 1.05rem; line-height: 1.8;
+    color: #71717a; max-width: 520px;
+    border-left: 3px solid var(--gold);
+    padding-left: 1.2rem; margin-bottom: 2.5rem;
+    font-style: italic;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 0.9rem 2.2rem; border-radius: 50px;
+    background: var(--gold); color: #000;
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.4em;
+    text-decoration: none; transition: all 0.3s; border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,146,42,0.35); }
+  .btn-outline {
+    padding: 0.9rem 2.2rem; border-radius: 50px;
+    border: 1px solid var(--border-gold); color: #fff;
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.4em;
+    text-decoration: none; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { background: var(--gold-dim); border-color: var(--gold); }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5em; color: var(--text-muted);
+    animation: bounce-soft 2s ease infinite;
+  }
+  .scroll-indicator i { font-size: 1rem; color: var(--gold); }
+  @keyframes bounce-soft { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* ─── TICKER ────────────────────────────────────────────────────── */
+  .ticker-wrap {
+    overflow: hidden;
+    background: linear-gradient(90deg, #0c0c0e, #111118, #0c0c0e);
+    border-top: 1px solid var(--border-gold);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 1rem 0;
+  }
+  .ticker-track { display: flex; gap: 3rem; animation: ticker-move 30s linear infinite; width: max-content; }
+  .ticker-item { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5em; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: 1rem; }
+  .ticker-item span { color: var(--gold); }
+  .ticker-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
+  @keyframes ticker-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ─── STATS ─────────────────────────────────────────────────────── */
+  .stats-section { padding: 5rem 2rem; }
+  .stats-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5px; background: var(--border); border-radius: 2rem; overflow: hidden; }
+  .stat-card {
+    background: #06060C;
+    padding: 3rem 2rem; text-align: center;
+    transition: background 0.3s;
+  }
+  .stat-card:hover { background: #0d0d14; }
+  .stat-num {
+    font-family: var(--bebas);
+    font-size: 4.5rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5em; color: var(--text-muted); }
+
+  /* ─── SLIDER (Products) ──────────────────────────────────────────── */
+  .products-section { padding: 6rem 0; }
+  .section-header { max-width: 1280px; margin: 0 auto 3rem; padding: 0 2rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .section-title-main { font-family: var(--bebas); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.05em; line-height: 1; text-transform: uppercase; }
+
+  .slider-controls { display: flex; gap: 0.8rem; }
+  .slider-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid var(--border-gold);
+    background: transparent; color: var(--gold);
+    font-size: 1rem; cursor: pointer;
+    transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+  }
+  .slider-btn:hover { background: var(--gold); color: #000; }
+
+  .slider-viewport { overflow: hidden; padding-bottom: 1rem; }
+  .slider-track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    max-width: 1280px; /* only visually within this width but scroll beyond */
+  }
+  .product-card {
+    flex: 0 0 clamp(280px, 30vw, 380px);
+    border-radius: 2.5rem;
+    overflow: hidden;
+    background: #080810;
+    border: 1px solid var(--border);
+    transition: border-color 0.4s, transform 0.4s;
+    position: relative;
+  }
+  .product-card:hover { border-color: var(--border-gold); transform: translateY(-8px); }
+  .product-card-img { height: 260px; overflow: hidden; position: relative; }
+  .product-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+  .product-card:hover .product-card-img img { transform: scale(1.08); }
+  .product-card-badge {
+    position: absolute; top: 1.2rem; left: 1.2rem;
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    background: rgba(4,4,10,0.75); backdrop-filter: blur(10px);
+    font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.35em;
+    border: 1px solid var(--border);
+  }
+  .product-card-body { padding: 1.8rem 2rem 2rem; }
+  .product-name { font-size: 1.15rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .product-meta { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4em; margin-bottom: 1.5rem; }
+  .product-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+  .product-price-label { font-size: 7px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4em; }
+  .product-price { font-family: var(--bebas); font-size: 2.2rem; color: var(--gold); letter-spacing: 0.05em; line-height: 1; }
+  .product-add-btn {
+    width: 46px; height: 46px; border-radius: 16px;
+    background: #0f0f1a; border: 1px solid var(--border);
+    color: #fff; font-size: 1.1rem;
+    cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-add-btn:hover { background: var(--gold); border-color: var(--gold); color: #000; transform: scale(1.1); }
+
+  /* Slider dots */
+  .slider-dots { display: flex; gap: 6px; justify-content: center; margin-top: 2rem; }
+  .slider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); transition: all 0.3s; cursor: pointer; }
+  .slider-dot.active { background: var(--gold); width: 24px; border-radius: 3px; }
+
+  /* ─── MARQUEE (Image Strip) ─────────────────────────────────────── */
+  .marquee-section { padding: 3rem 0; overflow: hidden; }
+  .marquee-track { display: flex; gap: 1.5rem; animation: marquee-scroll 25s linear infinite; width: max-content; }
+  .marquee-img { width: 260px; height: 160px; border-radius: 1.5rem; overflow: hidden; flex-shrink: 0; border: 1px solid var(--border); }
+  .marquee-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3); transition: filter 0.4s; }
+  .marquee-img:hover img { filter: grayscale(0); }
+  @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ─── WHY US ─────────────────────────────────────────────────────── */
+  .whyus-section { padding: 6rem 2rem; }
+  .whyus-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .whyus-text h2 { font-family: var(--bebas); font-size: clamp(3rem,6vw,5.5rem); line-height: 0.95; letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 2rem; }
+  .whyus-text p { color: #71717a; line-height: 1.9; font-size: 1rem; margin-bottom: 2rem; }
+  .feature-list { display: flex; flex-direction: column; gap: 1rem; }
+  .feature-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 1.5rem; border-radius: 1.2rem;
+    background: #08080f; border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .feature-item:hover { border-color: var(--border-gold); transform: translateX(8px); }
+  .feature-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--gold-dim); border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; }
+  .feature-item-text h4 { font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .feature-item-text p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* Right side big number card */
+  .whyus-right { display: flex; flex-direction: column; gap: 1.5rem; }
+  .big-number-card {
+    padding: 2.5rem; border-radius: 2rem;
+    background: #08080f; border: 1px solid var(--border);
+    position: relative; overflow: hidden; transition: border-color 0.3s;
+  }
+  .big-number-card:hover { border-color: var(--border-gold); }
+  .big-number-card::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, var(--gold-dim) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bnum { font-family: var(--bebas); font-size: 5rem; color: var(--gold); letter-spacing: 0.05em; line-height: 1; }
+  .bnum-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.4em; color: var(--text-muted); }
+  .bnum-desc { font-size: 0.85rem; color: #52525b; margin-top: 0.5rem; line-height: 1.6; }
+
+  /* ─── TESTIMONIALS SLIDER ────────────────────────────────────────── */
+  .testimonials-section { padding: 6rem 2rem; position: relative; overflow: hidden; }
+  .testimonials-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .testimonials-section::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .testimonials-inner { max-width: 1280px; margin: 0 auto; }
+  .testimonials-header { text-align: center; margin-bottom: 4rem; }
+  .testi-track { display: flex; gap: 2rem; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .testi-card {
+    flex: 0 0 calc(33.333% - 1.4rem);
+    padding: 2.5rem; border-radius: 2rem;
+    background: #08080f; border: 1px solid var(--border);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .testi-card:hover { border-color: var(--border-gold); transform: translateY(-6px); }
+  .testi-stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 1.2rem; }
+  .testi-text { font-size: 0.95rem; line-height: 1.8; color: #a1a1aa; font-style: italic; margin-bottom: 2rem; }
+  .testi-author { display: flex; align-items: center; gap: 0.9rem; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--gold-dim); border: 1px solid var(--border-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--bebas); font-size: 1.3rem; color: var(--gold);
+  }
+  .testi-name { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+  .testi-location { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3em; }
+
+  /* ─── PROCESS SECTION ───────────────────────────────────────────── */
+  .process-section { padding: 6rem 2rem; }
+  .process-inner { max-width: 1280px; margin: 0 auto; }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; margin-top: 4rem; }
+  .process-steps::before {
+    content: '';
+    position: absolute; top: 2.5rem; left: 12.5%; right: 12.5%;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border-gold), var(--border-gold), var(--border-gold), transparent);
+  }
+  .process-step { padding: 0 1.5rem; text-align: center; }
+  .step-num-wrap { position: relative; display: inline-flex; margin-bottom: 2rem; }
+  .step-num {
+    width: 54px; height: 54px; border-radius: 50%;
+    background: #08080f; border: 1px solid var(--border-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--bebas); font-size: 1.6rem; color: var(--gold);
+    letter-spacing: 0.05em; position: relative; z-index: 1;
+    transition: background 0.3s;
+  }
+  .process-step:hover .step-num { background: var(--gold-dim); }
+  .step-icon { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #000; }
+  .step-title { font-size: 0.92rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.7rem; }
+  .step-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ─── CONTACT & MAP ──────────────────────────────────────────────── */
+  .contact-section { padding: 6rem 2rem; }
+  .contact-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 5fr 7fr; gap: 4rem; align-items: start; }
+
+  .contact-info h2 { font-family: var(--bebas); font-size: clamp(2.5rem,5vw,4.5rem); letter-spacing: 0.03em; text-transform: uppercase; line-height: 1; margin-bottom: 2.5rem; }
+  .contact-cards { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
+  .contact-card {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.4rem 1.8rem; border-radius: 1.5rem;
+    background: #08080f; border: 1px solid var(--border);
+    transition: all 0.3s; text-decoration: none;
+  }
+  .contact-card:hover { border-color: var(--border-gold); transform: translateX(6px); }
+  .contact-icon { width: 46px; height: 46px; border-radius: 14px; background: var(--gold-dim); border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.1rem; flex-shrink: 0; }
+  .contact-label { font-size: 8px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4em; }
+  .contact-value { font-size: 1rem; font-weight: 800; color: #fff; }
+
+  /* WhatsApp CTA */
+  .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    padding: 1rem 2rem; border-radius: 50px;
+    background: #25D366; color: #fff;
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.35em;
+    text-decoration: none; transition: all 0.3s; width: 100%; justify-content: center;
+  }
+  .whatsapp-btn:hover { background: #128C7E; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,211,102,0.3); }
+
+  /* Map */
+  .map-wrap {
+    border-radius: 2.5rem; overflow: hidden;
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 0 60px rgba(201,146,42,0.08);
+    filter: grayscale(0.5) contrast(1.1);
+    transition: filter 0.5s;
+    height: 520px;
+  }
+  .map-wrap:hover { filter: grayscale(0) contrast(1); }
+  .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  /* ─── FLOATING WHATSAPP ──────────────────────────────────────────── */
+  .float-wa {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; color: #fff;
+    text-decoration: none; z-index: 500;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.35);
+    transition: transform 0.3s;
+    animation: wa-pop 3s ease infinite;
+  }
+  .float-wa:hover { transform: scale(1.12); }
+  @keyframes wa-pop { 0%,100%{box-shadow: 0 8px 30px rgba(37,211,102,0.35)} 50%{box-shadow: 0 8px 50px rgba(37,211,102,0.6)} }
+
+  /* ─── FOOTER ────────────────────────────────────────────────────── */
+  .footer-bar {
+    max-width: 1280px; margin: 0 auto;
+    padding: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border);
+  }
+  .footer-copy { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4em; }
+  .footer-logo { font-family: var(--bebas); font-size: 1.2rem; color: var(--gold); letter-spacing: 0.1em; }
+
+  /* ─── RESPONSIVE ────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .whyus-inner { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; }
+    .testi-card { flex: 0 0 calc(50% - 1rem); }
+    .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .process-steps::before { display: none; }
+  }
+  @media (max-width: 768px) {
+    .hero-inner { flex-direction: column; gap: 3rem; padding-top: 7rem; text-align: center; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .nav-links, .nav-cta { display: none; }
+    .nav-mobile-btn { display: block; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .testi-card { flex: 0 0 calc(100% - 0rem); }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: 3.5rem; }
+  }
+  </style>
+
+  <!-- ── CURSOR ── -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ── FLOATING WHATSAPP ── -->
+  <% if (merchant.mobile) { %>
+    <a href="https://wa.me/<%= merchant.mobile.replace(/[^0-9]/g,'') %>" target="_blank" class="float-wa" title="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  <% } %>
+
+  <!-- ════════════════════════════════════════════
+      NAV
+  ═══════════════════════════════════════════════ -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <span class="nav-logo"><%= merchant.companyName %></span>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#inventory">Products</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Get Quote</a>
+      <button class="nav-mobile-btn" id="menu-btn"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+      HERO
+  ═══════════════════════════════════════════════ -->
+ 
+<!-- ============================================================
+     ELITE MERCHANT HERO SECTION - FULLY OPTIMIZED
+============================================================= -->
+<section class="tx-elite-hero">
+    <!-- 1. Background Banner Layer (As per image_2a5219.jpg) -->
+    <div class="tx-hero-banner">
+        <img src="<%= merchant.bannerImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop' %>" 
+             alt="Textile Background" class="tx-banner-src">
+        <div class="tx-banner-overlay"></div>
+    </div>
+
+    <!-- 2. Main Content Container -->
+    <div class="tx-hero-container">
+        
+        <!-- Organic Floating Logo -->
+        <div class="tx-logo-wrapper">
+            <div class="tx-logo-frame">
+                <% if(merchant.logo) { %>
+                    <img src="<%= merchant.logo %>" alt="<%= merchant.companyName %>" class="tx-merchant-img">
+                <% } else { %>
+                    <span class="tx-initials"><%= (merchant.companyName && merchant.companyName[0]) || 'M' %></span>
+                <% } %>
+            </div>
+            <!-- Floating Achievement Badge -->
+            <div class="tx-badge-mini">
+                <i class="fas fa-award"></i>
+            </div>
+        </div>
+
+        <!-- Text Content -->
+        <div class="tx-content-box">
+            <div class="tx-tagline">
+                <span class="tx-line"></span>
+                <span class="tx-tag-text">Verified Industrial Partner</span>
+                <span class="tx-line"></span>
+            </div>
+
+            <h1 class="tx-main-title">
+                <%= merchant.companyName %>
+                <!-- Instagram Style Blue Tick -->
+                <span class="tx-insta-tick">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.5213 2.62368C11.3147 1.75255 12.6853 1.75255 13.4787 2.62368L14.4989 3.74391C14.8998 4.18418 15.4761 4.42259 16.0792 4.39808L17.6141 4.33568C18.8078 4.28716 19.8078 5.28716 19.7593 6.48085L19.6969 8.01579C19.6724 8.61891 19.9108 9.19515 20.3511 9.59608L21.4713 10.6163C22.3424 11.4097 22.3424 12.7803 21.4713 13.5737L20.3511 14.5939C19.9108 14.9948 19.6724 15.5711 19.6969 16.1742L19.7593 17.7091C19.8078 18.9028 18.8078 19.9028 17.6141 19.8543L16.0792 19.7919C15.4761 19.7674 14.8998 20.0058 14.4989 20.4461L13.4787 21.5663C12.6853 22.4374 11.3147 22.4374 10.5213 21.5663L9.50106 20.4461C9.10013 20.0058 8.52389 19.7674 7.92077 19.7919L6.38587 19.8543C5.19218 19.9028 4.19218 18.9028 4.2407 17.7091L4.3031 16.1742C4.32761 15.5711 4.0892 14.9948 3.64893 14.5939L2.5287 13.5737C1.65757 12.7803 1.65757 11.4097 2.5287 10.6163L3.64893 9.59608C4.0892 9.19515 4.32761 8.61891 4.3031 8.01579L4.2407 6.48085C4.19218 5.28716 5.19218 4.28716 6.38587 4.33568L7.92077 4.39808C8.52389 4.42259 9.10013 4.18418 9.50106 3.74391L10.5213 2.62368Z" fill="#0095F6"/>
+                        <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h1>
+
+            <p class="tx-elite-sub">
+                "<%= merchant.description || 'Global textile excellence from the heart of Bhilwara. We lead textile needs with unmatched precision and premium quality materials.' %>"
+            </p>
+
+            <div class="tx-cta-group">
+                <a href="#inventory" class="tx-btn-main">
+                    Explore Collection <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="#contact" class="tx-btn-outline">
+                    Request Quote
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 1. Reset & Variables */
+    .tx-elite-hero {
+        --gold: #C9922A;
+        --dark-bg: #050507;
+        --text-gap: 1.8;
+        --letter-gap: 2px;
+        
+        position: relative;
+        min-height: 100vh;
+        background: var(--dark-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding-top: 100px; /* Navbar Overlap Fix */
+    }
+
+    /* 2. Banner Area (Image_2a5219.jpg Style) */
+    .tx-hero-banner {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 65vh; /* Large banner feel */
+        z-index: 1;
+    }
+    .tx-banner-src {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        filter: brightness(0.35) grayscale(20%);
+    }
+    .tx-banner-overlay {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(to bottom, transparent 20%, var(--dark-bg) 95%);
+    }
+
+    /* 3. Container & Glassmorphism */
+    .tx-hero-container {
+        position: relative;
+        z-index: 10;
+        width: 90%;
+        max-width: 1100px;
+        background: rgba(13, 13, 15, 0.7);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 40px;
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -50px; /* Merges container with banner */
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 4. Logo Frame (BIG & Floating) */
+    .tx-logo-wrapper { position: relative; margin-bottom: 30px; }
+    .tx-logo-frame {
+        width: 180px; height: 180px;
+        background: #000;
+        border-radius: 32% 68% 65% 35% / 34% 39% 61% 66%; /* Organic shape */
+        border: 3px solid var(--gold);
+        display: grid; place-items: center;
+        overflow: hidden;
+        animation: txFloat 6s ease-in-out infinite;
+        box-shadow: 0 0 30px rgba(201, 146, 42, 0.2);
+    }
+    .tx-merchant-img { width: 85%; height: 85%; object-fit: contain; }
+    .tx-initials { font-size: 60px; font-weight: 900; color: var(--gold); }
+    
+    .tx-badge-mini {
+        position: absolute; bottom: 10px; right: 0;
+        background: var(--gold); color: #000;
+        width: 45px; height: 45px; border-radius: 50%;
+        display: grid; place-items: center; font-size: 18px;
+        border: 4px solid #111;
+    }
+
+    /* 5. Typography & Details Gap */
+    .tx-tagline { 
+        display: flex; align-items: center; justify-content: center; 
+        gap: 15px; margin-bottom: 20px; 
+    }
+    .tx-line { width: 30px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .tx-tag-text { 
+        color: var(--gold); font-size: 11px; font-weight: 800; 
+        text-transform: uppercase; letter-spacing: 4px; 
+    }
+
+    .tx-main-title {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        font-weight: 900; color: #fff;
+        line-height: 1.1; letter-spacing: -1.5px;
+        margin-bottom: 20px;
+    }
+
+    /* Real Insta Blue Tick */
+    .tx-insta-tick {
+        display: inline-flex; align-items: center;
+        width: 38px; height: 38px;
+        vertical-align: middle; margin-left: 10px;
+    }
+    .tx-insta-tick svg { width: 100%; height: 100%; }
+
+    .tx-elite-sub {
+        font-size: 1.1rem; color: #a1a1aa;
+        max-width: 750px; line-height: var(--text-gap);
+        letter-spacing: var(--letter-gap); /* As requested: gap in details */
+        font-style: italic; margin-bottom: 40px;
+    }
+
+    /* 6. Buttons */
+    .tx-cta-group { display: flex; gap: 20px; }
+    .tx-btn-main {
+        background: var(--gold); color: #000;
+        padding: 16px 35px; border-radius: 12px;
+        font-weight: 900; text-transform: uppercase;
+        font-size: 12px; letter-spacing: 2px;
+        text-decoration: none; transition: 0.4s;
+        display: flex; align-items: center; gap: 10px;
+    }
+    .tx-btn-main:hover { background: #fff; transform: translateY(-5px); box-shadow: 0 15px 30px rgba(201, 146, 42, 0.3); }
+
+    .tx-btn-outline {
+        padding: 16px 35px; border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #fff; font-weight: 800; text-transform: uppercase;
+        font-size: 12px; letter-spacing: 2px;
+        text-decoration: none; transition: 0.3s;
+    }
+    .tx-btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--gold); }
+
+    /* Floating Animation */
+    @keyframes txFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .tx-hero-container { padding: 40px 20px; width: 95%; }
+        .tx-main-title { font-size: 1.8rem; }
+        .tx-cta-group { flex-direction: column; width: 100%; }
+        .tx-btn-main, .tx-btn-outline { width: 100%; justify-content: center; }
+        .tx-logo-frame { width: 140px; height: 140px; }
+    }
+</style>
+  <!-- ════════════════════════════════════════════
+      TICKER
+  ═══════════════════════════════════════════════ -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker">
+      <% const tickerItems = ['Premium Fabrics', 'Bulk Orders Welcome', merchant.city + ' Manufacturing', 'GST Certified', 'Pan India Delivery', 'Export Quality', 'ISO Standards', 'Verified Merchant', 'Best Pricing', 'Custom Weaves']; %>
+      <% for(let t = 0; t < 3; t++) { %>
+        <% tickerItems.forEach(item => { %>
+          <div class="ticker-item">
+            <span class="ticker-dot"></span>
+            <span><%= item %></span>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+      STATS
+  ═══════════════════════════════════════════════ -->
+  <section class="stats-section" id="about">
+
+    <div class="stats-wrapper">
+
+        <!-- CARD -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+
+            <div class="stat-num">
+                <%= products.length %>
+            </div>
+
+            <div class="stat-label">
+                Products Listed
+            </div>
+        </div>
+
+        <!-- CARD -->
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-cart-plus"></i>
+            </div>
+
+            <div 
+                class="stat-num auto-random"
+                data-min="10"
+                data-max="20">
+            </div>
+
+            <div class="stat-label">
+                Orders Fulfilled
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <div 
+                class="stat-num auto-random"
+                data-min="8"
+                data-max="15">
+            </div>
+
+            <div class="stat-label">
+                Happy Clients
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-truck"></i>
+            </div>
+
+            <div 
+                class="stat-num auto-random"
+                data-min="20"
+                data-max="30">
+            </div>
+
+            <div class="stat-label">
+                Metres Shipped
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+
+    function updateStats() {
+
+        const stats = document.querySelectorAll('.auto-random');
+
+        stats.forEach((item) => {
+
+            const min = parseInt(item.dataset.min);
+            const max = parseInt(item.dataset.max);
+
+            let number =
+                (Math.random() * (max - min) + min)
+                .toFixed(1);
+
+            item.innerHTML = `${number}K+`;
+
+        });
+
+    }
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        updateStats
+    );
+
+    // OPTIONAL AUTO CHANGE
+    setInterval(updateStats, 8000);
+
+</script>
+
+<style>
+
+    .stats-section{
+
+        background:#050507;
+
+        padding:80px 20px;
+    }
+
+    .stats-wrapper{
+
+        max-width:1250px;
+
+        margin:auto;
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(auto-fit,minmax(240px,1fr));
+
+        gap:22px;
+    }
+
+    .stat-card{
+
+        position:relative;
+
+        background:
+        linear-gradient(
+            145deg,
+            #0f1015,
+            #13141b
+        );
+
+        border-radius:26px;
+
+        padding:40px 25px;
+
+        overflow:hidden;
+
+        text-align:center;
+
+        border:
+        1px solid rgba(255,255,255,0.05);
+
+        transition:0.4s ease;
+    }
+
+    /* TOP GLOW */
+    .stat-card::before{
+
+        content:'';
+
+        position:absolute;
+
+        top:0;
+        left:0;
+
+        width:100%;
+        height:4px;
+
+        background:
+        linear-gradient(
+            90deg,
+            #C9922A,
+            #f7d488
+        );
+
+        opacity:0;
+
+        transition:0.4s;
+    }
+
+    .stat-card:hover::before{
+        opacity:1;
+    }
+
+    .stat-card:hover{
+
+        transform:
+        translateY(-8px);
+
+        border-color:
+        rgba(201,146,42,0.3);
+
+        box-shadow:
+        0 15px 40px rgba(0,0,0,0.5);
+    }
+
+    /* ICON */
+    .stat-icon{
+
+        width:65px;
+        height:65px;
+
+        margin:auto auto 22px;
+
+        border-radius:18px;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+
+        background:
+        rgba(201,146,42,0.08);
+
+        border:
+        1px solid rgba(201,146,42,0.15);
+
+        color:#C9922A;
+
+        font-size:24px;
+    }
+
+    /* NUMBER */
+    .stat-num{
+
+        font-size:3rem;
+
+        font-weight:900;
+
+        color:#fff;
+
+        line-height:1;
+
+        margin-bottom:16px;
+
+        letter-spacing:-2px;
+    }
+
+    .auto-random{
+        color:#C9922A;
+    }
+
+    /* LABEL */
+    .stat-label{
+
+        color:#94a3b8;
+
+        text-transform:uppercase;
+
+        font-size:11px;
+
+        font-weight:700;
+
+        letter-spacing:4px;
+    }
+
+    /* MOBILE */
+    @media(max-width:768px){
+
+        .stats-section{
+            padding:60px 15px;
+        }
+
+        .stats-wrapper{
+            gap:18px;
+        }
+
+        .stat-card{
+            padding:35px 20px;
+            border-radius:22px;
+        }
+
+        .stat-num{
+            font-size:2.3rem;
+        }
+
+    }
+
+</style>
+
+  <!-- ════════════════════════════════════════════
+      PRODUCTS SLIDER
+  ═══════════════════════════════════════════════ -->
+  <section class="products-section" id="inventory">
+    <div class="section-header reveal">
+      <div>
+        <span class="section-label">Live Inventory</span>
+        <h2 class="section-title-main">Current <span class="gold-text">Supply</span></h2>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" id="prod-prev"><i class="fas fa-arrow-left"></i></button>
+        <button class="slider-btn" id="prod-next"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <div class="slider-viewport">
+      <div class="slider-track" id="prod-track">
+        <% if(products.length > 0) { %>
+          <% products.forEach(p => { %>
+            <div class="product-card">
+              <div class="product-card-img">
+                <img src="<%= p.fabricImage %>" alt="<%= p.productName %>" loading="lazy">
+                <span class="product-card-badge"><%= p.fabricType %></span>
+              </div>
+              <div class="product-card-body">
+                <h4 class="product-name"><%= p.productName %></h4>
+                <p class="product-meta"><%= p.gsm %> GSM &bull; High Grade</p>
+                <div class="product-footer">
+                  <div>
+                    <p class="product-price-label">Per Metre</p>
+                    <p class="product-price">₹<%= p.pricePerUnit %></p>
+                  </div>
+                  <button class="product-add-btn" title="Enquire about this product">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p style="color:#71717a;padding:2rem">No products listed yet.</p>
+        <% } %>
+      </div>
+    </div>
+    <div class="slider-dots" id="prod-dots"></div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+      IMAGE MARQUEE STRIP
+  ═══════════════════════════════════════════════ -->
+  <% if(products.length > 0) { %>
+  <section class="marquee-section">
+    <div class="marquee-track" id="marquee-track">
+      <% for(let m = 0; m < 3; m++) { %>
+        <% products.forEach(p => { %>
+          <div class="marquee-img">
+            <img src="<%= p.fabricImage %>" alt="" loading="lazy">
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ════════════════════════════════════════════
+      WHY CHOOSE US
+  ═══════════════════════════════════════════════ -->
+  <section class="whyus-section">
+    <div class="whyus-inner">
+      <div class="whyus-text reveal">
+        <span class="section-label">Why Choose Us</span>
+        <h2>Your Trusted <span class="gold-text">Textile</span> Partner</h2>
+        <p>From the textile capital of Rajasthan, we deliver fabric solutions that meet international quality standards. Every roll, every metre — crafted with precision.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+            <div class="feature-item-text">
+              <h4>Quality Certified</h4>
+              <p>Every fabric batch tested for GSM accuracy, tensile strength & colour fastness</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-truck-fast"></i></div>
+            <div class="feature-item-text">
+              <h4>Pan India Dispatch</h4>
+              <p>Reliable shipping across all states with real-time tracking & insurance</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-tags"></i></div>
+            <div class="feature-item-text">
+              <h4>Bulk Pricing</h4>
+              <p>Competitive rates for large orders — negotiable for long-term contracts</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+            <div class="feature-item-text">
+              <h4>Dedicated Support</h4>
+              <p>Dedicated account manager for every buyer — quick responses on WhatsApp</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="whyus-right reveal" style="transition-delay:0.2s">
+
+    <!-- HAPPY BUYERS -->
+    <div class="big-number-card luxury-card">
+
+        <div class="card-glow"></div>
+
+        <div class="bicon">
+            <i class="fas fa-users"></i>
+        </div>
+
+        <!-- RANDOM -->
+        <div 
+            class="bnum auto-change"
+            data-min="10"
+            data-max="20">
+        </div>
+
+        <div class="bnum-label">
+            Happy Buyers
+        </div>
+
+        <div class="bnum-desc">
+            Trusted by retailers, exporters and garment manufacturers
+            across India and international textile markets.
+        </div>
+
+    </div>
+
+    <!-- SMALL GRID -->
+    <div class="mini-grid">
+
+        <!-- YEARS ACTIVE -->
+        <div class="big-number-card luxury-card">
+
+            <div class="card-glow"></div>
+
+            <div class="bicon">
+                <i class="fas fa-award"></i>
+            </div>
+
+            <!-- FIXED -->
+            <div class="bnum fixed-year">
+                8+
+            </div>
+
+            <div class="bnum-label">
+                Years Active
+            </div>
+
+            <div class="bnum-desc">
+                8 years of excellence in premium textile manufacturing
+                and export services.
+            </div>
+
+        </div>
+
+        <!-- RATING -->
+        <div class="big-number-card luxury-card">
+
+            <div class="card-glow"></div>
+
+            <div class="bicon">
+                <i class="fas fa-star"></i>
+            </div>
+
+            <div class="bnum rating-text">
+                A+
+            </div>
+
+            <div class="bnum-label">
+                Rating
+            </div>
+
+            <div class="bnum-desc">
+                Consistently top-rated for premium quality,
+                customer satisfaction and timely delivery.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // RANDOM NUMBER CHANGE
+    function updateLuxuryNumbers(){
+
+        const allNumbers =
+        document.querySelectorAll('.auto-change');
+
+        allNumbers.forEach((item)=>{
+
+            const min =
+            parseInt(item.dataset.min);
+
+            const max =
+            parseInt(item.dataset.max);
+
+            // RANDOM VALUE
+            let value =
+            (Math.random() * (max - min) + min)
+            .toFixed(1);
+
+            // FINAL
+            item.innerHTML = `${value}K+`;
+
+        });
+
+    }
+
+    // FIRST LOAD
+    document.addEventListener(
+        'DOMContentLoaded',
+        updateLuxuryNumbers
+    );
+
+    // AUTO CHANGE EVERY 7 SEC
+    setInterval(updateLuxuryNumbers,7000);
+
+</script>
+
+<style>
+
+    .whyus-right{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:24px;
+    }
+
+    /* GRID */
+
+    .mini-grid{
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:24px;
+    }
+
+    /* CARD */
+
+    .luxury-card{
+
+        position:relative;
+
+        overflow:hidden;
+
+        background:
+        linear-gradient(
+            145deg,
+            #101116,
+            #181a23
+        );
+
+        border-radius:28px;
+
+        padding:35px 30px;
+
+        border:
+        1px solid rgba(255,255,255,0.05);
+
+        transition:0.4s ease;
+    }
+
+    .luxury-card:hover{
+
+        transform:
+        translateY(-8px);
+
+        border-color:
+        rgba(201,146,42,0.25);
+
+        box-shadow:
+        0 20px 50px rgba(0,0,0,0.45);
+    }
+
+    /* TOP LINE */
+
+    .luxury-card::before{
+
+        content:'';
+
+        position:absolute;
+
+        top:0;
+        left:0;
+
+        width:100%;
+        height:4px;
+
+        background:
+        linear-gradient(
+            90deg,
+            #C9922A,
+            #f5d27c
+        );
+
+        opacity:0;
+
+        transition:0.4s;
+    }
+
+    .luxury-card:hover::before{
+        opacity:1;
+    }
+
+    /* GLOW */
+
+    .card-glow{
+
+        position:absolute;
+
+        width:220px;
+        height:220px;
+
+        background:
+        radial-gradient(
+            circle,
+            rgba(201,146,42,0.15),
+            transparent 70%
+        );
+
+        top:-120px;
+        right:-120px;
+
+        transition:0.5s;
+    }
+
+    .luxury-card:hover .card-glow{
+        transform:scale(1.3);
+    }
+
+    /* ICON */
+
+    .bicon{
+
+        width:68px;
+        height:68px;
+
+        border-radius:20px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        background:
+        rgba(201,146,42,0.08);
+
+        border:
+        1px solid rgba(201,146,42,0.15);
+
+        color:#C9922A;
+
+        font-size:24px;
+
+        margin-bottom:25px;
+
+        position:relative;
+
+        z-index:2;
+    }
+
+    /* NUMBER */
+
+    .bnum{
+
+        position:relative;
+
+        z-index:2;
+
+        font-size:3rem;
+
+        font-weight:900;
+
+        line-height:1;
+
+        margin-bottom:16px;
+
+        letter-spacing:-2px;
+
+        color:#C9922A;
+    }
+
+    .fixed-year{
+        color:#fff;
+    }
+
+    .rating-text{
+        color:#f5d27c;
+    }
+
+    /* LABEL */
+
+    .bnum-label{
+
+        position:relative;
+
+        z-index:2;
+
+        color:#fff;
+
+        font-size:15px;
+
+        font-weight:800;
+
+        letter-spacing:2px;
+
+        text-transform:uppercase;
+
+        margin-bottom:14px;
+    }
+
+    /* DESC */
+
+    .bnum-desc{
+
+        position:relative;
+
+        z-index:2;
+
+        color:#94a3b8;
+
+        line-height:1.8;
+
+        font-size:14px;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:768px){
+
+        .mini-grid{
+            grid-template-columns:1fr;
+        }
+
+        .luxury-card{
+            padding:28px 22px;
+            border-radius:22px;
+        }
+
+        .bnum{
+            font-size:2.2rem;
+        }
+
+        .bicon{
+            width:60px;
+            height:60px;
+            font-size:20px;
+        }
+
+    }
+
+</style>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+      TESTIMONIALS
+  ═══════════════════════════════════════════════ -->
+  <section class="testimonials-section">
+    <div class="testimonials-inner">
+      <div class="testimonials-header reveal">
+        <span class="section-label">Client Reviews</span>
+        <h2 class="section-title-main">What Buyers <span class="gold-text">Say</span></h2>
+      </div>
+
+      <div style="overflow:hidden">
+        <div class="testi-track" id="testi-track">
+          <div class="testi-card">
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-text">"Exceptional quality fabrics delivered on time. The GSM consistency across all rolls was perfect for our garment production. Highly recommend for bulk buyers."</p>
+            <div class="testi-author">
+              <div class="testi-avatar">R</div>
+              <div>
+                <p class="testi-name">Rajesh Mehta</p>
+                <p class="testi-location">Mumbai, Maharashtra</p>
+              </div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-text">"Best pricing I've found for premium polyester blends. The team was responsive on WhatsApp and shipment was packed professionally. Will reorder."</p>
+            <div class="testi-author">
+              <div class="testi-avatar">S</div>
+              <div>
+                <p class="testi-name">Sunita Agarwal</p>
+                <p class="testi-location">Surat, Gujarat</p>
+              </div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">★★★★☆</div>
+            <p class="testi-text">"Reliable supplier for our export orders. Documentation was clean, quality certificates provided on request. A true professional operation."</p>
+            <div class="testi-author">
+              <div class="testi-avatar">A</div>
+              <div>
+                <p class="testi-name">Arjun Singhania</p>
+                <p class="testi-location">Ludhiana, Punjab</p>
+              </div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-text">"We've been sourcing from Bhilwara for years and this merchant stands out — transparent pricing, accurate GSM, and zero quality disputes."</p>
+            <div class="testi-author">
+              <div class="testi-avatar">P</div>
+              <div>
+                <p class="testi-name">Priya Textiles</p>
+                <p class="testi-location">Tirupur, Tamil Nadu</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:0.8rem; margin-top:2.5rem">
+        <button class="slider-btn" id="testi-prev"><i class="fas fa-arrow-left"></i></button>
+        <button class="slider-btn" id="testi-next"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+      PROCESS
+  ═══════════════════════════════════════════════ -->
+  <section class="process-section" id="process">
+    <div class="process-inner">
+      <div class="reveal" style="text-align:center; margin-bottom:1rem">
+        <span class="section-label">How It Works</span>
+        <h2 class="section-title-main">Order in <span class="gold-text">4 Steps</span></h2>
+      </div>
+
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-num-wrap">
+            <div class="step-num">01</div>
+            <div class="step-icon"><i class="fas fa-search"></i></div>
+          </div>
+          <h3 class="step-title">Browse</h3>
+          <p class="step-desc">Explore our live inventory of premium fabrics filtered by type, GSM, and price range.</p>
+        </div>
+        <div class="process-step reveal" style="transition-delay:0.1s">
+          <div class="step-num-wrap">
+            <div class="step-num">02</div>
+            <div class="step-icon"><i class="fas fa-message"></i></div>
+          </div>
+          <h3 class="step-title">Enquire</h3>
+          <p class="step-desc">Send bulk enquiry via the contact form or directly on WhatsApp for fastest response.</p>
+        </div>
+        <div class="process-step reveal" style="transition-delay:0.2s">
+          <div class="step-num-wrap">
+            <div class="step-num">03</div>
+            <div class="step-icon"><i class="fas fa-file-invoice"></i></div>
+          </div>
+          <h3 class="step-title">Quotation</h3>
+          <p class="step-desc">Receive a detailed quotation with sample availability, MOQ and payment terms.</p>
+        </div>
+        <div class="process-step reveal" style="transition-delay:0.3s">
+          <div class="step-num-wrap">
+            <div class="step-num">04</div>
+            <div class="step-icon"><i class="fas fa-truck"></i></div>
+          </div>
+          <h3 class="step-title">Delivery</h3>
+          <p class="step-desc">Confirm order and receive your fabric shipment with proper GST invoice and tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+      CONTACT + MAP
+  ═══════════════════════════════════════════════ -->
+  <section class="contact-section" id="contact">
+    <div class="contact-inner">
+      <div class="reveal">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="contact-info" style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); letter-spacing:0.03em; text-transform:uppercase; line-height:1; margin-bottom:2.5rem">
+          Global <span class="gold-text">Reach</span>
+        </h2>
+        <div class="contact-cards">
+          <a href="tel:<%= merchant.mobile %>" class="contact-card">
+            <div class="contact-icon"><i class="fas fa-phone-volume"></i></div>
+            <div>
+              <p class="contact-label">Direct Line</p>
+              <p class="contact-value"><%= merchant.mobile %></p>
+            </div>
+          </a>
+          <a href="mailto:<%= merchant.email %>" class="contact-card">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <p class="contact-label">Business Email</p>
+              <p class="contact-value"><%= merchant.email %></p>
+            </div>
+          </a>
+          <div class="contact-card" style="cursor:default">
+            <div class="contact-icon"><i class="fas fa-map-marked-alt"></i></div>
+            <div>
+              <p class="contact-label">Factory Address</p>
+              <p class="contact-value" style="font-size:0.85rem; line-height:1.5"><%= merchant.address %>, <%= merchant.city %></p>
+            </div>
+          </div>
+        </div>
+       <% if (merchant.mobile) { %>
+  <a href="https://wa.me/<%= merchant.mobile.replace(/[^0-9]/g,'') %>" target="_blank" class="float-wa" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+<% } %>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.15s">
+        <div class="map-wrap">
+          <iframe
+            src="https://maps.google.com/maps?q=<%= encodeURIComponent(merchant.address + ' ' + merchant.city) %>&t=&z=14&ie=UTF8&iwloc=&output=embed"
+            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+      FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-bar">
+      <span class="footer-copy">&copy; <%= new Date().getFullYear() %> <%= merchant.companyName %> &mdash; All rights reserved</span>
+      <span class="footer-logo"><%= merchant.companyName %></span>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════
+      JAVASCRIPT
+  ═══════════════════════════════════════════════ -->
+  <script>
+  /* ── Custom Cursor ── */
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.7)'; ring.style.borderColor = 'rgba(201,146,42,0.8)'; });
+    el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(201,146,42,0.5)'; });
+  });
+
+  /* ── Sticky Nav ── */
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── Reveal on Scroll ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── Counter Animation ── */
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+  const countObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.target.dataset.count) {
+        animateCount(e.target);
+        countObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+  /* ── Products Slider ── */
+  (function() {
+    const track = document.getElementById('prod-track');
+    const dotsWrap = document.getElementById('prod-dots');
+    if (!track) return;
+    const cards = track.querySelectorAll('.product-card');
+    if (!cards.length) return;
+
+    const cardW = cards[0].getBoundingClientRect().width + 24; // card + gap
+    let index = 0;
+    const visibleCount = Math.floor(track.parentElement.offsetWidth / cardW) || 1;
+    const maxIndex = Math.max(0, cards.length - visibleCount);
+
+    // Build dots
+    const dotCount = maxIndex + 1;
+    for (let i = 0; i <= maxIndex; i++) {
+      const d = document.createElement('div');
+      d.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(d);
+    }
+
+    function goTo(i) {
+      index = Math.max(0, Math.min(i, maxIndex));
+      track.style.transform = `translateX(-${index * cardW}px)`;
+      dotsWrap.querySelectorAll('.slider-dot').forEach((d, idx) => d.classList.toggle('active', idx === index));
+    }
+
+    document.getElementById('prod-prev').addEventListener('click', () => goTo(index - 1));
+    document.getElementById('prod-next').addEventListener('click', () => goTo(index + 1));
+
+    // Touch/swipe
+    let startX = 0;
+    track.addEventListener('touchstart', e => startX = e.touches[0].clientX, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) goTo(diff > 0 ? index + 1 : index - 1);
+    });
+  })();
+
+  /* ── Testimonials Slider ── */
+  (function() {
+    const track = document.getElementById('testi-track');
+    if (!track) return;
+    const cards = track.querySelectorAll('.testi-card');
+    let tIndex = 0;
+    const gap = 32;
+
+    function getVisible() {
+      const vw = window.innerWidth;
+      if (vw < 768) return 1;
+      if (vw < 1024) return 2;
+      return 3;
+    }
+
+    function tGoTo(i) {
+      const vis = getVisible();
+      const max = Math.max(0, cards.length - vis);
+      tIndex = Math.max(0, Math.min(i, max));
+      const cardW = cards[0].getBoundingClientRect().width + gap;
+      track.style.transform = `translateX(-${tIndex * cardW}px)`;
+    }
+
+    document.getElementById('testi-prev').addEventListener('click', () => tGoTo(tIndex - 1));
+    document.getElementById('testi-next').addEventListener('click', () => tGoTo(tIndex + 1));
+
+    // Auto-play
+    setInterval(() => tGoTo(tIndex + 1 > cards.length - getVisible() ? 0 : tIndex + 1), 5000);
+  })();
+
+  /* ── Mobile Menu ── */
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    const existing = document.getElementById('mobile-menu');
+    if (existing) { existing.remove(); return; }
+    const menu = document.createElement('div');
+    menu.id = 'mobile-menu';
+    menu.style.cssText = `
+      position:fixed; top:70px; left:0; right:0; z-index:999;
+      background:rgba(4,4,10,0.97); backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(201,146,42,0.2);
+      padding:1.5rem; display:flex; flex-direction:column; gap:1rem;
+    `;
+    ['About','Products','Process','Contact'].forEach((label, i) => {
+      const a = document.createElement('a');
+      a.href = '#' + ['about','inventory','process','contact'][i];
+      a.textContent = label;
+      a.style.cssText = `font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.4em;color:#71717a;text-decoration:none;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.04)`;
+      a.addEventListener('click', () => menu.remove());
+      menu.appendChild(a);
+    });
+    document.body.appendChild(menu);
+  });
+  </script>
+
+  <%- include('partials/footer') %>

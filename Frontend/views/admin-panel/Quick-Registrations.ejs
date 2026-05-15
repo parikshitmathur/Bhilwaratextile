@@ -1,61 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %>
+    </title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ====================================================== */
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        html,
+        body{
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            background:#000000;
+            color:white;
+            font-family:'Lato',sans-serif;
+        }
+
+        body{
+            display:flex;
+        }
+
+        /* =====================================================
+           SIDEBAR + HEADER FIX
+        ====================================================== */
+
+        aside{
+            background:#000000 !important;
+            border-right:1px solid #111111;
+        }
+
+        header{
+            background:#000000 !important;
+            border-bottom:1px solid #111111;
+        }
+
+        /* =====================================================
+           MAIN WRAPPER
+        ====================================================== */
+
+        .main-wrapper{
+            background:#000000;
+        }
+
+        main{
+            background:#000000;
+        }
+
+        /* =====================================================
+           CARD
+        ====================================================== */
+
+        .premium-card{
+            background:#050505;
+            border:1px solid rgba(255,255,255,0.06);
+            box-shadow:0 0 0 1px rgba(255,255,255,0.02);
+        }
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        thead{
+            background:#0a0a0a;
+        }
+
+        tbody tr{
+            border-bottom:1px solid rgba(255,255,255,0.04);
+            transition:0.3s;
+        }
+
+        tbody tr:hover{
+            background:#0c0c0c;
+        }
+
+        /* =====================================================
+           GOLD TEXT
+        ====================================================== */
+
+        .gold-text{
+            background:linear-gradient(
+                to right,
+                #C9922A,
+                #F3D084,
+                #C9922A
+            );
+
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        /* =====================================================
+           SCROLLBAR
+        ====================================================== */
+
+        ::-webkit-scrollbar{
+            width:5px;
+            height:5px;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background:#C9922A;
+            border-radius:20px;
+        }
+
+    </style>
+
 </head>
-<body class="bg-[#f4f0e8] min-h-screen flex overflow-hidden font-['Lato']">
 
-    <%- include('partials/sidebar') %>
+<body>
 
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
-        
-        <%- include('partials/header') %>
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-        <main class="flex-1 overflow-y-auto p-8 flex items-start justify-center">
-            <div class="bg-white w-full max-w-5xl rounded-2xl shadow-xl overflow-hidden mt-4">
-                
-                <div class="bg-[#1a1a1a] px-8 py-6 border-b-4 border-[#c8962a]">
-                    <h2 class="text-2xl text-white font-bold font-['Playfair_Display'] tracking-wider">
-                        Quick <span class="text-[#c8962a]">Registrations</span> (Leads)
+    <div class="shrink-0">
+
+        <%- include('partials/sidebar') %>
+
+    </div>
+
+    <!-- =====================================================
+         MAIN
+    ======
+
+        <!-- HEADER -->
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <main class="flex-1 overflow-y-auto p-5 lg:p-8 flex items-start justify-center">
+
+            <!-- CARD -->
+
+            <div class="premium-card w-full max-w-6xl rounded-[2rem] overflow-hidden">
+
+                <!-- =================================================
+                     TOP HEADER
+                ================================================== -->
+
+                <div class="bg-black px-8 py-6 border-b border-white/5">
+
+                    <h2 class="text-2xl lg:text-3xl text-white font-black italic uppercase tracking-tight font-['Playfair_Display']">
+
+                        Quick
+
+                        <span class="gold-text">
+
+                            Registrations
+
+                        </span>
+
                     </h2>
-                    <p class="text-gray-400 text-sm mt-1">Users who joined via the 'Free Join' mobile number form.</p>
+
+                    <p class="text-zinc-500 text-[10px] uppercase tracking-[0.3em] mt-2 font-bold">
+
+                        Users Joined Via Free Join Form
+
+                    </p>
+
                 </div>
 
-                <div class="p-6">
-                    <table class="w-full text-left border-collapse">
+                <!-- =================================================
+                     TABLE
+                ================================================== -->
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full min-w-[800px] text-left border-collapse">
+
+                        <!-- HEAD -->
+
                         <thead>
-                            <tr class="bg-gray-50 border-b-2 border-gray-200">
-                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">S.No</th>
-                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Mobile Number</th>
-                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Status</th>
-                                <th class="p-4 font-bold text-gray-700 uppercase text-xs">Date & Time</th>
+
+                            <tr>
+
+                                <th class="p-5 text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    S.No
+
+                                </th>
+
+                                <th class="p-5 text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Mobile Number
+
+                                </th>
+
+                                <th class="p-5 text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Status
+
+                                </th>
+
+                                <th class="p-5 text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Date & Time
+
+                                </th>
+
                             </tr>
+
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <% registrations.forEach(function(reg, index) { %>
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-4 text-gray-500 font-bold"><%= index + 1 %></td>
-                                    <td class="p-4 font-bold text-lg text-blue-600">+91 <%= reg.mobile %></td>
-                                    <td class="p-4">
-                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">
+
+                        <!-- BODY -->
+
+                        <tbody>
+
+                            <% registrations.forEach(function(reg, index){ %>
+
+                                <tr>
+
+                                    <!-- SERIAL -->
+
+                                    <td class="p-5 text-zinc-500 font-black text-sm">
+
+                                        <%= index + 1 %>
+
+                                    </td>
+
+                                    <!-- MOBILE -->
+
+                                    <td class="p-5">
+
+                                        <div class="text-base font-black text-white tracking-wide">
+
+                                            +91 <%= reg.mobile %>
+
+                                        </div>
+
+                                    </td>
+
+                                    <!-- STATUS -->
+
+                                    <td class="p-5">
+
+                                        <span class="bg-[#C9922A]/10 border border-[#C9922A]/20 text-[#C9922A] px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-black">
+
                                             <%= reg.status %>
+
                                         </span>
+
                                     </td>
-                                    <td class="p-4 text-sm text-gray-500">
-                                        <%= new Date(reg.createdAt).toLocaleString('en-IN') %>
+
+                                    <!-- DATE -->
+
+                                    <td class="p-5 text-sm text-zinc-500 font-medium">
+
+                                        <%= new Date(reg.createdAt)
+                                        .toLocaleString('en-IN') %>
+
                                     </td>
+
                                 </tr>
-                            <% }); %>
+
+                            <% }) %>
+
                         </tbody>
+
                     </table>
+
                 </div>
 
             </div>
+
         </main>
+
     </div>
+
 </body>
+
 </html>

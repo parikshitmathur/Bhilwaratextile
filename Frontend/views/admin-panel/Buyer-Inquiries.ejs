@@ -1,98 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %> | Bhilwara Textile Admin</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %> | Buyer Authority
+    </title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <style>
+
+        /* =====================================================
+           FULL BLACK PREMIUM THEME
+        ====================================================== */
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        html,
+        body{
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            background:#000000 !important;
+            color:#ffffff;
+            font-family:sans-serif;
+        }
+
+        body{
+            display:flex;
+        }
+
+        /* =====================================================
+           MAIN BACKGROUND FIX
+        ====================================================== */
+
+        .main-wrapper{
+            background:#000000 !important;
+        }
+
+        main{
+            background:#000000 !important;
+        }
+
+        /* =====================================================
+           CARD
+        ====================================================== */
+
+        .glass-card{
+            background:#050505;
+            border:1px solid rgba(255,255,255,0.06);
+            box-shadow:0 0 0 1px rgba(255,255,255,0.02);
+        }
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        thead{
+            background:#080808;
+        }
+
+        tbody tr{
+            background:#050505;
+            transition:0.3s;
+        }
+
+        tbody tr:hover{
+            background:#0c0c0c;
+        }
+
+        /* =====================================================
+           GOLD TEXT
+        ====================================================== */
+
+        .gold-text{
+
+            background:linear-gradient(
+                to right,
+                #C9922A,
+                #F3D084,
+                #C9922A
+            );
+
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        /* =====================================================
+           SCROLLBAR
+        ====================================================== */
+
+        ::-webkit-scrollbar{
+            width:5px;
+            height:5px;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background:#C9922A;
+            border-radius:20px;
+        }
+
+        /* =====================================================
+           HEADER FIX
+        ====================================================== */
+
+        header{
+            background:#000000 !important;
+            border-bottom:1px solid #111111 !important;
+        }
+
+        /* =====================================================
+           SIDEBAR FIX
+        ====================================================== */
+
+        aside{
+            background:#000000 !important;
+            border-right:1px solid #111111 !important;
+        }
+
+    </style>
+
 </head>
-<body class="bg-gray-50 font-sans overflow-hidden flex h-screen text-gray-900">
 
-    <%- include('partials/sidebar') %>
+<body>
 
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
-        
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <div class="shrink-0 bg-black">
+
+        <%- include('partials/sidebar') %>
+
+    </div>
+
+    <!-- =====================================================
+         MAIN WRAPPER
+    ====================================================== -->
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden main-wrapper">
+
+        <!-- HEADER -->
+
         <%- include('partials/header') %>
 
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <main class="flex-1 overflow-y-auto p-5 lg:p-8">
+
+            <!-- =================================================
+                 TOP SECTION
+            ================================================== -->
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
+
+                <!-- TITLE -->
+
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight">Buyer Requirements</h2>
-                    <p class="text-sm text-gray-500 mt-1">Manage and track all textile requirements from buyers.</p>
+
+                    <h1 class="text-2xl lg:text-4xl font-black uppercase italic tracking-tight text-white">
+
+                        Buyer
+
+                        <span class="gold-text">
+
+                            Inquiries
+
+                        </span>
+
+                    </h1>
+
+                    <p class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-bold mt-2">
+
+                        Marketplace Requirement Signals
+
+                    </p>
+
                 </div>
-                
-                <button class="bg-[#1e2b58] hover:bg-blue-800 text-white font-medium py-2 px-5 rounded-lg shadow-md transition duration-200 flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Export List
-                </button>
+
+                <!-- TOTAL -->
+
+                <div class="bg-[#C9922A]/10 border border-[#C9922A]/20 px-5 py-3 rounded-2xl">
+
+                    <span class="text-[#C9922A] text-xs uppercase tracking-[0.3em] font-black">
+
+                        Total :
+                        <%= inquiries.length %>
+
+                    </span>
+
+                </div>
+
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[400px]">
-                
-                <div class="bg-gray-100 px-6 py-4 border-b border-gray-200">
-                    <h3 class="font-semibold text-gray-700">Latest Buyer Requirements</h3>
+            <!-- =================================================
+                 TABLE CARD
+            ================================================== -->
+
+            <div class="glass-card rounded-[2rem] overflow-hidden">
+
+                <!-- HEADER -->
+
+                <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+
+                    <h2 class="text-xs uppercase tracking-[0.3em] text-zinc-400 font-black">
+
+                        Live Inquiry Feed
+
+                    </h2>
+
+                    <div class="flex items-center gap-2">
+
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-green-500 font-bold">
+
+                            Active
+
+                        </span>
+
+                    </div>
+
                 </div>
 
+                <!-- TABLE -->
+
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+
+                    <table class="w-full min-w-[900px]">
+
+                        <!-- TABLE HEAD -->
+
+                        <thead class="border-b border-white/5">
+
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Company Details</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Quantity</th>
-                                <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
+
+                                <th class="px-6 py-4 text-left text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Date
+
+                                </th>
+
+                                <th class="px-6 py-4 text-left text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Customer
+
+                                </th>
+
+                                <th class="px-6 py-4 text-left text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Requirement
+
+                                </th>
+
+                                <th class="px-6 py-4 text-right text-[10px] uppercase tracking-[0.3em] text-[#C9922A]">
+
+                                    Actions
+
+                                </th>
+
                             </tr>
+
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            
-                            <% if (inquiries && inquiries.length > 0) { %>
-                                <% inquiries.forEach((reqItem) => { %>
-                                    <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <%= new Date(reqItem.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
-                                        </td>
-                                        
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-semibold text-gray-900"><%= reqItem.companyName %></div>
-                                            <div class="text-sm text-gray-500"><%= reqItem.email %></div>
-                                            <div class="text-sm text-gray-500 font-mono mt-1">📞 <%= reqItem.mobile %></div>
-                                        </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                <%= reqItem.category ? reqItem.category : 'Not Specified' %>
+                        <!-- TABLE BODY -->
+
+                        <tbody>
+
+                            <% if(inquiries && inquiries.length > 0){ %>
+
+                                <% inquiries.forEach((reqItem)=>{ %>
+
+                                    <tr class="border-b border-white/5">
+
+                                        <!-- DATE -->
+
+                                        <td class="px-6 py-5">
+
+                                            <span class="text-[11px] text-zinc-500 font-mono">
+
+                                                <%= reqItem.createdAt
+                                                    ? new Date(reqItem.createdAt)
+                                                    .toLocaleDateString('en-IN',{
+                                                        day:'2-digit',
+                                                        month:'short',
+                                                        year:'numeric'
+                                                    })
+                                                    : 'No Date'
+                                                %>
+
                                             </span>
+
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-700 font-bold">
-                                                <%= reqItem.quantity || 'N/A' %>
+                                        <!-- CUSTOMER -->
+
+                                        <td class="px-6 py-5">
+
+                                            <div class="text-sm font-black uppercase text-white">
+
+                                                <%= reqItem.companyName || reqItem.name || 'Unknown' %>
+
                                             </div>
+
+                                            <div class="text-[11px] text-zinc-500 mt-1">
+
+                                                <%= reqItem.email || 'No Email' %>
+
+                                            </div>
+
+                                            <div class="text-[10px] text-zinc-400 mt-1 font-bold">
+
+                                                📞 <%= reqItem.mobile || 'No Mobile' %>
+
+                                            </div>
+
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                            <a href="mailto:<%= reqItem.email %>" class="text-white bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded text-xs transition">Email</a>
-                                            <button class="text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded text-xs transition ml-2">Delete</button>
+                                        <!-- MESSAGE -->
+
+                                        <td class="px-6 py-5">
+
+                                            <div class="max-w-[450px] text-xs text-zinc-300 leading-relaxed">
+
+                                                <%= reqItem.message || 'No Requirement' %>
+
+                                            </div>
+
                                         </td>
+
+                                        <!-- ACTIONS -->
+
+                                        <td class="px-6 py-5">
+
+                                            <div class="flex justify-end gap-2">
+
+                                                <!-- EMAIL -->
+
+                                                <a href="mailto:<%= reqItem.email %>"
+                                                   class="w-9 h-9 rounded-xl bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500 hover:text-white transition-all flex items-center justify-center">
+
+                                                    <i class="fa-solid fa-envelope text-xs"></i>
+
+                                                </a>
+
+                                                <!-- DELETE -->
+
+                                                <button class="w-9 h-9 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
+
+                                                    <i class="fa-solid fa-trash text-xs"></i>
+
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
                                     </tr>
+
                                 <% }) %>
+
                             <% } else { %>
+
+                                <!-- EMPTY -->
+
                                 <tr>
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
-                                        <span class="block text-sm font-medium text-gray-900">Koi Nayi Requirement Nahi Aayi Hai!</span>
+
+                                    <td colspan="4"
+                                        class="py-20 text-center">
+
+                                        <div class="flex flex-col items-center gap-4 opacity-40">
+
+                                            <i class="fa-solid fa-inbox text-5xl text-[#C9922A]"></i>
+
+                                            <h2 class="text-lg font-black uppercase text-white">
+
+                                                No Inquiries Found
+
+                                            </h2>
+
+                                            <p class="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
+
+                                                New requirements will appear here
+
+                                            </p>
+
+                                        </div>
+
                                     </td>
+
                                 </tr>
+
                             <% } %>
 
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
-            
+
         </main>
+
     </div>
 
 </body>
-</html>
+
+</html> 

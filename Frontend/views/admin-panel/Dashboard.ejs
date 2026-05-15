@@ -3,24 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Bhilwara Textile</title>
+    <title><%= title %> | Central Authority</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        body { background-color: #050507; color: #d4d4d8; margin: 0; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .gold-text { background: linear-gradient(to right, #C9922A, #F3D084, #C9922A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card { background: rgba(17, 17, 19, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .glass-card:hover { border-color: #C9922A; transform: translateY(-3px); background: rgba(20, 20, 25, 0.8); }
+        .pulse-gold { animation: pulse-gold 2s infinite; }
+        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(201, 146, 42, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(201, 146, 42, 0); } 100% { box-shadow: 0 0 0 0 rgba(201, 146, 42, 0); } }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #C9922A; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans overflow-hidden flex h-screen text-gray-900">
+<body class="flex h-screen">
 
-    <%- include('partials/sidebar') %>
+    <div class="shrink-0 h-full overflow-y-auto border-r border-white/5">
+        <%- include('./partials/sidebar') %>
+    </div>
 
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
         
-        <%- include('partials/header') %>
+        <header class="h-20 flex items-center justify-between px-10 border-b border-white/5 bg-black/20 backdrop-blur-md shrink-0">
+            <div>
+                <h1 class="text-xl font-black italic uppercase tracking-widest text-white">Authority <span class="gold-text">Pulse</span></h1>
+                <p class="text-[8px] font-bold text-zinc-500 uppercase tracking-[0.5em]">Real-Time Database Sync: Active</p>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 bg-zinc-900/50 px-4 py-2 rounded-full border border-white/5">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[9px] font-black text-white uppercase tracking-widest">Live Signals</span>
+                </div>
+            </div>
+        </header>
 
-        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-8">
+        <main class="flex-1 overflow-y-auto p-8 lg:p-12">
             
-            <h2 class="text-3xl font-bold mb-6">Welcome Back!</h2>
-            </main>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                
+                <div onclick="location.href='/admin/seller-requests'" class="glass-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+                        <i class="fa-solid fa-users-gear text-8xl"></i>
+                    </div>
+                    <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-1">Merchants</p>
+                    <h3 class="text-3xl font-black text-white italic"><%= stats.sellers %></h3>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="text-[8px] font-bold text-[#C9922A] uppercase">View Requests</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] text-[#C9922A]"></i>
+                    </div>
+                </div>
+
+                <div onclick="location.href='/admin/all-products'" class="glass-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                    <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-1">Active Fabrics</p>
+                    <h3 class="text-3xl font-black text-white italic"><%= stats.products %></h3>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="text-[8px] font-bold text-blue-400 uppercase">Inventory Control</span>
+                        <i class="fa-solid fa-box-open text-[8px] text-blue-400"></i>
+                    </div>
+                </div>
+
+                <div onclick="location.href='/admin/buyer-inquiries'" class="glass-card p-6 rounded-[2.5rem] relative overflow-hidden group border-l-2 border-[#C9922A]">
+                    <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-1">Signals (Inquiries)</p>
+                    <h3 class="text-3xl font-black text-white italic"><%= stats.inquiries %></h3>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="text-[8px] font-bold text-green-400 uppercase">Signal Logs</span>
+                        <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></div>
+                    </div>
+                </div>
+
+                <div onclick="location.href='/admin/quick-registrations'" class="glass-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                    <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-1">Quick Leads</p>
+                    <h3 class="text-3xl font-black text-white italic"><%= stats.leads %></h3>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="text-[8px] font-bold text-red-400 uppercase">Flash Registrations</span>
+                        <i class="fa-solid fa-bolt-lightning text-[8px] text-red-400"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2 glass-card rounded-[3rem] overflow-hidden">
+                    <div class="px-10 py-8 border-b border-white/5 flex justify-between items-center">
+                        <h2 class="text-xs font-black text-white uppercase tracking-[0.4em] italic">Authority Live Feed</h2>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[8px] font-black text-zinc-500 uppercase italic">Last Sync: Just Now</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <% if(recentInquiries && recentInquiries.length > 0) { %>
+                                <% recentInquiries.forEach(item => { %>
+                                <div onclick="location.href='/admin/buyer-inquiries'" class="flex items-center justify-between p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-[#C9922A]/40 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-600 group-hover:text-[#C9922A]">
+                                            <i class="fa-solid fa-message text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-[11px] font-black text-white uppercase"><%= item.name %></p>
+                                            <p class="text-[9px] text-zinc-500 italic lowercase tracking-tight"><%= item.email %></p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-[9px] font-bold text-[#C9922A] uppercase italic">Verified Signal</p>
+                                        <p class="text-[8px] font-mono text-zinc-700 mt-1"><%= item.createdAt ? item.createdAt.toLocaleDateString() : 'N/A' %></p>
+                                    </div>
+                                </div>
+                                <% }) %>
+                            <% } else { %>
+                                <div class="py-20 text-center opacity-20 italic text-[10px] uppercase tracking-widest font-black">No signals detected...</div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="glass-card p-10 rounded-[3rem] border-t border-white/10">
+                        <h2 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-8 text-center">Marketplace Health</h2>
+                        
+                        <div class="relative w-32 h-32 mx-auto mb-10">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="64" cy="64" r="58" stroke="currentColor" stroke-width="8" fill="transparent" class="text-zinc-900"/>
+                                <circle cx="64" cy="64" r="58" stroke="currentColor" stroke-width="8" fill="transparent" stroke-dasharray="364.4" stroke-dashoffset="36.4" class="text-[#C9922A]"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-2xl font-black text-white italic">90%</span>
+                                <span class="text-[7px] font-black text-zinc-500 uppercase">Elite Status</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                                <span class="text-[8px] font-black text-zinc-500 uppercase">DB Uptime</span>
+                                <span class="text-[9px] font-black text-green-500">99.9%</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                                <span class="text-[8px] font-black text-zinc-500 uppercase">Sync Speed</span>
+                                <span class="text-[9px] font-black text-[#C9922A]">0.2ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="location.href='/admin/contact-details'" class="glass-card p-6 rounded-2xl bg-gradient-to-r from-[#C9922A]/10 to-transparent border-l-2 border-[#C9922A] group">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-[10px] font-black text-white uppercase italic">Contact Authority</h3>
+                                <p class="text-[8px] text-zinc-500 uppercase tracking-widest mt-1 font-bold">Update Global Reach</p>
+                            </div>
+                            <i class="fa-solid fa-gear text-zinc-800 group-hover:text-[#C9922A] group-hover:rotate-45 transition-all"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
     </div>
 
-   
 </body>
 </html>

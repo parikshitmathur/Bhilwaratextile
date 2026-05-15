@@ -1,295 +1,286 @@
+<!-- 
+============================================================
+PROJECT: BHILWARA TEXTILE - AUTHORITY HUB (V2.1)
+DEVELOPER: PARIKSHIT MATHUR
+THEME: TRUE BLACK & INDUSTRIAL GOLD
+============================================================
+-->
+
 <%- include('partials/header') %>
 
-<div id="floatingIcons" style="position:fixed;inset:0;pointer-events:none;z-index:9989;overflow:hidden;"></div>
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<div class="cursor-dot"  id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<style>
+    /* 💎 CORE ELITE STYLES */
+    body { background: #000000; color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+    
+    .gold-text {
+        background: linear-gradient(to right, #C9922A, #fde68a, #C9922A);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% auto;
+        animation: textShine 4s linear infinite;
+    }
+    @keyframes textShine { to { background-position: 200% center; } }
 
-<section class="page-hero">
-  <div class="page-hero-bg"></div>
-  <img class="page-hero-img" src="https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=1600" alt="Fabric rolls background">
+    /* Typography & Layout Fixes */
+    .hero-title { line-height: 0.85; letter-spacing: -0.04em; }
+    
+    .elite-card { 
+        background: rgba(10, 10, 12, 0.8); 
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .elite-card:hover { border-color: #C9922A; transform: translateY(-8px); shadow: 0 20px 40px rgba(201, 146, 42, 0.1); }
 
-  <svg class="hero-weave" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-    <% for(let i=0;i<12;i++){ %>
-    <line x1="0" y1="<%= i*50 %>" x2="500" y2="<%= i*50 + 200 %>" stroke="#c8962a" stroke-width=".8" opacity="0.6"/>
-    <% } %>
-    <% for(let i=0;i<10;i++){ %>
-    <line x1="<%= i*55 %>" y1="0" x2="<%= i*55 - 100 %>" y2="600" stroke="#c8962a" stroke-width=".5" opacity="0.4"/>
-    <% } %>
-  </svg>
+    /* Google FAQ Logic */
+    .paa-card { border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+    .paa-question { cursor: pointer; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+    .paa-answer { max-height: 0; overflow: hidden; transition: all 0.4s ease; color: #a1a1aa; font-style: italic; }
+    .paa-active .paa-answer { max-height: 200px; padding-bottom: 20px; }
+    .paa-active i { transform: rotate(180deg); color: #C9922A; }
 
-  <div class="page-hero-inner">
-    <div class="breadcrumb">
-      <a href="/">Home</a>
-      <span>/</span>
-      <span style="color:rgba(255,255,255,.55)">Our Fabrics</span>
-    </div>
-    <p class="page-hero-label">Our Collection</p>
-    <h1 class="page-hero-title">
-      Premium Fabrics<br>
-      <em>Direct From the Loom</em>
-    </h1>
-    <p class="page-hero-sub">
-      1200+ fabric patterns. 4 core categories. Zero middlemen. 
-      Everything you need for suitings, shirtings, uniforms and beyond — 
-      straight from Bhilwara's finest manufacturing units.
-    </p>
-  </div>
-</section>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: #C9922A; border-radius: 10px; }
+</style>
 
-<div class="marquee-strip">
-  <div class="marquee-track">
-    <% ['Cotton Suitings','Poly-Viscose Blends','Uniform Fabrics','Premium Shirtings','Woolen Blends','Custom Dyeing','ISO Certified','Direct from Mill','Cotton Suitings','Poly-Viscose Blends','Uniform Fabrics','Premium Shirtings','Woolen Blends','Custom Dyeing','ISO Certified','Direct from Mill'].forEach(t => { %>
-    <div class="marquee-item"><span class="marquee-dot"></span><%= t %></div>
-    <% }) %>
-  </div>
-</div>
+<div class="min-h-screen">
 
-<div class="feature-banner reveal">
-  <div class="feature-banner-inner">
-    <div class="fb-left">
-      <div class="fb-label">Why Order From Us</div>
-      <h3>Mill-Direct Quality. <em>Wholesale Pricing.</em></h3>
-      <p>No agents. No markup. We manufacture and supply — you get the best price on the best fabric.</p>
-    </div>
-    <div class="fb-stats">
-      <div class="fb-stat">
-        <div class="fb-stat-num" data-count="1200">0</div>
-        <div class="fb-stat-lbl">Patterns</div>
-      </div>
-      <div class="fb-stat">
-        <div class="fb-stat-num" data-count="4">0</div>
-        <div class="fb-stat-lbl">Categories</div>
-      </div>
-      <div class="fb-stat">
-        <div class="fb-stat-num" data-count="72">0</div>
-        <div class="fb-stat-lbl">Hr Dispatch</div>
-      </div>
-      <div class="fb-stat">
-        <div class="fb-stat-num" data-count="100">0</div>
-        <div class="fb-stat-lbl">Min. Metres</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<section class="filter-section">
-  <div class="filter-inner">
-    <div class="filter-top reveal">
-      <div>
-        <div class="filter-title">All Fabrics</div>
-        <div class="filter-count" id="fabricCount">Showing all 12 fabrics</div>
-      </div>
-      <div class="grid-toggle">
-        <button class="grid-btn active" id="btn3col" title="3 columns">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="4" height="4" stroke-width="1.5"/><rect x="6" y="1" width="4" height="4" stroke-width="1.5"/><rect x="11" y="1" width="4" height="4" stroke-width="1.5"/><rect x="1" y="7" width="4" height="4" stroke-width="1.5"/><rect x="6" y="7" width="4" height="4" stroke-width="1.5"/><rect x="11" y="7" width="4" height="4" stroke-width="1.5"/></svg>
-        </button>
-        <button class="grid-btn" id="btn2col" title="2 columns">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" stroke-width="1.5"/></svg>
-        </button>
-        <button class="grid-btn" id="btn1col" title="List view">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="4" stroke-width="1.5"/><rect x="1" y="7" width="14" height="4" stroke-width="1.5"/><rect x="1" y="13" width="14" height="2" stroke-width="1.5"/></svg>
-        </button>
-      </div>
-    </div>
-    <div class="filter-tags reveal delay-1" id="filterTags">
-      <button class="filter-btn active" data-filter="all"><span>All Fabrics</span></button>
-      <button class="filter-btn" data-filter="suiting"><span>Suitings</span></button>
-      <button class="filter-btn" data-filter="shirting"><span>Shirtings</span></button>
-      <button class="filter-btn" data-filter="uniform"><span>Uniforms</span></button>
-      <button class="filter-btn" data-filter="woolen"><span>Woolen Blends</span></button>
-      <button class="filter-btn" data-filter="custom"><span>Custom Range</span></button>
-    </div>
-  </div>
-</section>
-
-<section class="fabrics-section">
-  <div class="fabrics-inner">
-    <div class="fabrics-grid" id="fabricsGrid">
-
-      <%
-      const fabrics = [
-        {
-          name: "Classic Poly-Viscose Suiting",
-          category: "suiting",
-          catLabel: "Suiting",
-          badge: "Bestseller", badgeClass: "",
-          desc: "India's most trusted suiting blend. Rich texture, wrinkle resistance, and 200+ shades available. Ideal for corporate formals and school uniforms.",
-          gsm: "200–260 GSM", moq: "100 Metres", width: "58 inches", finish: "Anti-wrinkle",
-          swatches: ["#1a2a4a","#3d3d3d","#4a2c0a","#2c4a2c","#5a4a2a"],
-          img: "https://images.unsplash.com/photo-1558171813-0a3de81ff4cb?auto=format&fit=crop&q=80&w=700",
-          large: true
-        },
-        {
-          name: "Pure Cotton Oxford Shirting",
-          category: "shirting",
-          catLabel: "Shirting",
-          badge: "Popular", badgeClass: "",
-          desc: "Crisp, breathable, premium-feel Oxford weave cotton. Perfect for formal and casual shirt manufacturing at scale.",
-          gsm: "120–140 GSM", moq: "100 Metres", width: "60 inches", finish: "Soft-feel",
-          swatches: ["#ffffff","#e8e8e8","#b8d4e8","#d8c4b8","#f0e8d8"],
-          img: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "School Uniform Twill",
-          category: "uniform",
-          catLabel: "Uniform",
-          badge: "Bulk Preferred", badgeClass: "",
-          desc: "Robust poly-cotton twill specifically designed for school uniforms. Colour retention tested up to 50 washes. Fast delivery on bulk orders.",
-          gsm: "180–220 GSM", moq: "200 Metres", width: "58 inches", finish: "Shrink-proof",
-          swatches: ["#1a3a6a","#2a5a3a","#4a1a1a","#3a2a5a","#1a4a4a"],
-          img: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Superfine Wool-Poly Suiting",
-          category: "woolen",
-          catLabel: "Woolen",
-          badge: "Premium", badgeClass: "new",
-          desc: "Luxurious warmth with sharp drape. Our winter suiting range blends finest wool with polyester for shape retention and comfort in cold climates.",
-          gsm: "280–340 GSM", moq: "100 Metres", width: "58 inches", finish: "Brushed finish",
-          swatches: ["#2c2c2c","#4a3a2a","#3a2a4a","#2a3a2a","#4a4a2a"],
-          img: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Linen-Look Poly Shirting",
-          category: "shirting",
-          catLabel: "Shirting",
-          badge: "Summer Special", badgeClass: "",
-          desc: "Achieves the natural texture and breathability of linen at a fraction of the cost. High-volume summer shirt production staple.",
-          gsm: "110–130 GSM", moq: "100 Metres", width: "60 inches", finish: "Linen texture",
-          swatches: ["#d4c4a8","#b8c4b8","#c8b4a0","#e0d4c0","#a8b8c8"],
-          img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Corporate Uniform Serge",
-          category: "uniform",
-          catLabel: "Uniform",
-          badge: "Corporate Pick", badgeClass: "",
-          desc: "Polished serge weave for hotel staff, security personnel, and corporate uniform programs. Maintains crease and colour after repeated washing.",
-          gsm: "220–250 GSM", moq: "200 Metres", width: "58 inches", finish: "Anti-pilling",
-          swatches: ["#1a1a2a","#2a2a3a","#1a2a1a","#3a1a1a","#2a3a3a"],
-          img: "https://images.unsplash.com/photo-1544441892-794166f1e3be?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Organic GOTS Cotton Shirting",
-          category: "shirting",
-          catLabel: "Shirting",
-          badge: "Eco", badgeClass: "eco",
-          desc: "GOTS-certified 100% organic cotton. Zero harmful dyes, waterless processing. The conscious choice for sustainable fashion brands.",
-          gsm: "130–150 GSM", moq: "100 Metres", width: "60 inches", finish: "Enzyme washed",
-          swatches: ["#e8dcc8","#c8d4c0","#d4c8b8","#b8c4b0","#e0d0b8"],
-          img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Custom Dobby Suiting",
-          category: "custom",
-          catLabel: "Custom",
-          badge: "Custom MOQ", badgeClass: "custom",
-          desc: "Woven-to-order dobby patterns for fashion houses and boutique brands. Provide your design file — our jacquard looms handle the rest.",
-          gsm: "220–280 GSM", moq: "300 Metres", width: "58 inches", finish: "Custom",
-          swatches: ["#8a6a4a","#4a6a8a","#6a4a8a","#8a4a4a","#4a8a6a"],
-          img: "https://images.unsplash.com/photo-1504198322253-cfa87a0ff60f?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Melange Jersey Suiting",
-          category: "suiting",
-          catLabel: "Suiting",
-          badge: "New Season", badgeClass: "new",
-          desc: "Heathered melange effect with gentle stretch. Modern suiting for the contemporary workwear buyer who values comfort without compromising on sharpness.",
-          gsm: "200–230 GSM", moq: "100 Metres", width: "60 inches", finish: "2-way stretch",
-          swatches: ["#7a7a7a","#9a8a7a","#6a7a6a","#7a6a7a","#8a8a6a"],
-          img: "https://images.unsplash.com/photo-1580518337843-f959e992563b?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Defence & Industrial Drill",
-          category: "uniform",
-          catLabel: "Uniform",
-          badge: "Heavy Duty", badgeClass: "",
-          desc: "High-tenacity polyester-cotton drill for defence, industrial workwear, and security uniforms. Tear-resistant and maintains rigidity under stress.",
-          gsm: "260–300 GSM", moq: "500 Metres", width: "58 inches", finish: "Starch-free",
-          swatches: ["#2a3a1a","#1a2a1a","#3a3a1a","#1a1a1a","#2a2a2a"],
-          img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Tweed Wool Overcoating",
-          category: "woolen",
-          catLabel: "Woolen",
-          badge: "Winter Range", badgeClass: "new",
-          desc: "Heavy-weight tweed-effect wool blend for overcoats and jackets. Rich texture, outstanding warmth, available in 40+ heritage colour options.",
-          gsm: "380–450 GSM", moq: "100 Metres", width: "60 inches", finish: "Milled finish",
-          swatches: ["#5a4a3a","#3a4a5a","#4a3a5a","#5a3a3a","#3a5a3a"],
-          img: "https://images.unsplash.com/photo-1548778052-311f4bc2b502?auto=format&fit=crop&q=80&w=700"
-        },
-        {
-          name: "Printed Ethnic Suiting",
-          category: "custom",
-          catLabel: "Custom",
-          badge: "Ethnic Range", badgeClass: "custom",
-          desc: "Digital and rotary printed suiting fabric with traditional motifs — paisleys, block prints, and geometric patterns inspired by Rajasthan's craft heritage.",
-          gsm: "180–220 GSM", moq: "200 Metres", width: "58 inches", finish: "Rotary print",
-          swatches: ["#c8522a","#e8a82a","#2a6a4a","#4a2a8a","#c82a6a"],
-          img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?auto=format&fit=crop&q=80&w=700"
-        }
-      ];
-      %>
-
-      <% fabrics.forEach((f, i) => { %>
-      <div class="fabric-card reveal delay-<%= (i%3)+1 %> <%= f.large ? 'large' : '' %>" data-category="<%= f.category %>">
-        <div class="fabric-img-wrap">
-          <img class="fabric-img" src="<%= f.img %>" alt="<%= f.name %>" loading="lazy">
-          <% if(f.badge){ %><div class="fabric-badge <%= f.badgeClass %>"><%= f.badge %></div><% } %>
-          <button class="fabric-wish" onclick="this.classList.toggle('wished');this.textContent=this.classList.contains('wished')?'❤️':'🤍'">🤍</button>
-          
- <div class="fabric-swatches">
-    <% if (f && f.swatches && Array.isArray(f.swatches)) { %>
-        <% f.swatches.forEach(color => { %>
-            <div class="swatch" "></div>
-        <% }) %>
-    <% } else { %>
-        <span>No colors available</span>
-    <% } %>
-</div>
-        </div> 
-
-        <div class="fabric-body">
-          <div class="fabric-cat"><%= f.catLabel %></div>
-          <div class="fabric-name"><%= f.name %></div>
-          <div class="fabric-desc"><%= f.desc %></div>
-          <div class="fabric-meta">
-            <div class="meta-item"><span class="meta-label">GSM</span><span class="meta-value"><%= f.gsm %></span></div>
-            <div class="meta-item"><span class="meta-label">Min Order</span><span class="meta-value"><%= f.moq %></span></div>
-            <div class="meta-item"><span class="meta-label">Width</span><span class="meta-value"><%= f.width %></span></div>
-            <div class="meta-item"><span class="meta-label">Finish</span><span class="meta-value"><%= f.finish %></span></div>
-          </div>
-          <div class="fabric-actions">
-            <button class="btn-enquire" onclick="openModal('<%= f.name %>')"><span>📩 Enquire Now</span></button>
-            <button class="btn-sample" onclick="openModal('<%= f.name %>', true)">Request Sample</button>
-          </div>
+    <!-- 🏗️ SECTION 1: HERO -->
+<!-- Yahan loop lagao agar multiple slides dikhani hain -->
+<% slides.forEach(slide => { %>
+<section class="relative pt-32 pb-20 px-6 overflow-hidden bg-black">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C9922A]/5 blur-[100px] rounded-full pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7 z-10">
+            <span class="text-[10px] font-black text-[#C9922A] uppercase tracking-[0.6em] mb-4 block italic"><%= slide.tagline %></span>
+            <h1 class="hero-title text-6xl md:text-8xl font-black italic uppercase mb-8">
+                <span class="block text-white"><%= slide.titleMain %></span>
+                <span class="text-[#C9922A] block mt-2"><%= slide.titleGold %></span>
+            </h1>
+            <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic border-l-2 border-[#C9922A]/40 pl-6 max-w-xl">
+                <%= slide.description %>
+            </p>
+            <div class="flex gap-10">
+                <div>
+                    <h4 class="text-3xl font-black text-white italic"><%= slide.stat1_value %></h4>
+                    <p class="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mt-1"><%= slide.stat1_label %></p>
+                </div>
+                <div>
+                    <h4 class="text-3xl font-black text-white italic"><%= slide.stat2_value %></h4>
+                    <p class="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mt-1"><%= slide.stat2_label %></p>
+                </div>
+            </div>
         </div>
-      </div>
-      <% }) %>
 
-    </div><div class="load-more-wrap reveal">
-      <button class="btn-load-more" id="loadMoreBtn"><span>Load More Fabrics</span></button>
+        <div class="lg:col-span-5 relative">
+            <div class="relative rounded-[3rem] overflow-hidden border border-zinc-800 shadow-2xl aspect-[4/5] group">
+                <img src="<%= slide.imageURL %>" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#000] via-transparent to-transparent"></div>
+            </div>
+            <div class="absolute -bottom-4 -left-4 bg-[#C9922A] text-black px-5 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-2xl rotate-[-2deg]">
+                <%= slide.badgeText %>
+            </div>
+        </div>
     </div>
-  </div>
+</section>
+<% }) %>
+
+    <!-- 🏭 SECTION 2: INDUSTRIAL ECOSYSTEM -->
+    <section class="py-20 bg-[#050507] border-y border-zinc-900">
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16">
+            <h2 class="text-3xl font-black italic uppercase tracking-tighter">Trade <span class="gold-text">Ecosystem</span></h2>
+            <p class="text-zinc-500 text-[9px] font-black uppercase mt-2 tracking-[0.4em]">Integrated Manufacturing</p>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="elite-card p-8 rounded-[2.5rem]">
+                <i class="fas fa-microchip text-amber-600 text-xl mb-6 block"></i>
+                <h4 class="text-md font-black uppercase italic text-white mb-3">Smart Spinning</h4>
+                <p class="text-[11px] text-zinc-500 leading-relaxed italic">Advanced ring aur open-end technology jo world-class yarn taiyar karti hai.</p>
+            </div>
+            <div class="elite-card p-8 rounded-[2.5rem]">
+                <i class="fas fa-layer-group text-blue-500 text-xl mb-6 block"></i>
+                <h4 class="text-md font-black uppercase italic text-white mb-3">Fabric Processing</h4>
+                <p class="text-[11px] text-zinc-500 leading-relaxed italic">Modern dyeing plants jo kapde ko global standards ke hisab se "Elite" banate hain.</p>
+            </div>
+            <div class="elite-card p-8 rounded-[2.5rem]">
+                <i class="fas fa-truck-fast text-green-500 text-xl mb-6 block"></i>
+                <h4 class="text-md font-black uppercase italic text-white mb-3">Global Supply</h4>
+                <p class="text-[11px] text-zinc-500 leading-relaxed italic">Efficient logistics network jo Bhilwara se direct port tak mal pahunchata hai.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🧶 SECTION 3: FABRIC SEGMENTS -->
+    <section class="py-20 bg-black relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-4xl font-black italic uppercase tracking-tighter">Fabric <span class="gold-text">Segments</span></h2>
+                <p class="text-zinc-600 text-[10px] font-black uppercase tracking-[0.4em] mt-2">Bhilwara's Core Expertise</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <% ['PV Suiting', 'Cotton Blends', 'Denim & Canvas', 'Technical Textiles'].forEach((fabric, i) => { %>
+                <div class="p-6 border border-zinc-900 rounded-2xl hover:bg-zinc-900/40 transition-all group">
+                    <p class="text-[#C9922A] font-black text-lg mb-1 italic">0<%= i+1 %></p>
+                    <h4 class="text-white font-bold uppercase tracking-tight text-xs group-hover:text-[#C9922A]"><%= fabric %></h4>
+                    <p class="text-[9px] text-zinc-500 mt-2 italic leading-relaxed">High-performance manufacturing for global markets.</p>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🛡️ SECTION 4: VERIFIED PARTNERS -->
+    <section class="py-20 bg-[#050507]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-4xl font-black italic uppercase tracking-tighter">Verified <span class="gold-text">Partners</span></h2>
+                    <p class="text-zinc-600 text-[10px] font-black uppercase tracking-widest mt-2">Elite Industrialists</p>
+                </div>
+                <a href="/verified-sellers" class="text-[10px] font-black uppercase tracking-widest text-[#C9922A] border-b border-[#C9922A]/20 pb-1 hover:text-white transition-all italic">Explore All</a>
+            </div>
+            <div id="topPartners" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 🔍 SECTION 5: PEOPLE ALSO ASK -->
+   <!-- 🔍 SECTION: PEOPLE ALSO ASK (EXPANDED) -->
+<section class="py-20 bg-black">
+    <div class="max-w-2xl mx-auto px-6">
+        <!-- Google Style Header -->
+        <div class="flex items-center gap-3 mb-8 pb-4 border-b border-zinc-900">
+            <i class="fab fa-google text-blue-500 text-lg"></i>
+            <h3 class="text-lg font-bold text-white tracking-tight">People also ask</h3>
+        </div>
+
+        <div class="space-y-1">
+            <!-- Q1 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Bhilwara kis cheez ke liye sabse zyada prasiddh hai?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Bhilwara ko "Synthetic Suiting Capital of India" kaha jata hai. Yeh Polyester-Viscose (PV) suiting ka sabse bada hub hai, jahan se poore desh aur videshon mein premium kapda supply hota hai.
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Kya hum factory se direct bulk inquiry kar sakte hain?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Ji haan, Bhilwara Textile portal ka maksad hi manufacturers aur buyers ko direct connect karna hai. Aap kisi bhi verified seller ki profile par jaakar direct inquiry bhej sakte hain.
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Vastra Nagri ko "Manchester of Rajasthan" kyun kehte hain?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Apni vishal textile production capacity aur spinning units ki wajah se ise Manchester ki upadhi di gayi hai. Yahan har saal 1 billion meters se zyada fabric produce hota hai.
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Yahan kis-kis tarah ke fabric ki variety milti hai?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    PV Suiting ke alawa, Bhilwara mein Cotton Blends, Denim, Technical Textiles, Corporate Uniform fabrics aur specialized Shirting ki vishal range available hai.
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Bhilwara ke fabric ki quality check kaise hoti hai?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Yahan ki adhiktar mills ISO certified hain aur in-house NABL accredited labs ka use karti hain, taaki colorfastness aur durability ke global standards maintain rahein.
+                </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Export orders ke liye logistics ki kya suvidha hai?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Bhilwara ka transport network India ke har bade port se juda hai. Yahan dedicated ICD (Inland Container Depot) suvidha hai jo export consignments ko smooth banati hai.
+                </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="paa-card" onclick="togglePAA(this)">
+                <div class="paa-question text-[11px] font-black text-white uppercase tracking-wider">
+                    Kya naye traders ko small MOQs ki suvidha milti hai?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="paa-answer text-[11px] leading-relaxed italic">
+                    Kai verified partners startups ke liye flexible MOQs (Minimum Order Quantity) offer karte hain. Aap seller se unke specific terms ke bare mein direct baat kar sakte hain.
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-label" id="modalMode">Request Sample</div>
-    <div class="modal-title" id="modalTitle">Fabric Name</div>
-    <p class="modal-sub">Fill in your details and we'll get back within 4 working hours with pricing, availability, and sample dispatch info.</p>
-    <form class="modal-form" action="/inquiry" method="POST">
-      <input type="hidden" name="fabric" id="modalFabricInput">
-      <input class="modal-input" type="text"  name="name"  placeholder="Your Name *" required>
-      <input class="modal-input" type="tel"   name="phone" placeholder="Phone / WhatsApp *" required>
-      <input class="modal-input" type="email" name="email" placeholder="Email Address">
-      <input class="modal-input" type="text"  name="qty"   placeholder="Quantity Required (e.g. 500 metres)">
-      <button class="modal-submit" type="submit">Send Enquiry →</button>
-    </form>
-  </div>
 </div>
+
+<script>
+    // 🛡️ Load Partners with Icon Fallback
+    async function loadPartners() {
+        try {
+            const res = await fetch('/api/merchants/list');
+            const data = await res.json();
+            const top4 = data.slice(0, 4);
+            
+            document.getElementById('topPartners').innerHTML = top4.map(m => {
+                const logoContent = m.logo 
+                    ? `<img src="${m.logo}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">`
+                    : `<div class="w-full h-full flex items-center justify-center bg-zinc-900 text-zinc-700 group-hover:text-[#C9922A] transition-colors">
+                         <i class="fas fa-industry text-2xl"></i>
+                       </div>`;
+
+                return `
+                    <div class="elite-card p-8 rounded-[2.5rem] flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 bg-zinc-950 border border-zinc-800 rounded-2xl mb-5 overflow-hidden flex-shrink-0">
+                            ${logoContent}
+                        </div>
+                        <h4 class="text-xs font-black text-white uppercase mb-1 line-clamp-1 italic">${m.companyName}</h4>
+                        <p class="text-[8px] text-[#C9922A] font-bold uppercase tracking-[0.2em] mb-6">${m.city || 'Bhilwara'}</p>
+                        <a href="/merchant/${m._id}" class="inline-block w-full py-3 bg-zinc-900/50 border border-zinc-800 rounded-xl text-[9px] font-black uppercase tracking-widest text-zinc-400 group-hover:bg-[#C9922A] group-hover:text-black transition-all">View Profile</a>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) { console.error("Error loading merchants:", err); }
+    }
+
+    // 🔍 Toggle Accordion
+    function togglePAA(el) {
+        document.querySelectorAll('.paa-card').forEach(c => { if(c !== el) c.classList.remove('paa-active'); });
+        el.classList.toggle('paa-active');
+    }
+
+    loadPartners();
+</script>
 
 <%- include('partials/footer') %>

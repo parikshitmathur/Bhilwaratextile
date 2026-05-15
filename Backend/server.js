@@ -36,6 +36,46 @@ mongoose
         console.log('❌ MongoDB Connection Error:', err);
     });
 
+
+app.get('/api/search-dynamic', async (req, res) => {
+    try {
+        const { q, type } = req.query;
+        if (!q) return res.json({ results: [], type });
+
+        const searchRegex = new RegExp(q, 'i');
+        let results = [];
+
+        if (type === 'Suppliers') {
+            results = await SellerAdmin.find({ 
+                companyName: searchRegex, 
+                status: 'Approved' 
+            }).limit(5).lean();
+        } else {
+            // 1. Pehle Categories (Sub-categories) mein dhoondho
+            const categories = await Category.find({ name: searchRegex }).limit(5).lean();
+            
+            // 2. Fir Products mein dhoondho
+            const products = await Product.find({ 
+                $or: [
+                    { name: searchRegex },
+                    { description: searchRegex } // Description mein bhi search karega
+                ]
+            }).limit(5).lean();
+
+            // Dono results ko merge kar do
+            results = [
+                ...categories.map(c => ({ ...c, isCat: true })), 
+                ...products.map(p => ({ ...p, isProd: true }))
+            ];
+        }
+
+        res.json({ results, type });
+    } catch (err) {
+        console.error("Search Error:", err);
+        res.status(500).json({ error: "failed" });
+    }
+});
+
 /* ============================================================
    [03] BASIC EXPRESS SETTINGS
 ============================================================ */
@@ -71,6 +111,8 @@ app.use((req, res, next) => {
 /* ============================================================
    [05] IMPORT DATABASE MODELS
 ============================================================ */
+
+const SellerLead = require('./models/SellerLead');
 
 const SellerAdmin = require('./models/seller-admin-model');
 
@@ -457,12 +499,14 @@ app.get('/reset-password', (req, res) => {
 // Verified Sellers Page
 app.get('/verified-sellers', (req, res) => {
 
-    res.render('user/verified-sellers', {
-
-        title: "Verified Partners | Bhilwara Textile"
+   // Backend Route (app.js ya routes file mein)
+res.render('user/verified-sellers', {
+    title: "Verified Textile Manufacturers in Bhilwara | B2B Directory",
+    metaDesc: "Connect directly with 400+ verified textile mills, PV suiting manufacturers, and denim suppliers in Bhilwara, Rajasthan. Direct factory pricing with no middleman.",
+    keywords: "Bhilwara textile manufacturers, suiting suppliers Rajasthan, denim mills Bhilwara, B2B textile directory"
+});
 
     });
-});
 
 // Approved Sellers API
 app.get('/api/merchants/list', async (req, res) => {
@@ -659,6 +703,87 @@ app.get('/tx-dashboard', isTxAuthenticated, async (req, res) => {
 /* =========================
    SELLER REQUESTS
 ========================= */
+
+
+
+
+/* ============================================================
+   [NEW] PRODUCT / SELLER SPECIFIC INQUIRY ROUTE
+============================================================ */
+app.post('/api/send-product-inquiry', async (req, res) => {
+    try {
+        const { productId, productName, sellerId, sellerCompany, buyerName, buyerPhone, message } = req.body;
+
+        // Ab hum naye 'SellerLead' model me data save kar rahe hain
+        await SellerLead.create({
+            sellerId,
+            productId,
+            sellerCompany,
+            productName,
+            buyerName,
+            buyerPhone,
+            message
+        });
+
+        // Puran email notification ka code aap chahein toh yahan rakh sakte hain
+
+        res.send(`
+            <script>
+                alert('Your inquiry for ${productName} has been sent successfully to ${sellerCompany}!');
+                window.history.back();
+            </script>
+        `);
+    } catch (err) {
+        console.error("❌ Lead Submission Error:", err);
+        res.status(500).send("Failed to send inquiry. Please try again.");
+    }
+});
+
+/* ============================================================
+   [NEW] SELLER'S PERSONAL INQUIRIES PAGE
+============================================================ */
+app.get('/tx-inquiries', isTxAuthenticated, async (req, res) => {
+    try {
+        const sellerId = req.cookies.sellerId;
+        const userData = await SellerAdmin.findById(sellerId);
+        
+        // Ab 'Inquiry' ki jagah 'SellerLead' se data utha rahe hain
+        const myInquiries = await SellerLead.find({ sellerId: sellerId }).sort({ createdAt: -1 });
+
+        res.render('seller-admin/tx-inquiries', {
+            user: userData,
+            inquiries: myInquiries,
+            title: "My Product Leads"
+        });
+    } catch (err) {
+        console.error("❌ Fetch Inquiries Error:", err);
+        res.status(500).send("Error loading your inquiries.");
+    }
+});
+/* ============================================================
+   [NEW] SELLER'S PERSONAL INQUIRIES PAGE
+============================================================ */
+app.get('/tx-inquiries', isTxAuthenticated, async (req, res) => {
+    try {
+        const sellerId = req.cookies.sellerId;
+        const userData = await SellerAdmin.findById(sellerId);
+        
+        // Sirf wahi inquiries dhoondo jisme is seller ka ID ho
+        const myInquiries = await Inquiry.find({ sellerId: sellerId }).sort({ createdAt: -1 });
+
+        res.render('seller-admin/tx-inquiries', {
+            user: userData,
+            inquiries: myInquiries,
+            title: "My Product Inquiries"
+        });
+    } catch (err) {
+        console.error("❌ Fetch Inquiries Error:", err);
+        res.status(500).send("Error loading your inquiries.");
+    }
+});
+
+
+
 
 app.get('/admin/seller-requests', async (req, res) => {
 
@@ -1136,6 +1261,44 @@ app.post('/api/quick-register',
             res.status(500).send("Error");
         }
     });
+
+const { SitemapStream, streamToPromise } = require('sitemap');
+const { createGzip } = require('zlib');
+
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        res.header('Content-Type', 'application/xml');
+        res.header('Content-Encoding', 'gzip');
+
+        const sitemap = new SitemapStream({ hostname: 'https://bhilwaratextile.com' }); // Apni domain dalo
+        const pipeline = sitemap.pipe(createGzip());
+
+        // Static Pages
+        sitemap.write({ url: '/', changefreq: 'daily', priority: 1.0 });
+        sitemap.write({ url: '/fabrics', changefreq: 'weekly', priority: 0.8 });
+        sitemap.write({ url: '/verified-sellers', changefreq: 'weekly', priority: 0.8 });
+
+        // Dynamic Merchant Pages (Har merchant ka link SEO mein aayega)
+        const merchants = await SellerAdmin.find({ status: 'Approved' });
+        merchants.forEach(m => {
+            sitemap.write({ url: `/merchant/${m._id}`, changefreq: 'monthly', priority: 0.7 });
+        });
+
+        // Dynamic Category Pages
+        const categories = await Category.find();
+        categories.forEach(c => {
+            sitemap.write({ url: `/category/${encodeURIComponent(c.name)}`, changefreq: 'monthly', priority: 0.6 });
+        });
+
+        sitemap.end();
+        streamToPromise(pipeline).then(sm => res.send(sm));
+    } catch (e) {
+        console.error(e);
+        res.status(500).end();
+    }
+});
+
+
 
 /* ============================================================
    [22] 404 PAGE

@@ -2,128 +2,236 @@
 
 <main class="ap-main-wrapper">
     <div class="ap-container">
-        <div class="ap-header">
-            <h1 class="ap-title">Inventory <span class="gold-text">Management</span></h1>
-            <p class="ap-subtitle">List your bulk fabrics and manage stock levels</p>
+        <!-- Minimalist Page Header -->
+        <div class="ap-page-header">
+            <div class="header-content">
+                <h1 class="ap-title">Inventory <span class="gold-text italic tracking-tighter">Vault</span></h1>
+                <p class="ap-subtitle">Register high-volume clusters & bespoke micro-segments</p>
+            </div>
+            <div class="header-status">
+                <span class="status-dot"></span> Secure Cloud Sync
+            </div>
         </div>
 
-        <div class="ap-glass-card">
-            <!-- Form Action as per your API -->
-            <form action="/api/seller/add-product" method="POST" enctype="multipart/form-data" class="ap-form">
+        <form action="/api/seller/add-product" method="POST" enctype="multipart/form-data" class="ap-master-form">
+            <div class="form-layout-grid">
                 
-                <!-- Section 1: Fabric Image -->
-                <div class="ap-upload-section">
-                    <label class="ap-label">FABRIC VISUAL (IMAGE)</label>
-                    <div class="ap-drop-zone">
-                        <input type="file" name="productImage" id="prodImg" hidden onchange="previewProd(this)" required>
-                        <div id="imgPreview" class="ap-preview-box">
-                            <span class="ap-plus">+</span>
-                            <p>Upload Fabric Photo</p>
+                <!-- Left Sidebar: Visual Reference -->
+                <aside class="form-sidebar">
+                    <div class="ap-glass-card upload-card">
+                        <label class="section-tag">Visual Reference</label>
+                        <div class="ap-drop-zone" id="dropZone">
+                            <input type="file" name="productImage" id="prodImg" hidden onchange="previewProd(this)" required>
+                            <div id="imgPreview" class="ap-preview-wrapper">
+                                <div class="upload-state">
+                                    <div class="upload-icon-circle">+</div>
+                                    <p class="upload-label">Fabric Photo</p>
+                                    <p class="upload-sub">Drop or Browse</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </aside>
 
-                <!-- Section 2: Details -->
-                <div class="ap-grid">
-                    <!-- 🆕 Product Name Field Added -->
-                    <div class="ap-group pf-full">
-                        <label class="ap-label">Product Name / Title</label>
-                        <input type="text" name="productName" class="ap-input" placeholder="e.g. Premium Cotton Shirting" required>
-                    </div>
+                <!-- Right Sidebar: Technical Specs -->
+                <section class="form-main">
+                    <div class="ap-glass-card details-card">
+                        <label class="section-tag">Technical Parameters</label>
+                        
+                        <div class="field-grid">
+                            <!-- Product Name -->
+                            <div class="field-group full">
+                                <label class="ap-label">Product Name / Signature</label>
+                                <input type="text" name="productName" class="ap-input" placeholder="e.g. Premium Cotton Shirting" required>
+                            </div>
 
-                    <div class="ap-group">
-                        <label class="ap-label">Select Category</label>
-                        <select name="category" class="ap-input" required>
-                            <option value="" disabled selected>-- Choose Category --</option>
-                            <% if(categories && categories.length > 0) { %>
-                                <% categories.forEach(function(cat) { %>
-                                    <option value="<%= cat.name %>"><%= cat.name %></option>
-                                <% }); %>
-                            <% } else { %>
-                                <option disabled>No categories found.</option>
-                            <% } %>
-                        </select>
-                    </div>
+                            <!-- Category Selection -->
+                            <div class="field-group">
+                                <label class="ap-label">Main Cluster</label>
+                                <select name="category" id="mainCategory" class="ap-select" required onchange="updateSubCategories()">
+                                    <option value="" disabled selected>Select Segment</option>
+                                    <% if(categories && categories.length > 0) { %>
+                                        <% categories.forEach(function(cat) { %>
+                                            <option value="<%= cat.name %>" data-subs='<%= JSON.stringify(cat.subcategories) %>'>
+                                                <%= cat.name %>
+                                            </option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                            </div>
 
-                    <div class="ap-group">
-                        <label class="ap-label">Fabric Material Type</label>
-                        <input type="text" name="fabricType" class="ap-input" placeholder="e.g. 60/60 Count, Lycra">
-                    </div>
+                            <!-- Sub-Category Selection -->
+                            <div class="field-group">
+                                <label class="ap-label">Micro Segment</label>
+                                <div id="subCatWrapper">
+                                    <select name="subCategory" id="subCategory" class="ap-select" onchange="checkCustomSub(this)">
+                                        <option value="" disabled selected>Waiting for Selection...</option>
+                                    </select>
+                                    <!-- Custom Input (Hidden) -->
+                                    <div id="customSubBox" class="hidden mt-2 animate-fade-in">
+                                        <input type="text" id="customSubInput" name="customSubCategory" class="ap-input" placeholder="Name your segment...">
+                                        <span class="back-link" onclick="resetSubSelection()">← Back to list</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="ap-group">
-                        <label class="ap-label">Bulk Stock (In Meters)</label>
-                        <input type="number" name="bulkStock" class="ap-input" placeholder="e.g. 5000" required>
-                    </div>
+                            <!-- Material Details -->
+                            <div class="field-group">
+                                <label class="ap-label">Material Details</label>
+                                <input type="text" name="fabricType" class="ap-input" placeholder="e.g. 60/60 Count, Twill">
+                            </div>
 
-                    <!-- 💰 Price Per Meter Update -->
-                    <div class="ap-group">
-                        <label class="ap-label">Price (Per Meter)</label>
-                        <div style="position: relative;">
-                            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b;">₹</span>
-                            <input type="number" name="pricePerUnit" class="ap-input" style="padding-left: 28px;" placeholder="0.00" required>
+                            <!-- GSM -->
+                            <div class="field-group">
+                                <label class="ap-label">GSM (Weight)</label>
+                                <input type="number" name="gsm" class="ap-input" placeholder="180">
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="field-group">
+                                <label class="ap-label">Stock Balance (Mtrs)</label>
+                                <input type="number" name="bulkStock" class="ap-input" placeholder="5000" required>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="field-group">
+                                <label class="ap-label">Unit Price (₹/Mtr)</label>
+                                <div class="price-input-wrapper">
+                                    <span class="currency-tag">₹</span>
+                                    <input type="number" name="pricePerUnit" class="ap-input indent" placeholder="0.00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ap-actions-wrapper">
+                            <button type="submit" class="ap-btn-primary">
+                                Sync with Marketplace Vault
+                            </button>
                         </div>
                     </div>
-                </div>
-
-                <div class="ap-group" style="margin-top: 20px;">
-                    <label class="ap-label">Bulk Supply Description</label>
-                    <textarea name="description" class="ap-input ap-textarea" placeholder="Describe quality, width (panna), and delivery terms..."></textarea>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="ap-actions">
-                    <button type="submit" class="ap-btn-save">Publish to Marketplace</button>
-                </div>
-
-            </form>
-        </div>
+                </section>
+            </div>
+        </form>
     </div>
 </main>
 
 <style>
-    :root { --gold: #C9922A; --bg: #08090a; --card: rgba(255,255,255,0.02); }
-    .ap-main-wrapper { margin-left: 280px; padding: 50px; background: var(--bg); min-height: 100vh; transition: 0.3s; }
-    @media (max-width: 768px) { .ap-main-wrapper { margin-left: 0; padding: 100px 20px 40px; } }
-
-    .ap-glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 35px; backdrop-filter: blur(20px); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-    .ap-title { font-size: 32px; font-weight: 800; color: white; margin: 0; }
-    .gold-text { color: var(--gold); }
-    .ap-subtitle { color: #64748b; font-size: 14px; margin-top: 5px; }
-
-    /* Upload Style */
-    .ap-drop-zone { border: 2px dashed rgba(201, 146, 42, 0.3); border-radius: 20px; height: 180px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; margin-bottom: 30px; overflow: hidden; }
-    .ap-drop-zone:hover { border-color: var(--gold); background: rgba(201, 146, 42, 0.05); }
-    .ap-preview-box { text-align: center; color: #64748b; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .ap-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-    .ap-plus { font-size: 40px; display: block; color: var(--gold); line-height: 1; }
-
-    /* Form Grid */
-    .ap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-    .pf-full { grid-column: span 2; }
-    .ap-label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: block; padding-left: 5px; }
-    
-    .ap-input { 
-        width: 100%; 
-        padding: 14px 18px; 
-        background: #0b111a; 
-        border: 1px solid rgba(255,255,255,0.07); 
-        border-radius: 14px; 
-        color: white; 
-        font-size: 14px;
-        outline: none; 
-        transition: 0.3s; 
-        box-sizing: border-box; 
+    :root { 
+        --gold: #C8962A; 
+        --bg-black: #09090b; 
+        --card-dark: #121214;
+        --input-black: #000000;
+        --border-muted: rgba(255,255,255,0.06);
+        --text-zinc: #a1a1aa;
     }
-    .ap-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(201, 146, 42, 0.1); background: #0d1421; }
-    
-    .ap-textarea { height: 120px; resize: none; line-height: 1.6; }
 
-    .ap-btn-save { background: var(--gold); color: black; border: none; padding: 18px; border-radius: 15px; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 25px; transition: 0.3s; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
-    .ap-btn-save:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(201, 146, 42, 0.3); }
+    body { background-color: var(--bg-black); color: #fff; }
+
+    .ap-main-wrapper { margin-left: 280px; padding: 40px; min-height: 100vh; }
+    
+    /* Header Styling */
+    .ap-page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+    .ap-title { font-size: 32px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; line-height: 1; }
+    .gold-text { color: var(--gold); }
+    .ap-subtitle { color: var(--text-zinc); font-size: 13px; margin-top: 5px; font-weight: 500; }
+    .header-status { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 8px; background: rgba(200, 150, 42, 0.05); padding: 5px 12px; border-radius: 50px; border: 1px solid rgba(200, 150, 42, 0.2); }
+    .status-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 8px var(--gold); }
+
+    /* Layout */
+    .form-layout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
+    
+    .ap-glass-card { background: var(--card-dark); border: 1px solid var(--border-muted); border-radius: 20px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .section-tag { display: block; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--gold); letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--border-muted); padding-bottom: 10px; }
+
+    /* Upload Area */
+    .ap-drop-zone { border: 2px dashed #27272a; border-radius: 15px; height: 280px; background: var(--input-black); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+    .ap-drop-zone:hover { border-color: var(--gold); background: rgba(200, 150, 42, 0.03); }
+    .upload-state { text-align: center; }
+    .upload-icon-circle { font-size: 24px; color: var(--gold); font-weight: bold; margin-bottom: 10px; }
+    .upload-label { font-size: 12px; font-weight: 800; color: #fff; }
+    .upload-sub { font-size: 10px; color: var(--text-zinc); margin-top: 4px; }
+
+    /* Form Fields */
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .field-group.full { grid-column: span 2; }
+    .ap-label { font-size: 10px; font-weight: 800; color: var(--text-zinc); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+    
+    .ap-input, .ap-select { width: 100%; background: var(--input-black); border: 1px solid #27272a; border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 13px; font-weight: 500; transition: 0.2s; }
+    .ap-input:focus, .ap-select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 1px var(--gold); }
+    
+    /* Price Input Special */
+    .price-input-wrapper { position: relative; }
+    .currency-tag { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 900; color: var(--gold); }
+    .indent { padding-left: 32px !important; }
+
+    /* Custom Sub Logic */
+    .back-link { font-size: 9px; color: var(--gold); text-transform: uppercase; font-weight: 900; margin-top: 8px; display: inline-block; cursor: pointer; }
+    .hidden { display: none; }
+    .animate-fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Button */
+    .ap-btn-primary { width: 100%; background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+    .ap-btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(200, 150, 42, 0.2); }
+
+    @media (max-width: 1024px) {
+        .ap-main-wrapper { margin-left: 0; padding: 20px; padding-top: 100px; }
+        .form-layout-grid { grid-template-columns: 1fr; }
+    }
 </style>
 
 <script>
-    const zone = document.querySelector('.ap-drop-zone');
+    function updateSubCategories() {
+        const mainCat = document.getElementById('mainCategory');
+        const subCat = document.getElementById('subCategory');
+        const selectedOption = mainCat.options[mainCat.selectedIndex];
+        const subsData = selectedOption.getAttribute('data-subs');
+        
+        resetSubSelection();
+
+        subCat.innerHTML = '<option value="" disabled selected>Select Segment</option>';
+        
+        if (subsData) {
+            const subs = JSON.parse(subsData);
+            subs.forEach(s => {
+                const option = document.createElement('option');
+                option.value = s; option.textContent = s;
+                subCat.appendChild(option);
+            });
+        }
+        
+        const addNewOpt = document.createElement('option');
+        addNewOpt.value = "ADD_NEW_CUSTOM";
+        addNewOpt.textContent = "+ ADD CUSTOM SEGMENT";
+        addNewOpt.className = "text-[#C9922A] font-bold";
+        subCat.appendChild(addNewOpt);
+    }
+
+    function checkCustomSub(select) {
+        const customBox = document.getElementById('customSubBox');
+        const customInput = document.getElementById('customSubInput');
+        
+        if (select.value === "ADD_NEW_CUSTOM") {
+            select.classList.add('hidden');
+            customBox.classList.remove('hidden');
+            customInput.focus();
+            customInput.required = true;
+        }
+    }
+
+    function resetSubSelection() {
+        const subCatSelect = document.getElementById('subCategory');
+        const customBox = document.getElementById('customSubBox');
+        const customInput = document.getElementById('customSubInput');
+
+        subCatSelect.classList.remove('hidden');
+        subCatSelect.selectedIndex = 0;
+        customBox.classList.add('hidden');
+        customInput.value = "";
+        customInput.required = false;
+    }
+
+    const zone = document.getElementById('dropZone');
     const input = document.getElementById('prodImg');
     zone.onclick = () => input.click();
 
@@ -131,8 +239,7 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('imgPreview').innerHTML = `<img src="${e.target.result}">`;
-                document.getElementById('imgPreview').style.padding = "0";
+                document.getElementById('imgPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
             }
             reader.readAsDataURL(input.files[0]);
         }

@@ -12,7 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,500;0,700;1,300;1,700&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-
+<title><%= title %> | Bhilwara Textile B2B Portal</title>
+<meta name="description" content="Find premium <%= title %> from verified manufacturers in Bhilwara. Direct B2B access to Rajasthan's finest textile hub.">
+<meta name="keywords" content="Bhilwara Textile, <%= title %>, Fabric Manufacturers, Rajasthan Textile, B2B Textile Portal">
 <style>
 /* ══════════════════════════════════════
    ROOT TOKENS
@@ -1561,107 +1563,257 @@ body {
 }
 </style>
 
+<style>
+    /* Navbar text spacing fix */
+    .navbar-nav .nav-link {
+        padding: 10px 20px !important;
+        margin: 0 5px;
+    }
 
-<!-- ═══════════════════════════════════════════
-  HERO
-═══════════════════════════════════════════ -->
-<section class="btx-hero" id="btx-home">
+    /* Suggestion Box Correction */
+    #resultsList {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        display: none;
+        z-index: 9999;
+        overflow: hidden;
+        margin-top: -5px;
+        border: 1px solid #ddd;
+    }
 
-  <div class="btx-hero-slider-wrap">
+    .suggestion-item {
+        padding: 12px 20px;
+        border-bottom: 1px solid #eee;
+        transition: 0.2s;
+        display: block;
+        text-decoration: none;
+    }
 
-    <% if (typeof slides !== 'undefined' && slides.length > 0) { %>
-      <% slides.forEach((slide, i) => { %>
-        <div class="btx-hero-slide <%= i === 0 ? 'btx-active' : '' %>" data-btx-slide>
+    .suggestion-item:hover {
+        background: #f8f9fa;
+    }
 
-          <!-- TEXT -->
-          <div class="btx-hero-text">
-            <p class="btx-hero-eyebrow">Bhilwara, Rajasthan · Est. 1975</p>
+    /* Hero Text Spacing */
+    .hero-content {
+        padding-top: 50px;
+        z-index: 2;
+        position: relative;
+    }
 
-            <h1 class="btx-hero-title">
-              <%- slide.title || 'Where Threads<br><em>Become Legacy</em>' %>
-            </h1>
+    /* FIXED SLIDER CSS */
+    .hero-slider {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
 
-            <p class="btx-hero-sub">
-              <%= slide.subtitle || "India's textile capital, woven into every metre. Premium suitings & shirtings crafted with mastery." %>
-            </p>
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transition: opacity 0.6s ease;
+    }
+</style>
 
-            <div class="btx-hero-cta">
-              <a href="/fabrics" class="btx-btn-primary">
-                <i class="fa-solid fa-arrow-right"></i> Explore Collection
-              </a>
-              <a href="https://wa.me/91XXXXXXXXXX" class="btx-btn-ghost">
-                💬 WhatsApp Us
-              </a>
+<section class="hero-container" style="position: relative; height: 85vh; background: #000; overflow: visible;">
+    
+    <div class="hero-slider">
+
+        <% if (typeof slides !== 'undefined' && slides.length > 0) { %>
+
+            <% slides.forEach((slide, i) => { %>
+
+                <div 
+                    class="slide <%= i === 0 ? 'active' : '' %>"
+                    style="display:<%= i === 0 ? 'flex' : 'none' %>; background-image:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('<%= slide.imagePath %>');"
+                >
+
+                    <div class="hero-content">
+
+                        <h1 style="font-size: clamp(32px, 5vw, 60px); font-weight: 900; color: #C9922A; text-transform: uppercase;">
+                            PRIME FABRIC HUB <br>
+                            <span>OF RAJASTHAN</span>
+                        </h1>
+
+                        <p style="color: #e9d30b; margin: 20px auto; max-width: 600px;">
+                            <%= slide.subtitle %>
+                        </p>
+
+                        <a href="/fabrics" style="background: #C9922A; padding: 12px 24px; border-radius: 40px; color: #000; text-decoration: none; font-weight: bold;">
+                            →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </div>
+
+    <div class="floating-search-wrap" style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 850px; z-index: 1000;">
+
+        <div class="search-pill" style="display: flex; align-items: center; background: white; border-radius: 50px; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); height: 60px; position: relative;">
+
+            <div class="filter-side" style="width: 140px; border-right: 1px solid #C9922A;">
+
+                <select id="searchType" style="width: 100%; border: none; outline: none; padding: 0 15px; font-weight: 700; color: #333; background: transparent; cursor: pointer;">
+                    <option value="Products">Products</option>
+                    <option value="Suppliers">Suppliers</option>
+                </select>
+
             </div>
-          </div>
 
-          <!-- VISUAL -->
-          <div class="btx-hero-visual">
-            <div class="btx-hero-img-wrap">
-              <img src="<%= slide.imagePath %>" alt="<%= slide.title || 'Fabric' %>">
+            <div class="input-side" style="flex-grow: 1; height: 100%; position: relative;">
+
+                <input 
+                    type="text" 
+                    id="dynamicInput" 
+                    placeholder="Find Your Textile Needs..." 
+                    autocomplete="off" 
+                    style="width: 100%; height: 100%; border: none; outline: none; padding: 0 20px; font-size: 16px; color: #333; background: transparent;"
+                >
+
+                <div id="resultsList"></div>
+
             </div>
-            <div class="btx-hero-badge">
-              <strong>50+</strong>
-              <span>Years of<br>Excellence</span>
-            </div>
-          </div>
+
+            <button 
+                id="mainSearchBtn" 
+                style="background: #C9922A; color: black; border: none; padding: 0 30px; height: 100%; border-radius: 40px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;"
+            >
+                <i class="fa-solid fa-magnifying-glass"></i> SEARCH
+            </button>
 
         </div>
-      <% }) %>
-    <% } else { %>
-      <div class="btx-hero-slide btx-active" data-btx-slide>
-        <div class="btx-hero-text">
-          <p class="btx-hero-eyebrow">Bhilwara, Rajasthan · Est. 1975</p>
-          <h1 class="btx-hero-title">Where Threads<br><em>Become Legacy</em></h1>
-          <p class="btx-hero-sub">India's textile capital, woven into every metre. Premium suitings and shirtings crafted with mastery.</p>
-          <div class="btx-hero-cta">
-            <a href="/fabrics" class="btx-btn-primary"><i class="fa-solid fa-arrow-right"></i> Explore Collection</a>
-            <a href="https://wa.me/91XXXXXXXXXX" class="btx-btn-ghost">💬 WhatsApp Us</a>
-          </div>
-        </div>
-        <div class="btx-hero-visual">
-          <div class="btx-hero-img-wrap">
-            <img src="/images/hero-default.jpg" alt="Textile">
-          </div>
-          <div class="btx-hero-badge"><strong>50+</strong><span>Years of<br>Excellence</span></div>
-        </div>
-      </div>
-    <% } %>
 
-  </div>
-
-  <!-- DOTS -->
-  <div class="btx-hero-dots" id="btxHeroDots"></div>
+    </div>
 
 </section>
 
 <script>
-(function() {
-  const slides = document.querySelectorAll('[data-btx-slide]');
-  if (slides.length < 2) return;
 
-  const dotsWrap = document.getElementById('btxHeroDots');
-  let current = 0;
+    // --- SLIDER REPAIR ---
+    const slides = document.querySelectorAll('.slide');
 
-  // build dots
-  slides.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'btx-hero-dot' + (i === 0 ? ' btx-active' : '');
-    d.addEventListener('click', () => goTo(i));
-    dotsWrap.appendChild(d);
-  });
+    let currentSlide = 0;
 
-  function goTo(idx) {
-    slides[current].classList.remove('btx-active');
-    dotsWrap.children[current].classList.remove('btx-active');
-    current = idx;
-    slides[current].classList.add('btx-active');
-    dotsWrap.children[current].classList.add('btx-active');
-  }
+    if (slides.length > 1) {
 
-  setInterval(() => goTo((current + 1) % slides.length), 5000);
-})();
+        setInterval(() => {
+
+            slides[currentSlide].style.display = 'none';
+
+            currentSlide = (currentSlide + 1) % slides.length;
+
+            slides[currentSlide].style.display = 'flex';
+
+        }, 5000);
+
+    }
+
+    // --- SEARCH LOGIC REPAIR ---
+    const input = document.getElementById('dynamicInput');
+    const typeSelect = document.getElementById('searchType');
+    const list = document.getElementById('resultsList');
+
+    input.addEventListener('input', async () => {
+
+        const query = input.value.trim();
+        const type = typeSelect.value;
+
+        if (query.length < 2) {
+
+            list.style.display = 'none';
+            return;
+
+        }
+
+        try {
+
+            const response = await fetch(`/api/search-dynamic?q=${encodeURIComponent(query)}&type=${type}`);
+
+            const data = await response.json();
+
+            if (data.results && data.results.length > 0) {
+
+                let html = '';
+
+                data.results.forEach(item => {
+
+                    const name = (data.type === 'Suppliers') 
+                        ? item.companyName 
+                        : item.name;
+
+                    const sub = (data.type === 'Suppliers') 
+                        ? item.city 
+                        : 'Fabric Category';
+
+                    const link = (data.type === 'Suppliers') 
+                        ? `/merchant/${item._id}` 
+                        : `/category/${encodeURIComponent(item.name)}`;
+
+                    html += `
+                        <a href="${link}" style="display:block; padding:12px; color:#222; text-decoration:none; border-bottom:1px solid #eee;">
+                            <div style="font-weight:bold;">${name}</div>
+                            <small style="color:#C9922A;">${sub}</small>
+                        </a>
+                    `;
+
+                });
+
+                list.innerHTML = html;
+                list.style.display = 'block';
+
+            } else {
+
+                list.innerHTML = `
+                    <div style="padding:15px; color:#999; text-align:center;">
+                        No matches found
+                    </div>
+                `;
+
+                list.style.display = 'block';
+
+            }
+
+        } catch (e) {
+
+            console.error("Fetch Error:", e);
+
+        }
+
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+
+        if (
+            !input.contains(e.target) &&
+            !list.contains(e.target)
+        ) {
+            list.style.display = 'none';
+        }
+
+    });
+
 </script>
+
+
+
 
 
 <!-- ═══════════════════════════════════════════
@@ -1732,164 +1884,6 @@ body {
 
 
 
-<!-- kaam -->
-<div class="swiper-wrapper">
-
-    <% if (locals.categories && categories.length > 0) { %>
-
-        <% categories.forEach((cat, index) => { %>
-
-            <div class="swiper-slide h-auto py-4 flex justify-center">
-
-                <!-- CATEGORY LINK -->
-                <a
-                    href="/category/<%= encodeURIComponent(cat.name) %>"
-                    class="btx-elite-card group block text-center"
-                >
-
-                    <!-- IMAGE -->
-                    <div class="btx-thumb-wrap relative mx-auto mb-5 <%= index % 2 === 1 ? 'shape-alt' : 'shape-std' %>">
-
-                        <img
-                            src="<%= cat.image || '/images/default.jpg' %>"
-                            alt="<%= cat.name %>"
-                            class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                        >
-
-                        <!-- OVERLAY -->
-                        <div class="btx-elite-overlay">
-
-                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-xl scale-0 group-hover:scale-100 transition-all duration-500">
-
-                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- TEXT -->
-                    <div class="px-2">
-
-                        <h3 class="text-[12px] font-black uppercase tracking-[0.1em] text-gray-900 group-hover:text-black transition-all duration-300 mb-1">
-
-                            <%= cat.name %>
-
-                        </h3>
-
-                        <div class="flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
-
-                            <span class="h-[1px] w-4 bg-black"></span>
-
-                            <p class="text-[8px] font-black text-black uppercase tracking-tighter">
-                                View Collection
-                            </p>
-
-                            <span class="h-[1px] w-4 bg-black"></span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-        <% }) %>
-
-    <% } else { %>
-
-        <div class="w-full text-center py-10">
-
-            <p class="text-gray-400 italic text-sm">
-                No collections available at the moment.
-            </p>
-
-        </div>
-
-    <% } %>
-
-</div>
-
-<style>
-
-/* SWIPER FIX */
-.btx-auto-slider-22{
-    overflow:visible !important;
-}
-
-.btx-auto-slider-22 .swiper-slide{
-    height:auto !important;
-}
-
-/* CARD */
-.btx-elite-card{
-    width:100%;
-    max-width:140px;
-    text-decoration:none;
-}
-
-/* IMAGE WRAP */
-.btx-thumb-wrap{
-    width:110px;
-    height:150px;
-    position:relative;
-    overflow:hidden;
-    background:#fff;
-    border:1px solid rgba(0,0,0,0.05);
-    transition:all .6s cubic-bezier(.23,1,.32,1);
-    box-shadow:0 10px 25px -10px rgba(0,0,0,0.08);
-}
-
-/* SHAPES */
-.shape-std{
-    border-radius:3rem .8rem 3rem .8rem;
-}
-
-.shape-alt{
-    border-radius:.8rem 3rem .8rem 3rem;
-}
-
-/* HOVER */
-.btx-elite-card:hover .btx-thumb-wrap{
-    transform:translateY(-8px);
-    box-shadow:0 20px 40px -15px rgba(0,0,0,.15);
-}
-
-/* OVERLAY */
-.btx-elite-overlay{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to top, rgba(255,255,255,.35), transparent);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    transition:.4s;
-}
-
-.btx-elite-card:hover .btx-elite-overlay{
-    opacity:1;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-
-    .btx-thumb-wrap{
-        width:95px;
-        height:130px;
-    }
-
-}
-
-</style>
-
-
-
-
-
-
 
 
 
@@ -1953,6 +1947,163 @@ body {
 </section>
 
 
+
+
+
+
+
+<!-- ============================================
+   ELITE CATEGORIES CSS (DESIGN)
+============================================= -->
+<style>
+    .bt-product-section {
+        padding: 60px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #08090a; /* Aapke dark theme se match karta hua */
+    }
+
+    .bt-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .bt-section-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffffff; /* White text for dark background */
+        margin-bottom: 40px;
+    }
+
+    .bt-highlight {
+        color: #C9922A; /* Aapke logo ka Gold color */
+    }
+
+    .bt-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 25px;
+    }
+
+    .bt-card {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bt-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(201, 146, 42, 0.2); /* Gold shadow on hover */
+    }
+
+    .bt-img-wrapper {
+        position: relative;
+        width: 100%;
+        height: 240px;
+    }
+
+    .bt-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .bt-img-shadow {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+    }
+
+    .bt-card-content {
+        padding: 20px 15px;
+        text-align: center;
+        background: #ffffff;
+    }
+
+    /* Force text colors so global dark theme doesn't make it white-on-white */
+    .bt-card-title {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: #111111 !important; 
+    }
+
+    .bt-card-sub {
+        margin: 4px 0;
+        font-size: 13px;
+        color: #666666 !important;
+        line-height: 1.4;
+    }
+</style>
+
+<!-- ============================================
+   DYNAMIC TEXTILE CATEGORIES HTML
+============================================= -->
+<!-- DYNAMIC TEXTILE CATEGORIES (DATABASE DRIVEN) -->
+<section class="bt-product-section">
+    <div class="bt-container">
+        
+        <h2 class="bt-section-title">
+            Browse By <span class="bt-highlight">Textile Categories</span>
+        </h2>
+
+        <div class="bt-grid">
+            
+            <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+                
+                <% categories.forEach(category => { %>
+                    <!-- Card Redirects to Category Page -->
+                    <div class="bt-card" onclick="window.location.href='/category/<%= encodeURIComponent(category.name) %>'">
+                        
+                        <div class="bt-img-wrapper">
+                            <!-- 🔥 YAHAN HAI ASLI DYNAMIC IMAGE LOGIC 🔥 -->
+                            <!-- Yeh pehle check karega DB mein 'image' field, fir 'categoryImage', agar dono nahi hain toh default image lagayega -->
+                            <img src="<%= category.image || category.categoryImage || '/images/category-img/default.jpg' %>" alt="<%= category.name %>" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image+Available'">
+                            
+                            <div class="bt-img-shadow"></div>
+                        </div>
+
+                        <div class="bt-card-content">
+                            <h3 class="bt-card-title"><%= category.name %></h3>
+                            
+                            <% if (category.description) { %>
+                                <p class="bt-card-sub"><%= category.description %></p>
+                            <% } else { %>
+                                <p class="bt-card-sub">Explore Premium <%= category.name %></p>
+                            <% } %>
+                        </div>
+
+                    </div>
+                <% }) %>
+
+            <% } else { %>
+                <div style="text-align: center; width: 100%; grid-column: 1 / -1;">
+                    <h3 style="color: #666;">No Categories Found.</h3>
+                </div>
+            <% } %>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
 <!-- ═══════════════════════════════════════════
   WEAVE SECTION
 ═══════════════════════════════════════════ -->
@@ -1999,6 +2150,98 @@ body {
 
   </div>
 </section>
+
+
+<!-- ============================================
+   PROMOTIONAL BANNER (BLACK, WHITE & GOLD)
+============================================= -->
+<style>
+    .bt-promo-banner {
+        background-color: #08090a; /* Elite Dark Background */
+        padding: 40px 20px;
+        border-top: 1px solid rgba(201, 146, 42, 0.2);
+        border-bottom: 1px solid rgba(201, 146, 42, 0.2);
+        text-align: center;
+        margin: 50px 0; /* Upar-neeche space ke liye */
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+    }
+
+    .bt-promo-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .bt-promo-text {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .bt-text-gold {
+        color: #C9922A; /* Gold Color */
+    }
+
+    .bt-text-white {
+        color: #ffffff; /* White Color */
+    }
+
+    /* The Dotted Gold Button */
+    .bt-promo-btn {
+        background-color: transparent;
+        color: #C9922A;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        border: 2px dashed #C9922A; /* Dashed style jaisa image me hai */
+        transition: all 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(201, 146, 42, 0.1);
+    }
+
+    .bt-promo-btn:hover {
+        background-color: #C9922A;
+        color: #000000;
+        border-style: solid;
+        box-shadow: 0 0 20px rgba(201, 146, 42, 0.4);
+        transform: scale(1.05);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .bt-promo-wrapper {
+            flex-direction: column;
+            gap: 20px;
+        }
+        .bt-promo-text {
+            font-size: 24px;
+        }
+        .bt-promo-btn {
+            font-size: 16px;
+            padding: 10px 25px;
+        }
+    }
+</style>
+
+<section class="bt-promo-banner">
+    <div class="bt-promo-wrapper">
+        <h2 class="bt-promo-text">
+            <span class="bt-text-gold">Get Best Offer</span> 
+            <span class="bt-text-white">Promote Your Business with us</span>
+        </h2>
+        <!-- Link ko apne registration page se change kar lena -->
+        <a href="/tx-register" class="bt-promo-btn">Add My Business</a>
+    </div>
+</section>
+
 
 
 <!-- ═══════════════════════════════════════════
@@ -2137,10 +2380,421 @@ body {
     </div>
 </section>
 
+<!-- ============================================================
+     ELITE PARTNERS SECTION (HOME PAGE - TOP 4)
+     ============================================================ -->
+<section class="py-20 bg-[#050507] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div class="animate-card">
+                <span class="text-[10px] font-black text-[#C9922A] uppercase tracking-[0.5em] mb-3 block animate-pulse">Industry Leaders</span>
+                <h2 class="text-3xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
+                    Verified <span class="text-[#C9922A]">Partners</span>
+                </h2>
+                <p class="text-zinc-500 mt-3 max-w-xl text-xs md:text-sm font-medium">
+                    Top-rated manufacturers from Bhilwara's textile hub, handpicked for quality and reliability.
+                </p>
+            </div>
+            
+            <!-- Desktop "See More" Link -->
+            <a href="/verified-sellers" class="hidden md:flex items-center gap-3 text-[#C9922A] text-[10px] font-black uppercase tracking-[0.3em] group">
+                Explore Full Directory 
+                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+            </a>
+        </div>
 
+        <!-- Merchants Grid (Home Version) -->
+        <div id="homeMerchantsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Loading States or JS Content -->
+            <div class="col-span-full text-center py-10 opacity-20">
+                <i class="fas fa-circle-notch fa-spin text-2xl text-[#C9922A]"></i>
+            </div>
+        </div>
+
+        <!-- Mobile "See More" Button -->
+        <div class="mt-12 text-center md:hidden">
+            <a href="/verified-sellers" class="inline-block px-10 py-4 border border-zinc-800 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest hover:border-[#C9922A] transition-all">
+                See More Partners
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    /* Animations wahi jo aapne di thi */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-card { animation: fadeInUp 0.5s ease backwards; }
+    
+    .merchant-card-home { 
+        background: #0f0f11; 
+        border: 1px solid #1f1f22; 
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+    .merchant-card-home:hover { 
+        border-color: #C9922A; 
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -15px rgba(201, 146, 42, 0.15);
+        background: #141417;
+    }
+</style>
+
+<script>
+async function loadHomeMerchants() {
+    try {
+        const res = await fetch('/api/merchants/list');
+        const allMerchants = await res.json();
+        
+        // 🔥 Sirf TOP 4 Sellers dikhane ke liye slice kiya
+        const topFour = allMerchants.slice(0, 4);
+        renderHomeGrid(topFour);
+    } catch (e) { 
+        console.error("Home Section Error:", e); 
+    }
+}
+
+function renderHomeGrid(list) {
+    const grid = document.getElementById('homeMerchantsGrid');
+    
+    if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full text-center py-10 text-zinc-700 text-[10px] font-black uppercase tracking-widest">No Partners Verified Yet</div>`;
+        return;
+    }
+
+    grid.innerHTML = list.map((m, index) => `
+        <div class="merchant-card-home overflow-hidden p-6 rounded-[2.5rem] flex flex-col items-center text-center animate-card" style="animation-delay: ${index * 0.1}s">
+            
+            <!-- Badge -->
+            <div class="absolute top-5 right-6">
+                <i class="fas fa-shield-check text-[#C9922A] text-[10px]"></i>
+            </div>
+
+            <!-- Logo -->
+            <div class="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[#C9922A] mb-5 overflow-hidden">
+                ${m.logo ? `<img src="${m.logo}" class="w-full h-full object-cover">` : `<i class="fas fa-industry text-2xl opacity-30"></i>`}
+            </div>
+            
+            <h3 class="text-sm font-black uppercase tracking-tight text-white mb-1 line-clamp-1">${m.companyName || 'Bhilwara Merchant'}</h3>
+            <p class="text-[9px] font-bold text-[#C9922A] uppercase tracking-[0.2em] mb-4">${m.city || 'Bhilwara'}</p>
+            
+            <div class="w-full pt-4 border-t border-zinc-800/50 mt-auto">
+                <a href="/merchant/${m._id}" class="group relative flex items-center justify-center w-full py-3 bg-zinc-900 border border-zinc-800 hover:border-[#C9922A] text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl transition-all overflow-hidden">
+                    <span class="relative z-10">View Profile</span>
+                    <div class="absolute inset-0 bg-[#C9922A] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                </a>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Section load hone par function call
+loadHomeMerchants();
+</script>
 <!-- ═══════════════════════════════════════════
   INQUIRY SECTION
 ═══════════════════════════════════════════ -->
+<!-- ============================================
+   LIVE DYNAMIC REVIEWS & SUPPLIERS WIDGET (ELITE)
+============================================= -->
+<style>
+    .bt-live-section {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    .bt-live-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .bt-live-header h3 {
+        color: white;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .bt-live-header h3 span { color: #C9922A; }
+
+    .bt-live-indicators {
+        display: flex;
+        gap: 5px;
+    }
+
+    .bt-live-indicators div {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #C9922A;
+        animation: pulseLive 1.5s infinite alternate;
+    }
+
+    .bt-live-indicators div:nth-child(2) { animation-delay: 0.5s; }
+    .bt-live-indicators div:nth-child(3) { animation-delay: 1s; }
+
+    @keyframes pulseLive {
+        0% { opacity: 0.3; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .bt-cards-wrapper {
+        display: flex;
+        gap: 20px;
+        min-height: 220px;
+    }
+
+    .bt-live-card {
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        padding: 20px;
+        flex: 1;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    /* User Profile Area */
+    .bt-card-top {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .bt-avatar {
+        width: 45px;
+        height: 45px;
+        background: rgba(201,146,42,0.1);
+        color: #C9922A;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: bold;
+        border: 1px solid rgba(201,146,42,0.3);
+    }
+
+    .bt-user-info h4 { margin: 0; color: white; font-size: 15px; }
+    .bt-user-info p { margin: 2px 0 0 0; color: #6b7280; font-size: 11px; }
+    
+    .bt-stars { color: #C9922A; font-size: 12px; margin-top: 5px; }
+    
+    .bt-review-text {
+        color: #d1d5db;
+        font-size: 13px;
+        line-height: 1.5;
+        font-style: italic;
+        margin-bottom: 15px;
+    }
+
+    .bt-supplier-desc {
+        color: #9ca3af;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .bt-action-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .bt-sm-btn {
+        flex: 1;
+        padding: 8px 0;
+        text-align: center;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-pink { background: #ff1a5f; color: white; border: none; }
+    .btn-blue { background: #3b82f6; color: white; border: none; }
+
+    /* For animation */
+    .fade-out { opacity: 0; transform: translateY(10px); }
+    .fade-in { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+        .bt-live-section { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+        .bt-cards-wrapper { flex-direction: column; }
+    }
+</style>
+
+<div class="bt-live-section">
+    <!-- REVIEWS COLUMN -->
+    <div>
+        <div class="bt-live-header">
+            <h3>Recent <span>Reviews</span> By Buyers</h3>
+            <div class="bt-live-indicators"><div></div><div></div><div></div></div>
+        </div>
+        <div class="bt-cards-wrapper" id="reviews-container">
+            <!-- Dynamic Reviews will load here -->
+        </div>
+    </div>
+
+    <!-- SUPPLIERS COLUMN -->
+    <div>
+        <div class="bt-live-header">
+            <h3>Recently Registered <span>Suppliers</span></h3>
+            <div class="bt-live-indicators"><div></div><div></div><div></div></div>
+        </div>
+        <div class="bt-cards-wrapper" id="suppliers-container">
+            <!-- Dynamic Suppliers will load here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 1. THE "FAKE BUT REAL" DATABASES
+    // ==========================================
+    const fakeReviews = [
+        { name: "Rahul Sharma", loc: "New Delhi, India", stars: 5, text: "Excellent fabric quality and fast delivery. Best B2B portal in India." },
+        { name: "Hasina Trading", loc: "Barmer, Rajasthan", stars: 4, text: "Good company, genuine suppliers. Very easy to send inquiries." },
+        { name: "Rashid Shamboko", loc: "Lusaka, Zambia", stars: 5, text: "Great export quality fabrics. The suppliers responded very fast to my needs." },
+        { name: "Amit Agarwal", loc: "Surat, Gujarat", stars: 5, text: "Highly impressed with the premium suiting collection available here." },
+        { name: "Al-Noor Textiles", loc: "Dubai, UAE", stars: 4, text: "Reliable platform. The verification of sellers gives a lot of trust." },
+        { name: "Meera Fashions", loc: "Mumbai, India", stars: 5, text: "Got the exact cotton yarn I was looking for. Brilliant interface!" },
+        { name: "Jonathan Smith", loc: "London, UK", stars: 5, text: "Importing from Bhilwara has never been this smooth. Highly recommended." },
+        { name: "Vikas Jain", loc: "Ahmedabad, India", stars: 4, text: "Good portal for bulk orders. Customer support is also very helpful." },
+        { name: "Priya Boutique", loc: "Jaipur, India", stars: 5, text: "I regularly source my boutique fabrics from here. Top-notch quality!" },
+        { name: "Chen Wei", loc: "Guangzhou, China", stars: 4, text: "Good variety of synthetic blends. Easy to communicate with sellers." }
+    ];
+
+    const fakeSuppliers = [
+        { name: "Shree Ji Textiles", loc: "Bhilwara, Rajasthan", stars: 5, desc: "Leading manufacturer of premium polyester viscose suiting fabrics and yarns since 1995." },
+        { name: "Kartik Weaves", loc: "Surat, Gujarat", stars: 5, desc: "We accept bulk orders in woven fabrics of all types like Pure chiffon, Dola, lichi etc." },
+        { name: "KVH Furnishing", loc: "Panipat, Haryana", stars: 4, desc: "Leading manufacturer and supplier of furnishing fabrics. Aiming to offer high quality goods." },
+        { name: "Mahadev Synthetics", loc: "Bhilwara, Rajasthan", stars: 5, desc: "Specialists in cotton blends, denim fabric, and heavy duty workwear materials." },
+        { name: "Royal Threads", loc: "Ahmedabad, Gujarat", stars: 4, desc: "Wholesaler of unstitched dress materials, kurtis, and pure cotton cambric." },
+        { name: "Global Yarns Co.", loc: "Ludhiana, Punjab", stars: 5, desc: "Exporters of premium acrylic and wool blended yarns for winterwear manufacturing." },
+        { name: "Chippas & Brothers", loc: "Jaipur, Rajasthan", stars: 5, desc: "Famous for traditional block prints, indigo dyes, and pure organic cotton fabrics." },
+        { name: "TexCorp India", loc: "Mumbai, Maharashtra", stars: 4, desc: "B2B suppliers of technical textiles and non-woven fabrics for medical use." },
+        { name: "A-One Suitings", loc: "Bhilwara, Rajasthan", stars: 5, desc: "Premium suiting and shirting manufacturers catering to top brands across India." },
+        { name: "Siddhi Silks", loc: "Varanasi, UP", stars: 5, desc: "Authentic banarasi silk sarees and raw silk fabric direct from weavers." }
+    ];
+
+    // ==========================================
+    // 2. HELPER FUNCTIONS
+    // ==========================================
+    // Function to get random items from array
+    function getRandomItems(arr, num) {
+        const shuffled = [...arr].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, num);
+    }
+
+    // Function to generate star HTML (Only 4 or 5 stars)
+    function generateStars(rating) {
+        let starsHtml = '';
+        for(let i=1; i<=5; i++) {
+            if(i <= rating) starsHtml += '<i class="fa-solid fa-star"></i>';
+            else starsHtml += '<i class="fa-regular fa-star"></i>';
+        }
+        return starsHtml;
+    }
+
+    // ==========================================
+    // 3. RENDER FUNCTIONS WITH ANIMATION
+    // ==========================================
+    function updateWidgets() {
+        const reviewContainer = document.getElementById('reviews-container');
+        const supplierContainer = document.getElementById('suppliers-container');
+
+        // Step A: Add Fade-out class
+        reviewContainer.classList.add('fade-out');
+        supplierContainer.classList.add('fade-out');
+
+        // Step B: Wait for fade-out, then change content and Fade-in
+        setTimeout(() => {
+            // Pick 2 random reviews and 2 random suppliers
+            const activeReviews = getRandomItems(fakeReviews, 2);
+            const activeSuppliers = getRandomItems(fakeSuppliers, 2);
+
+            // Generate HTML for Reviews
+            reviewContainer.innerHTML = activeReviews.map(rev => `
+                <div class="bt-live-card">
+                    <div class="bt-card-top">
+                        <div class="bt-avatar">${rev.name.charAt(0)}</div>
+                        <div class="bt-user-info">
+                            <h4>${rev.name}</h4>
+                            <p>From ${rev.loc}</p>
+                            <div class="bt-stars">${generateStars(rev.stars)}</div>
+                        </div>
+                    </div>
+                    <div class="bt-review-text">"${rev.text}"</div>
+                </div>
+            `).join('');
+
+            // Generate HTML for Suppliers
+            supplierContainer.innerHTML = activeSuppliers.map(sup => `
+                <div class="bt-live-card" style="display:flex; flex-direction:column;">
+                    <div class="bt-card-top">
+                        <div class="bt-avatar" style="background:rgba(59,130,246,0.1); color:#3b82f6; border-color:rgba(59,130,246,0.3)">
+                            ${sup.name.charAt(0)}
+                        </div>
+                        <div class="bt-user-info">
+                            <h4>${sup.name}</h4>
+                            <p>${sup.loc}</p>
+                            <div class="bt-stars">${generateStars(sup.stars)}</div>
+                        </div>
+                    </div>
+                    <div class="bt-supplier-desc">${sup.desc}</div>
+                   <div class="bt-action-btns">
+    <!-- Links updated to point to the All Categories page -->
+    <a href="/all-categories" class="bt-sm-btn btn-pink">Send Inquiry</a>
+    <a href="/all-categories" class="bt-sm-btn btn-blue">Contact</a>
+</div>
+                </div>
+            `).join('');
+
+            // Remove Fade-out, Add Fade-in
+            reviewContainer.classList.remove('fade-out');
+            supplierContainer.classList.remove('fade-out');
+            
+            // Trigger reflow to restart animation
+            void reviewContainer.offsetWidth; 
+            
+            reviewContainer.classList.add('fade-in');
+            supplierContainer.classList.add('fade-in');
+
+        }, 500); // 500ms delay matches the CSS transition time
+    }
+
+    // ==========================================
+    // 4. START THE MAGIC
+    // ==========================================
+    // Load first time immediately
+    updateWidgets();
+
+    // Rotate every 8 Seconds (8000 milliseconds)
+    setInterval(updateWidgets, 8000);
+</script>
 
 <%- include('partials/footer') %>

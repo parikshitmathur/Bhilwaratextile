@@ -67,7 +67,16 @@
                                 <span class="bg-gray-100 px-4 py-3 border-r border-gray-200 flex items-center font-bold text-gray-700">
                                     🇮🇳 +91
                                 </span>
-                                <input type="tel" name="mobile" required placeholder="Valid Mobile Number" class="w-full px-4 py-3 focus:outline-none text-lg">
+                              <input 
+    type="tel" 
+    name="mobile" 
+    required 
+    placeholder="9876543210" 
+    maxlength="10"
+    oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length > 0 && !['6','7','8','9'].includes(this.value[0])) { this.value = ''; }"
+    class="w-full px-4 py-3 focus:outline-none text-lg text-black font-semibold border border-gray-300 rounded-md"
+    style="color: #000000 !important;"
+>
                             </div>
                             <button type="submit" class="w-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold text-lg py-4 rounded-lg transition duration-300 shadow-md">
                                 Free Registration

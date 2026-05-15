@@ -1,0 +1,249 @@
+<%- include('./partials/header') %>
+
+<style>
+    /* Base Dark Theme & Navbar Overlap Fix */
+    body { background-color: #08090a; margin: 0; }
+    
+    .bt-directory-main {
+        background-color: #08090a;
+        min-height: 100vh;
+        padding-top: 150px; /* 🔥 Ye line navbar ko upar chhod degi aur overlap theek karegi */
+        padding-bottom: 80px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #ffffff;
+    }
+
+    /* Header Section */
+    .bt-dir-header { text-align: center; margin-bottom: 50px; padding: 0 20px; }
+    
+    .bt-dir-title { 
+        font-size: 38px; 
+        font-weight: 900; 
+        margin: 0 0 15px 0; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        color: #ffffff; /* White Text */
+    }
+    
+    .bt-dir-title span { color: #C9922A; /* Gold Accent */ }
+    
+    .bt-dir-subtitle { 
+        color: #9ca3af; 
+        font-size: 16px; 
+        max-width: 600px; 
+        margin: 0 auto 40px auto; 
+        line-height: 1.6; 
+    }
+
+    /* Search Bar (Black & Gold) */
+    .bt-search-container { max-width: 650px; margin: 0 auto; position: relative; }
+    
+    .bt-search-input {
+        width: 100%;
+        padding: 20px 25px 20px 60px;
+        border-radius: 50px;
+        background: #111827; /* Dark Box */
+        border: 2px solid #1f2937;
+        color: #ffffff;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: 0.3s ease;
+        outline: none;
+    }
+    
+    .bt-search-input::placeholder { color: #6b7280; }
+    
+    .bt-search-input:focus { 
+        border-color: #C9922A; 
+        box-shadow: 0 0 20px rgba(201, 146, 42, 0.2); 
+    }
+    
+    .bt-search-icon {
+        position: absolute;
+        left: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6b7280;
+        font-size: 20px;
+        transition: 0.3s;
+        z-index: 10;
+    }
+    
+    /* Grid Container */
+    .bt-dir-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Category Cards (Dark Mode) */
+    .bt-cat-card {
+        background: #111827; /* Dark Background */
+        border: 1px solid #1f2937; /* Subtle border */
+        border-radius: 24px;
+        padding: 35px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.4s ease;
+        cursor: pointer;
+    }
+    
+    .bt-cat-card:hover {
+        border-color: #C9922A; /* Gold Border on Hover */
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(201, 146, 42, 0.15);
+        background: #161e2e;
+    }
+
+    /* Image Circle */
+    .bt-cat-img-wrapper {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #1f2937;
+        margin-bottom: 25px;
+        transition: 0.4s ease;
+        background: #000;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .bt-cat-card:hover .bt-cat-img-wrapper { border-color: #C9922A; }
+    
+    .bt-cat-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+    
+    .bt-cat-card:hover .bt-cat-img { transform: scale(1.15); }
+
+    /* Category Name */
+    .bt-cat-name {
+        color: #ffffff; /* White Text */
+        font-size: 15px;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin: 0 0 20px 0;
+        transition: 0.3s;
+        letter-spacing: 0.5px;
+    }
+    
+    .bt-cat-card:hover .bt-cat-name { color: #C9922A; /* Gold on Hover */ }
+
+    /* Golden Explore Button */
+    .bt-explore-badge {
+        background: transparent;
+        color: #9ca3af; /* Light Grey Default */
+        border: 1px solid #374151;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s ease;
+    }
+    
+    .bt-cat-card:hover .bt-explore-badge {
+        background: #C9922A;
+        color: #000000; /* Black Text on Gold */
+        border-color: #C9922A;
+    }
+
+    /* Empty / No Results Message */
+    .bt-no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6b7280;
+        grid-column: 1 / -1;
+        display: none;
+        background: #111827;
+        border-radius: 20px;
+        border: 1px dashed #374151;
+    }
+    
+    .bt-no-results i { font-size: 60px; margin-bottom: 20px; color: #374151; }
+    .bt-no-results p { font-size: 20px; font-weight: bold; color: #ffffff; margin:0;}
+    
+    /* Responsive Fix */
+    @media (max-width: 768px) {
+        .bt-directory-main { padding-top: 120px; }
+        .bt-dir-title { font-size: 28px; }
+    }
+</style>
+
+<main class="bt-directory-main">
+    <div class="bt-dir-header">
+        <h1 class="bt-dir-title">Bhilwara <span style="color: #C9922A;">Textile Directory</span></h1>
+        <p class="bt-dir-subtitle">Browse our elite directory of premium textile manufacturers, suppliers, and fabrics. Find exactly what your business needs.</p>
+        
+        <div class="bt-search-container">
+            <i class="fa-solid fa-magnifying-glass bt-search-icon"></i>
+            <!-- Search Box -->
+            <input type="text" id="categoryFilter" class="bt-search-input" placeholder="Search fabrics (e.g. Cotton, Denim, Silk...)">
+        </div>
+    </div>
+
+    <!-- Category Cards Area -->
+    <div class="bt-dir-grid" id="categoryGrid">
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+                <a href="/category/<%= encodeURIComponent(cat.name) %>" class="bt-cat-card category-item">
+                    <div class="bt-cat-img-wrapper">
+                        <img src="<%= cat.image || '/images/default.jpg' %>" alt="<%= cat.name %>" class="bt-cat-img">
+                    </div>
+                    <h3 class="bt-cat-name"><%= cat.name %></h3>
+                    <span class="bt-explore-badge">Explore <i class="fa-solid fa-arrow-right ml-2"></i></span>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <div style="grid-column: 1 / -1; text-align: center; padding: 80px; color: #9ca3af; background: #111827; border-radius: 20px; border: 1px dashed #374151;">
+                <i class="fa-solid fa-box-open" style="font-size: 50px; margin-bottom: 20px; color: #374151;"></i>
+                <p style="font-size: 18px; color: #fff; font-weight: 800;">No categories available.</p>
+            </div>
+        <% } %>
+        
+        <!-- Live Search Error Message -->
+        <div id="noResults" class="bt-no-results">
+            <i class="fa-solid fa-face-frown-open"></i>
+            <p>Oops! No categories match your search.</p>
+            <span style="font-size: 14px; margin-top: 10px; display: block; color: #C9922A;">Try searching for something else like "Yarn" or "Denim".</span>
+        </div>
+    </div>
+</main>
+
+<!-- Live Filter Logic -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('categoryFilter');
+        const categoryItems = document.querySelectorAll('.category-item');
+        const noResultsMsg = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let hasVisibleCards = false;
+
+            categoryItems.forEach(item => {
+                const categoryName = item.querySelector('.bt-cat-name').textContent.toLowerCase();
+                
+                if (categoryName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                    hasVisibleCards = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (!hasVisibleCards && categoryItems.length > 0) {
+                noResultsMsg.style.display = 'block';
+            } else {
+                noResultsMsg.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<%- include('./partials/footer') %>

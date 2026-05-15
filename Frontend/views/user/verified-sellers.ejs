@@ -1,0 +1,224 @@
+<!-- TAILWIND & FONTS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<%- include('partials/header') %>
+
+<style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050507; color: #fff; }
+    
+    /* Smooth entrance animation */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-card { animation: fadeInUp 0.5s ease backwards; }
+    
+    /* Clean Elite Cards */
+    .elite-card { 
+        background: #0d0d0f; 
+        border: 1px solid #1a1a1d; 
+        transition: all 0.3s ease;
+    }
+    .elite-card:hover { 
+        border-color: #C9922A; 
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(201, 146, 42, 0.08);
+        background: #121215;
+    }
+
+    /* Subtle Gold Accent Line */
+    .gold-accent-line {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background: #C9922A;
+        transition: width 0.3s ease;
+    }
+    .elite-card:hover .gold-accent-line { width: 100%; }
+</style>
+
+<!-- pt-[130px] keeps content safe from fixed navbar -->
+<main class="pt-[130px] pb-20 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- ============================================
+             1. HEADER & SEARCH SECTION (TOP)
+        ============================================= -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-5xl font-black uppercase tracking-wider mb-2">
+                Elite <span class="text-[#C9922A]">Partners</span>
+            </h1>
+            <p class="text-zinc-500 text-sm md:text-base font-medium max-w-2xl mx-auto mb-10">
+                Connect with Bhilwara's verified textile manufacturers and wholesale suppliers.
+            </p>
+
+            <!-- Sleek Search Bar -->
+            <div class="relative max-w-xl mx-auto">
+                <input type="text" id="searchSeller" placeholder="Search suppliers by name or city..." 
+                    class="w-full bg-[#0d0d0f] border border-zinc-800 hover:border-zinc-700 focus:border-[#C9922A] rounded-full py-4 px-6 pl-14 text-sm text-white outline-none transition-all shadow-lg">
+                <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+            </div>
+        </div>
+
+        <!-- ============================================
+             2. MERCHANTS DIRECTORY GRID
+        ============================================= -->
+        <div id="merchantsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-20">
+            <!-- JS Loading State -->
+            <div class="col-span-full text-center py-10 text-zinc-600 text-xs tracking-widest uppercase">
+                Loading Verified Partners...
+            </div>
+        </div>
+
+        <!-- Divider Line -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent my-16"></div>
+
+        <!-- ============================================
+             3. SUGGESTIONS: TOP FABRICS (BOTTOM)
+        ============================================= -->
+       <!-- ============================================
+     NEW SECTION: WHY BHILWARA TEXTILE HUB? 
+============================================= -->
+<section class="mt-24 border-t border-zinc-900 pt-20 pb-10">
+    <div class="text-center mb-16">
+        <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tight">
+            Why <span class="text-[#C9922A]">Bhilwara</span> is India's Textile Capital?
+        </h2>
+        <div class="h-1 w-20 bg-[#C9922A] mx-auto mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Feature 1: Global Suiting Leader -->
+        <div class="p-8 bg-[#0d0d0f] border border-zinc-800 rounded-3xl group hover:border-[#C9922A] transition-all">
+            <div class="w-12 h-12 bg-[#C9922A] rounded-2xl flex items-center justify-center text-black mb-6 rotate-3 group-hover:rotate-12 transition-transform">
+                <i class="fas fa-crown text-xl"></i>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-3 text-white">Suiting Capital</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed font-medium">
+                Bhilwara is the undisputed leader in **PV Suiting**, producing millions of meters of premium fabric exported to over 50+ countries.
+            </p>
+        </div>
+
+        <!-- Feature 2: Massive Denim Hub -->
+        <div class="p-8 bg-[#0d0d0f] border border-zinc-800 rounded-3xl group hover:border-[#C9922A] transition-all">
+            <div class="w-12 h-12 bg-[#C9922A] rounded-2xl flex items-center justify-center text-black mb-6 -rotate-3 group-hover:-rotate-12 transition-transform">
+                <i class="fas fa-layer-group text-xl"></i>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-3 text-white">Denim Powerhouse</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed font-medium">
+                With a production capacity of **20+ Million meters per month**, Bhilwara is the backbone of India's denim garment industry.
+            </p>
+        </div>
+
+        <!-- Feature 3: Verified Ecosystem -->
+        <div class="p-8 bg-[#0d0d0f] border border-zinc-800 rounded-3xl group hover:border-[#C9922A] transition-all">
+            <div class="w-12 h-12 bg-[#C9922A] rounded-2xl flex items-center justify-center text-black mb-6 rotate-3 group-hover:rotate-12 transition-transform">
+                <i class="fas fa-certificate text-xl"></i>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-3 text-white">Verified Excellence</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed font-medium">
+                Home to over **400 massive textile mills**, every partner on our platform is verified for international quality standards.
+            </p>
+        </div>
+
+        <!-- Feature 4: Direct Factory Access -->
+        <div class="p-8 bg-[#0d0d0f] border border-zinc-800 rounded-3xl group hover:border-[#C9922A] transition-all">
+            <div class="w-12 h-12 bg-[#C9922A] rounded-2xl flex items-center justify-center text-black mb-6 -rotate-3 group-hover:-rotate-12 transition-transform">
+                <i class="fas fa-handshake text-xl"></i>
+            </div>
+            <h3 class="text-lg font-black uppercase mb-3 text-white">Source Directly</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed font-medium">
+                No middleman, no extra margins. Connect **directly with mill owners** for bulk orders and get the most competitive factory pricing.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Final CTA Banner -->
+    <div class="mt-16 bg-gradient-to-r from-zinc-900 to-[#050507] border border-[#C9922A]/20 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+            <h4 class="text-xl font-black uppercase">Ready to source from the <span class="text-[#C9922A]">Best?</span></h4>
+            <p class="text-xs text-zinc-500 font-medium mt-1">Get custom quotes from multiple verified suppliers in one click.</p>
+        </div>
+        <a href="/tx-register" class="bg-[#C9922A] text-black px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform">
+            Add My Business
+        </a>
+    </div>
+</section>
+    </div>
+</main>
+
+<script>
+let merchants = [];
+
+// Fetch merchants from API
+async function getMerchants() {
+    try {
+        const res = await fetch('/api/merchants/list');
+        merchants = await res.json();
+        renderGrid(merchants);
+    } catch (e) { 
+        console.error("Error fetching merchants"); 
+        document.getElementById('merchantsGrid').innerHTML = `<div class="col-span-full text-center py-10 text-zinc-600 text-xs tracking-widest uppercase border border-zinc-900 rounded-2xl">Could not load partners. Please try again.</div>`;
+    }
+}
+
+function renderGrid(list) {
+    const grid = document.getElementById('merchantsGrid');
+    if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full text-center py-20 text-zinc-500 font-bold uppercase tracking-widest text-xs border border-zinc-900 rounded-2xl">No Verified Partners Found</div>`;
+        return;
+    }
+
+    grid.innerHTML = list.map((m, index) => `
+        <div class="elite-card relative p-6 rounded-2xl flex flex-col items-center text-center animate-card" style="animation-delay: ${index * 0.05}s">
+            <div class="gold-accent-line"></div>
+            
+            <!-- Verified Badge -->
+            <div class="absolute top-4 right-4 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded text-[9px] text-[#C9922A] font-bold uppercase flex items-center gap-1">
+                <i class="fas fa-check-circle"></i> Verified
+            </div>
+
+            <!-- Logo Area -->
+            <div class="w-20 h-20 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center text-[#C9922A] mb-5 overflow-hidden">
+                ${m.logo ? `<img src="${m.logo}" class="w-full h-full object-cover">` : `<i class="fas fa-building text-2xl opacity-50"></i>`}
+            </div>
+            
+            <h3 class="text-base font-black uppercase tracking-tight text-white mb-1 line-clamp-1">${m.companyName || 'Bhilwara Merchant'}</h3>
+            <p class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-4 flex items-center gap-1">
+                <i class="fas fa-map-marker-alt text-[#C9922A]"></i> ${m.city || 'Bhilwara'}
+            </p>
+            
+            <p class="text-[11px] text-zinc-400 mb-6 line-clamp-2 leading-relaxed">
+                ${m.description || 'Premium textile manufacturer and bulk supplier.'}
+            </p>
+            
+            <!-- Link -->
+            <a href="/merchant/${m._id}" class="mt-auto w-full py-3 bg-zinc-900 hover:bg-[#C9922A] border border-zinc-800 hover:border-[#C9922A] text-white hover:text-black text-[10px] font-black uppercase tracking-[0.1em] rounded-lg transition-colors flex justify-center items-center gap-2">
+                View Profile <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    `).join('');
+}
+
+// Search Logic
+document.getElementById('searchSeller').addEventListener('input', (e) => {
+    const val = e.target.value.toLowerCase();
+    const filtered = merchants.filter(m => 
+        (m.companyName || '').toLowerCase().includes(val) || 
+        (m.city || '').toLowerCase().includes(val)
+    );
+    renderGrid(filtered);
+});
+
+// Init
+getMerchants();
+</script>
+
+<%- include('partials/footer') %>

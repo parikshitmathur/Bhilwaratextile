@@ -1,195 +1,164 @@
-<!-- 
-============================================================
-BHILWARA TEXTILE - ULTRA PREMIUM NAVBAR
-FULLY UNIQUE IDS + CLASSES VERSION
-AUTHOR : PARIKSHIT MATHUR
-============================================================
--->
+<!-- =========================================================
+BHILWARA TEXTILE - SMALL PREMIUM DARK NAVBAR
+========================================================= -->
 
-<!-- Tailwind -->
+<!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
     font-family:'Plus Jakarta Sans',sans-serif;
-    background:#f3f3f3;
+    background:#050507;
+    color:white;
+    margin:0;
+    overflow-x:hidden;
 }
 
-/* =========================================
-MAIN GLASS EFFECT
-========================================= */
-.btx_qv_main_glass{
-    background:rgba(255,255,255,0.82);
-    backdrop-filter:blur(20px) saturate(160%);
-    -webkit-backdrop-filter:blur(20px) saturate(160%);
+/* =========================================================
+PREMIUM NAVBAR
+========================================================= */
+
+.btx-navbar{
+    background:rgba(5,5,7,0.78);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
 }
 
-/* =========================================
-NAV LINKS
-========================================= */
-.btx_qv_nav_link{
+/* NAV LINKS */
+.btx-link{
     position:relative;
-    font-size:11px;
+    font-size:10px;
     font-weight:800;
     text-transform:uppercase;
-    letter-spacing:.15em;
-    color:#1f2937;
+    letter-spacing:.18em;
+    color:#d4d4d8;
     transition:.35s ease;
-    white-space:nowrap;
 }
 
-.btx_qv_nav_link:hover{
-    color:#d97706;
+.btx-link:hover{
+    color:#C9922A;
 }
 
-.btx_qv_nav_link::after{
+.btx-link::after{
     content:'';
     position:absolute;
     left:0;
     bottom:-7px;
     width:0%;
     height:2px;
-    background:#d97706;
+    background:#C9922A;
     transition:.35s ease;
 }
 
-.btx_qv_nav_link:hover::after{
+.btx-link:hover::after{
     width:100%;
 }
 
-/* =========================================
-CENTER LINKS FIX
-========================================= */
-#btx_qv_center_links{
-    display:flex !important;
-    align-items:center !important;
-    gap:42px;
+/* ACTIVE LINK */
+.btx-active{
+    color:#C9922A;
 }
 
-/* =========================================
-DROPDOWN
-========================================= */
-#btx_qv_portal_dropdown{
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(20px);
-    transition:.45s ease;
+.btx-active::after{
+    width:100%;
 }
 
-#btx_qv_portal_dropdown.btx_qv_dropdown_active{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0px);
+/* BUTTON */
+.btx-btn{
+    background:#C9922A;
+    color:black;
+    transition:.35s ease;
+    box-shadow:0 10px 30px rgba(201,146,42,0.25);
 }
 
-/* =========================================
-RESPONSIVE
-========================================= */
-@media(max-width:767px){
-
-    #btx_qv_center_links{
-        display:none !important;
-    }
-
-    #btx_qv_quote_btn{
-        display:none !important;
-    }
-
-    #btx_qv_shell{
-        padding-left:18px !important;
-        padding-right:18px !important;
-    }
-
-    #btx_qv_logo_text{
-        font-size:20px !important;
-    }
+.btx-btn:hover{
+    background:white;
+    transform:translateY(-2px);
 }
 
-@media(min-width:768px) and (max-width:1024px){
+/* MOBILE */
+@media(max-width:768px){
 
-    #btx_qv_center_links{
-        gap:24px !important;
+    .btx-center-links{
+        display:none;
     }
+
+    .btx-portal{
+        display:none;
+    }
+
 }
 
 </style>
 
-<!-- =========================================
+<!-- =========================================================
 NAVBAR START
-========================================= -->
-<nav 
-id="btx_qv_main_navbar"
-class="fixed top-0 left-0 w-full z-[99999] px-4 md:px-6 py-6 transition-all duration-500"
->
+========================================================= -->
 
-    <div class="max-w-[1440px] mx-auto">
+<nav
+class="fixed top-0 left-0 w-full z-[99999] px-4 md:px-6 py-2">
 
-        <!-- SHELL -->
-        <div 
-        id="btx_qv_shell"
-        class="btx_qv_main_glass border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[40px] h-24 px-10 transition-all duration-500"
-        >
+    <div class="max-w-[1450px] mx-auto">
 
-            <!-- FLEX -->
+        <!-- NAVBAR BOX -->
+        <div
+        class="btx-navbar rounded-[28px] h-[72px] px-5 md:px-8">
+
             <div class="flex items-center justify-between w-full h-full">
 
-                <!-- =========================================
-                LOGO
-                ========================================= -->
+                <!-- LOGO -->
                 <div class="flex-shrink-0">
 
                     <a href="/" class="group">
 
-                        <h1 
-                        id="btx_qv_logo_text"
-                        class="text-[22px] md:text-[30px] font-black uppercase tracking-[-1px] leading-none"
-                        >
+                        <h1
+                        class="text-[20px] md:text-[22px] font-black uppercase tracking-[-1px] leading-none">
+
                             Bhilwara
-                            <span class="text-amber-600 italic">
+                            <span class="text-[#C9922A] italic">
                                 Textile
                             </span>
+
                         </h1>
 
-                        <p class="text-[9px] font-bold uppercase tracking-[0.45em] text-gray-400 mt-1">
-                            Authority Hub
+                        <p class="text-[7px] font-bold uppercase tracking-[0.4em] text-zinc-500 mt-1">
+                            Elite Marketplace
                         </p>
 
                     </a>
 
                 </div>
 
-                <!-- =========================================
-                CENTER LINKS
-                ========================================= -->
+                <!-- CENTER LINKS -->
                 <div class="flex-1 flex justify-center">
 
-                    <div id="btx_qv_center_links">
+                    <div class="btx-center-links flex items-center gap-8">
 
-                        <a href="/" class="btx_qv_nav_link">
+                        <a href="/" class="btx-link">
                             Home
                         </a>
 
-                        <a href="/fabrics" class="btx_qv_nav_link">
+                        <a href="/verified-sellers" class="btx-link btx-active">
+                            Partners
+                        </a>
+
+                        <a href="/fabrics" class="btx-link">
                             Fabrics
                         </a>
 
-                        <a href="/about" class="btx_qv_nav_link">
-                            Our Bhilwara
+                        <a href="/about" class="btx-link">
+                            About
                         </a>
-
-                        <a href="/contact" class="btx_qv_nav_link">
+                         <a href="/contact" class="btx-link">
                             Contact
                         </a>
 
@@ -197,97 +166,83 @@ class="fixed top-0 left-0 w-full z-[99999] px-4 md:px-6 py-6 transition-all dura
 
                 </div>
 
-                <!-- =========================================
-                RIGHT SIDE
-                ========================================= -->
-                <div class="flex items-center gap-4 md:gap-6">
+                <!-- RIGHT SIDE -->
+                <div class="flex items-center gap-3 md:gap-4">
 
-                    <!-- =========================================
-                    PORTAL WRAPPER
-                    ========================================= -->
-                    <div class="relative">
+                    <!-- PORTAL -->
+                   <div class="relative inline-block text-left group">
+    
+    <button id="portalBtn" onclick="togglePortal()" class="btx-portal flex items-center gap-2 bg-black hover:bg-zinc-900 border border-white/10 px-2 py-1.5 pr-4 rounded-full transition-all duration-300">
+        <div class="w-8 h-8 rounded-full bg-[#C9922A] flex items-center justify-center text-black shadow-[0_0_15px_rgba(201,146,42,0.2)]">
+            <i class="fa-solid fa-shield-halved text-[10px]"></i>
+        </div>
+        <span class="text-[9px] font-black uppercase tracking-[0.18em] text-white">Portal</span>
+        <i class="fa-solid fa-chevron-down text-[8px] text-zinc-500 group-hover:text-[#C9922A] transition-transform duration-300" id="portalArrow"></i>
+    </button>
 
-                        <!-- BUTTON -->
-                        <button 
-                        id="btx_qv_portal_button"
-                        class="flex items-center gap-3 bg-black p-1.5 pr-5 rounded-full hover:bg-zinc-900 transition-all duration-300 shadow-xl"
-                        >
+    <div id="portalDropdown" class="absolute right-0 mt-3 w-48 origin-top-right hidden rounded-2xl bg-[#0b0b0f] border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl z-[100] overflow-hidden">
+        <div class="py-2">
+            
+          <a href="/tx-login" class="flex items-center gap-3 px-5 py-3 hover:bg-white/5 group transition-all">
+                <i class="fa-solid fa-right-to-bracket text-[10px] text-[#C9922A]"></i>
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-white uppercase tracking-widest">Merchant Login</span>
+                    <span class="text-[7px] font-bold text-zinc-600 uppercase">Existing Sellers</span>
+                </div>
+            </a>
 
-                            <div class="w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-black">
-                                <i class="fa-solid fa-shield-halved text-xs"></i>
-                            </div>
+            <a href="/become-seller" class="flex items-center gap-3 px-5 py-3 hover:bg-white/5 group transition-all">
+                <i class="fa-solid fa-user-plus text-[10px] text-[#C9922A]"></i>
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-white uppercase tracking-widest">Become a Seller</span>
+                    <span class="text-[7px] font-bold text-zinc-600 uppercase">Register Business</span>
+                </div>
+            </a>
 
-                            <span class="hidden lg:block text-[10px] font-black uppercase tracking-[0.25em] text-white">
-                                Portal
-                            </span>
+            <div class="h-[1px] bg-white/5 mx-4 my-1"></div>
 
-                        </button>
+            <a href="/buyer" class="flex items-center gap-3 px-5 py-3 hover:bg-white/5 group transition-all">
+                <div class="w-6 h-6 rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center group-hover:border-[#C9922A]/30 transition-all">
+                    <i class="fa-solid fa-headset text-[9px] text-zinc-500 group-hover:text-[#C9922A]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-white uppercase tracking-widest">Inquiry Hub</span>
+                    <span class="text-[7px] font-bold text-zinc-600 uppercase tracking-tighter">Direct Authority</span>
+                </div>
+            </a>
 
-                        <!-- =========================================
-                        DROPDOWN
-                        ========================================= -->
-                        <div 
-                        id="btx_qv_portal_dropdown"
-                        class="absolute right-0 top-full mt-5 w-72 bg-white border border-gray-100 shadow-[0_30px_70px_rgba(0,0,0,0.15)] rounded-[2.5rem] overflow-hidden z-[999999]"
-                        >
+        </div>
+    </div>
+</div>
 
-                            <!-- TOP -->
-                            <div class="p-8 bg-zinc-900 text-white text-center">
+<script>
+    function togglePortal() {
+        const dropdown = document.getElementById('portalDropdown');
+        const arrow = document.getElementById('portalArrow');
+        
+        dropdown.classList.toggle('hidden');
+        arrow.classList.toggle('rotate-180');
+    }
 
-                                <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest">
-                                    Bhilwara Authority
-                                </p>
+    // Window click par dropdown band karne ke liye
+    window.onclick = function(event) {
+        if (!event.target.closest('.btx-portal')) {
+            const dropdown = document.getElementById('portalDropdown');
+            const arrow = document.getElementById('portalArrow');
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+    }
+</script>
 
-                                <h3 class="text-sm font-bold mt-2">
-                                    Manage Empire
-                                </h3>
+                    <!-- CTA -->
+                    <a href="/join-free"
+                    class="btx-btn px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.18em]">
 
-                            </div>
+                        Join Free
 
-                            <!-- LINKS -->
-                            <div class="p-4 space-y-1">
-
-                                <a 
-                                href="/login"
-                                class="flex items-center gap-4 px-6 py-4 text-xs font-black text-gray-700 hover:bg-amber-50 rounded-3xl transition-all duration-300"
-                                >
-                                    <i class="fa-solid fa-fingerprint opacity-30"></i>
-                                    Sign In
-                                </a>
-
-                                <a 
-                                href="/join-free"
-                                class="flex items-center gap-4 px-6 py-4 text-xs font-black text-gray-700 hover:bg-amber-50 rounded-3xl transition-all duration-300"
-                                >
-                                    <i class="fa-solid fa-crown text-amber-600"></i>
-                                    Join Free
-                                </a>
-
-                                <hr class="my-2 border-gray-100">
-
-                                <a 
-                                href="/tx-logout"
-                                class="flex items-center gap-4 px-6 py-4 text-[10px] font-black text-red-600 hover:bg-red-50 rounded-3xl transition-all duration-300"
-                                >
-                                    <i class="fa-solid fa-power-off"></i>
-                                    Secure Exit
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- =========================================
-                    QUOTE BUTTON
-                    ========================================= -->
-                    <a 
-                    href="/buyer"
-                    id="btx_qv_quote_btn"
-                    class="bg-amber-600 hover:bg-black text-white px-7 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg"
-                    >
-                        Quote
                     </a>
 
                 </div>
@@ -300,87 +255,6 @@ class="fixed top-0 left-0 w-full z-[99999] px-4 md:px-6 py-6 transition-all dura
 
 </nav>
 
-<!-- SPACER -->
-<div class="h-32 md:h-36"></div>
-
-<!-- =========================================
-SCRIPTS
-========================================= -->
-<script>
-
-/* =========================================
-SCROLL EFFECT
-========================================= */
-
-const btxQvShell = document.getElementById('btx_qv_shell');
-const btxQvNavbar = document.getElementById('btx_qv_main_navbar');
-
-window.addEventListener('scroll', () => {
-
-    if(window.scrollY > 40){
-
-        btxQvNavbar.style.paddingTop = '10px';
-        btxQvNavbar.style.paddingBottom = '10px';
-
-        btxQvShell.style.height = '72px';
-
-        btxQvShell.style.borderRadius = '28px';
-
-    }else{
-
-        btxQvNavbar.style.paddingTop = '24px';
-        btxQvNavbar.style.paddingBottom = '24px';
-
-        btxQvShell.style.height = '96px';
-
-        btxQvShell.style.borderRadius = '40px';
-    }
-});
-
-
-/* =========================================
-PORTAL DROPDOWN
-========================================= */
-
-const btxQvPortalBtn = document.getElementById('btx_qv_portal_button');
-
-const btxQvDropdown = document.getElementById('btx_qv_portal_dropdown');
-
-let btxQvDropdownStatus = false;
-
-
-/* TOGGLE */
-btxQvPortalBtn.addEventListener('click', (event) => {
-
-    event.stopPropagation();
-
-    btxQvDropdownStatus = !btxQvDropdownStatus;
-
-    if(btxQvDropdownStatus){
-
-        btxQvDropdown.classList.add('btx_qv_dropdown_active');
-
-    }else{
-
-        btxQvDropdown.classList.remove('btx_qv_dropdown_active');
-    }
-
-});
-
-
-/* OUTSIDE CLICK */
-document.addEventListener('click', (event) => {
-
-    if(
-        !btxQvDropdown.contains(event.target) &&
-        !btxQvPortalBtn.contains(event.target)
-    ){
-
-        btxQvDropdown.classList.remove('btx_qv_dropdown_active');
-
-        btxQvDropdownStatus = false;
-    }
-
-});
-
-</script>
+<!-- =========================================================
+DUMMY SECTION
+========================================================= -->

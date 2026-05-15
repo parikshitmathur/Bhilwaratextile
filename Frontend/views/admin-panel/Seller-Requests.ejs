@@ -1,270 +1,203 @@
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                colors: { gold: '#C9922A', surface: '#0f0f13' }
+            }
+        }
+    }
+</script>
 
 <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #08090a; color: white; overflow-x: hidden; }
-    .gold-gradient { background: linear-gradient(135deg, #C9922A, #A8761D); }
-    .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    body { background-color: #050507; color: #d4d4d8; margin: 0; overflow-x: hidden; }
+    .glass-card { background: rgba(17, 17, 19, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
     
-    /* Status Badges */
-    .status-pending { background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); }
-    .status-approved { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
-    .status-rejected { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    /* Ultra Compact Status Pills */
+    .status-pill { font-size: 8px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.05em; }
+    .st-pending { background: rgba(234,179,8,0.1); color: #eab308; border: 1px solid rgba(234,179,8,0.2); }
+    .st-approved { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
+    .st-rejected { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
     
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #08090a; }
-    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
-    
-    tr { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    tr:hover { background: rgba(201, 146, 42, 0.05) !important; }
+    /* Layout Fix: Flex container handles the gap automatically */
+    .main-container { display: flex; min-height: 100vh; width: 100%; }
+    .authority-wrapper { flex: 1; min-width: 0; } /* min-width: 0 prevents flex child from overflowing */
 
-    /* Logo Glow */
-    .logo-container { position: relative; }
-    .logo-container::after {
-        content: ''; position: absolute; inset: -2px; 
-        background: linear-gradient(45deg, #C9922A, transparent);
-        border-radius: 14px; opacity: 0; transition: 0.3s; z-index: -1;
-    }
-    tr:hover .logo-container::after { opacity: 0.5; }
+    /* Compact Sizes */
+    h1 { font-size: 1.5rem !important; }
+    .stat-val { font-size: 1.25rem !important; }
+    .table-text { font-size: 11px !important; }
+    .sub-text { font-size: 9px !important; }
 </style>
 
-<div class="min-h-screen p-4 md:p-10">
-    
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
-        <div>
-            <h1 class="text-4xl font-black tracking-tight">Seller <span class="text-[#C9922A]">Authority</span></h1>
-            <p class="text-gray-500 mt-2 font-medium">Verify and manage textile merchant applications</p>
-        </div>
-        <div class="flex items-center gap-4 bg-white/5 p-3 rounded-2xl border border-white/10 shadow-xl">
-            <div class="flex flex-col items-end">
-                <span class="text-[10px] font-black uppercase tracking-widest text-[#C9922A]">System Status</span>
-                <span class="text-xs font-bold text-gray-400">Live Sync Active</span>
-            </div>
-            <div class="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
-                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            </div>
-        </div>
+<div class="main-container">
+    <div class="shrink-0">
+        <%- include('partials/sidebar') %>
     </div>
 
-    <!-- Stats Ribbon -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="glass-card p-4 rounded-2xl">
-            <p class="text-[10px] font-bold text-gray-500 uppercase">Total Requests</p>
-            <h3 id="statTotal" class="text-2xl font-black mt-1">0</h3>
-        </div>
-        <div class="glass-card p-4 rounded-2xl border-l-2 border-l-yellow-500">
-            <p class="text-[10px] font-bold text-gray-500 uppercase">Pending</p>
-            <h3 id="statPending" class="text-2xl font-black mt-1 text-yellow-500">0</h3>
-        </div>
-        <div class="glass-card p-4 rounded-2xl border-l-2 border-l-green-500">
-            <p class="text-[10px] font-bold text-gray-500 uppercase">Approved</p>
-            <h3 id="statApproved" class="text-2xl font-black mt-1 text-green-500">0</h3>
-        </div>
-        <div class="glass-card p-4 rounded-2xl border-l-2 border-l-red-500">
-            <p class="text-[10px] font-bold text-gray-500 uppercase">Rejected</p>
-            <h3 id="statRejected" class="text-2xl font-black mt-1 text-red-500">0</h3>
-        </div>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="relative mb-8 group">
-        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#C9922A] transition-colors">🔍</span>
-        <input id="searchInput"
-            class="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 text-white rounded-2xl focus:outline-none focus:border-[#C9922A] focus:bg-white/[0.08] transition-all placeholder:text-gray-600 shadow-lg"
-            placeholder="Search by merchant name, email, or mobile...">
-    </div>
-
-    <!-- Table -->
-    <div class="glass-card rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-black/60 border-b border-white/5 text-gray-400 font-black uppercase text-[11px] tracking-widest">
-                        <th class="p-6 text-left">Merchant Logo</th>
-                        <th class="p-6 text-left">Company Detail</th>
-                        <th class="p-6 text-left">Ownership</th>
-                        <th class="p-6 text-center">Status</th>
-                        <th class="p-6 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody" class="divide-y divide-white/5">
-                    <!-- Data Injected Here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- 🔥 ELITE MODAL -->
-<div id="modal" class="fixed inset-0 hidden bg-black/95 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-all">
-    <div class="bg-[#0b0c10] border border-white/10 p-10 rounded-[2.5rem] w-full max-w-2xl text-white relative shadow-2xl">
-        <button onclick="closeModal()" class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500 hover:text-white transition-all text-xl">✕</button>
-        
-        <div class="flex flex-col md:flex-row items-center gap-6 mb-10">
-            <div id="mLogoFrame" class="w-24 h-24 rounded-3xl bg-white/5 border-2 border-[#C9922A] p-1 flex items-center justify-center overflow-hidden">
-                <!-- Image or Initial -->
-            </div>
-            <div class="text-center md:text-left">
-                <h2 id="mTitle" class="text-4xl font-black mb-1"></h2>
-                <div class="flex items-center justify-center md:justify-start gap-2">
-                    <span class="w-2 h-2 bg-[#C9922A] rounded-full animate-ping"></span>
-                    <span class="text-[#C9922A] text-[10px] font-black uppercase tracking-[0.2em]">Verified Merchant File</span>
+    <div class="authority-wrapper flex flex-col">
+        <main class="p-4 lg:p-8 w-full max-w-7xl">
+            
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="font-black text-white italic uppercase tracking-tighter">
+                        Seller <span class="text-gold">Authority</span>
+                    </h1>
+                    <p class="sub-text font-bold text-zinc-500 uppercase tracking-widest">Verification Control</p>
+                </div>
+                <div class="bg-surface border border-zinc-800 px-3 py-1 rounded-xl flex items-center gap-2">
+                    <span class="flex h-1.5 w-1.5 relative">
+                        <span class="animate-ping absolute h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                    </span>
+                    <span class="text-[8px] font-black text-zinc-400 uppercase tracking-tight italic">Live Database</span>
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white/[0.03] p-8 rounded-3xl border border-white/5">
-            <div class="space-y-1">
-                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest">Official Email</label>
-                <p id="mEmail" class="font-bold text-gray-200 text-lg"></p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="glass-card p-4 rounded-2xl border-l-2 border-gold">
+                    <p class="sub-text font-bold text-zinc-500 uppercase">Total</p>
+                    <h3 id="statTotal" class="stat-val font-black text-white mt-0.5">0</h3>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-l-2 border-yellow-500">
+                    <p class="sub-text font-bold text-zinc-500 uppercase">Pending</p>
+                    <h3 id="statPending" class="stat-val font-black text-white mt-0.5">0</h3>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-l-2 border-green-500">
+                    <p class="sub-text font-bold text-zinc-500 uppercase">Approved</p>
+                    <h3 id="statApproved" class="stat-val font-black text-white mt-0.5">0</h3>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-l-2 border-red-500">
+                    <p class="sub-text font-bold text-zinc-500 uppercase">Rejected</p>
+                    <h3 id="statRejected" class="stat-val font-black text-white mt-0.5">0</h3>
+                </div>
             </div>
-            <div class="space-y-1">
-                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest">Business Contact</label>
-                <p id="mMobile" class="font-bold text-gray-200 text-lg"></p>
+
+            <div class="glass-card rounded-2xl overflow-hidden border-zinc-800/50 shadow-2xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-black/40 border-b border-zinc-800">
+                            <tr class="text-[9px] font-black text-zinc-500 uppercase tracking-widest">
+                                <th class="px-5 py-4">Merchant Details</th>
+                                <th class="px-5 py-4 text-center">Current Status</th>
+                                <th class="px-5 py-4 text-right">Verification</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-zinc-800/30">
+                            </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="space-y-1">
-                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest">City / Region</label>
-                <p id="mCity" class="font-bold text-gray-200"></p>
-            </div>
-            <div class="space-y-1">
-                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest">Full Address</label>
-                <p id="mAddress" class="font-bold text-gray-200"></p>
-            </div>
-            <div class="col-span-full pt-4 border-t border-white/5">
-                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest block mb-2">Merchant Bio</label>
-                <p id="mDesc" class="text-gray-400 leading-relaxed text-xs italic"></p>
-            </div>
-        </div>
+        </main>
     </div>
 </div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-[9999] px-4 py-2 rounded-full font-bold text-[10px] shadow-2xl backdrop-blur-md"></div>
 
 <script>
 let data = [];
 
-// 🔁 LOAD DATA
-async function load(){
+async function load() {
     try {
         const res = await fetch('/admin/seller-requests/data');
-        const newData = await res.json();
-        
-        if(JSON.stringify(data) !== JSON.stringify(newData)) {
-            data = newData;
-            updateStats();
-            render();
-        }
-    } catch (e) { console.error("Authority Load Error", e); }
+        data = await res.json();
+        updateStats();
+        render();
+    } catch (e) { 
+        showToast("System Error: Fetch Failed", true);
+    }
 }
 
-// 📊 UPDATE TOP STATS
-function updateStats(){
+function updateStats() {
     document.getElementById('statTotal').innerText = data.length;
-    document.getElementById('statPending').innerText = data.filter(s => !s.status || s.status === 'Pending').length;
-    document.getElementById('statApproved').innerText = data.filter(s => s.status === 'Approved').length;
-    document.getElementById('statRejected').innerText = data.filter(s => s.status === 'Rejected').length;
+    document.getElementById('statPending').innerText = data.filter(x => !x.status || x.status === 'Pending').length;
+    document.getElementById('statApproved').innerText = data.filter(x => x.status === 'Approved').length;
+    document.getElementById('statRejected').innerText = data.filter(x => x.status === 'Rejected').length;
 }
 
-// 🎯 RENDER TABLE
-function render(){
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const tableBody = document.getElementById('tableBody');
-
-    const rows = data.filter(s => {
-        return (s.companyName || '').toLowerCase().includes(search) ||
-               (s.email || '').toLowerCase().includes(search) ||
-               (s.mobile || '').includes(search);
-    });
-
-    if(rows.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="p-20 text-center text-gray-600 font-black uppercase tracking-widest opacity-50">Zero Merchant Records Found</td></tr>`;
+function render() {
+    const table = document.getElementById('tableBody');
+    if (!data.length) {
+        table.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-zinc-700 uppercase font-black sub-text">No Records found in database</td></tr>';
         return;
     }
 
-    tableBody.innerHTML = rows.map(s => {
-        const statusClass = s.status === 'Approved' ? 'status-approved' : s.status === 'Rejected' ? 'status-rejected' : 'status-pending';
-        
-        // 🖼️ Logo Logic
-        const logoHtml = s.logo 
-            ? `<div class="logo-container w-14 h-14"><img src="${s.logo}" class="w-full h-full rounded-xl object-cover border border-white/10"></div>`
-            : `<div class="logo-container w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-[#C9922A] font-black border border-dashed border-white/20">${(s.companyName || 'B').charAt(0)}</div>`;
-
+    table.innerHTML = data.map(s => {
+        const statusClass = s.status === 'Approved' ? 'st-approved' : (s.status === 'Rejected' ? 'st-rejected' : 'st-pending');
         return `
-        <tr onclick="view('${s._id}')" class="group cursor-pointer">
-            <td class="p-6">${logoHtml}</td>
-            <td class="p-6">
-                <div class="font-black text-gray-100 text-base">${s.companyName || 'Private Merchant'}</div>
-                <div class="text-[9px] text-[#C9922A] font-black uppercase tracking-widest mt-1">${s.shortName || 'NO BRAND TAG'}</div>
-            </td>
-            <td class="p-6">
-                <div class="font-bold text-gray-300">${s.ownerName || '-'}</div>
-                <div class="text-[11px] text-gray-500 font-medium">${s.email}</div>
-            </td>
-            <td class="p-6 text-center">
-                <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter ${statusClass}">
-                    ${s.status || 'Pending'}
-                </span>
-            </td>
-            <td class="p-6 text-right">
-                <div class="flex justify-end gap-2" onclick="event.stopPropagation()">
-                    <button onclick="update('${s._id}','Approved')" class="w-10 h-10 rounded-xl bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-black transition-all flex items-center justify-center font-bold shadow-lg shadow-green-500/5">✓</button>
-                    <button onclick="update('${s._id}','Rejected')" class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center font-bold shadow-lg shadow-red-500/5">✕</button>
-                </div>
-            </td>
-        </tr>
+            <tr class="hover:bg-white/[0.02] transition-all">
+                <td class="px-5 py-3.5">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gold/60 overflow-hidden shadow-inner">
+                            ${s.logo ? `<img src="${s.logo}" class="w-full h-full object-cover">` : `<i class="fas fa-building text-sm"></i>`}
+                        </div>
+                        <div>
+                            <h4 class="table-text font-bold text-white uppercase tracking-tight leading-none">${s.companyName || 'Bhilwara Merchant'}</h4>
+                            <p class="sub-text text-zinc-500 mt-1 font-semibold italic">${s.email} | ${s.mobile || 'No Contact'}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-5 py-3.5 text-center">
+                    <span class="status-pill ${statusClass}">${s.status || 'Pending'}</span>
+                </td>
+                <td class="px-5 py-3.5">
+                    <div class="flex justify-end gap-2">
+                        <button onclick="updateStatus(this, '${s._id}', 'Approved')" class="w-8 h-8 rounded-xl bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500 hover:text-white transition-all text-[11px] flex items-center justify-center shadow-lg shadow-green-500/5">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button onclick="updateStatus(this, '${s._id}', 'Rejected')" class="w-8 h-8 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all text-[11px] flex items-center justify-center shadow-lg shadow-red-500/5">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
         `;
     }).join('');
 }
 
-// 🔄 STATUS UPDATE
-async function update(id, status){
-    const btn = event.target;
-    const oldHtml = btn.innerHTML;
-    btn.innerHTML = `<svg class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
-    
+async function updateStatus(btn, id, status) {
     try {
-        await fetch('/api/seller/update-status/' + id, {
+        btn.disabled = true;
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        const response = await fetch('/api/seller/update-status/' + id, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'status=' + status
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: status })
         });
-        await load();
+
+        if (response.ok) {
+            showToast("Authority Verified: " + status, false);
+            await load();
+        } else {
+            const contentType = response.headers.get("content-type");
+            let msg = "Update Blocked";
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const errData = await response.json();
+                msg = errData.message || msg;
+            }
+            showToast(msg, true);
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        }
     } catch (e) {
-        alert("Operation Failed");
-        btn.innerHTML = oldHtml;
+        showToast("System Error: Connection Failed", true);
+        btn.disabled = false;
     }
 }
 
-// 👁 VIEW DETAILS
-function view(id){
-    const s = data.find(x => x._id === id);
-    if(!s) return;
-
-    const frame = document.getElementById('mLogoFrame');
-    if(s.logo) {
-        frame.innerHTML = `<img src="${s.logo}" class="w-full h-full object-cover">`;
-    } else {
-        frame.innerHTML = `<span class="text-4xl font-black text-[#C9922A]">${(s.companyName || 'B').charAt(0)}</span>`;
-    }
-
-    document.getElementById('mTitle').innerText = s.companyName || 'Merchant File';
-    document.getElementById('mEmail').innerText = s.email || '-';
-    document.getElementById('mMobile').innerText = s.mobile || '-';
-    document.getElementById('mCity').innerText = s.city || 'Not Specified';
-    document.getElementById('mAddress').innerText = s.address || 'No physical address provided';
-    document.getElementById('mDesc').innerText = s.description || 'The merchant has not provided a business description yet.';
-
-    document.getElementById('modal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+function showToast(msg, err = false) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] px-5 py-2 rounded-full font-bold text-[9px] shadow-2xl backdrop-blur-xl ${err ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-green-500/20 text-green-400 border border-green-500/30'}`;
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 3000);
 }
 
-// ❌ CLOSE MODAL
-function closeModal(){
-    document.getElementById('modal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-document.getElementById('searchInput').oninput = render;
-setInterval(load, 15000); 
 load();
 </script>

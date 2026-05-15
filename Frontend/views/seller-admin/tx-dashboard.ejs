@@ -1,197 +1,176 @@
 <%- include('./partials/Seller-Sidebar') %>
 
-<!-- Main Dashboard Area -->
-<main class="tx-main-wrapper">
-    <div class="tx-content-container">
-        
-        <!-- Header Section -->
-        <header class="tx-dash-header">
-            <div class="tx-welcome">
-                <h1>Ram Ram,<h1>
- 
-  <span class="gold-gradient">
-    <%= user && user.name ? user.name : user.email %>
-  </span> 🧵
-</h1>🧵</h1>
-<% if (user.isVerified) { %>
-    <span style="color:green;">✔ Verified Seller</span>
-<% } else { %>
-    <span style="color:orange;">Pending Approval</span>
-<% } %>
-                <p>Bhilwara Textile Merchant Portal | Monitoring your success.</p>
-            </div>
-            <div class="tx-action-btns">
-                <button class="tx-btn-outline">Download Report</button>
-                <button class="tx-btn-gold">+ Add New Fabric</button>
-            </div>
-        </header>
-
-        <!-- Stats Overview (The "Ek Number" Grid) -->
-        <section class="tx-stats-grid">
-            <div class="tx-stat-box">
-                <div class="tx-stat-icon">📈</div>
-                <div class="tx-stat-details">
-                    <span class="tx-stat-label">Total Revenue</span>
-                    <h2 class="tx-stat-value">₹2,45,000</h2>
-                    <span class="tx-stat-trend up">+12.5% vs last month</span>
-                </div>
-            </div>
-
-            <div class="tx-stat-box">
-                <div class="tx-stat-icon">📦</div>
-                <div class="tx-stat-details">
-                    <span class="tx-stat-label">Orders Processed</span>
-                    <h2 class="tx-stat-value">1,240</h2>
-                    <span class="tx-stat-trend">85 Pending Shipments</span>
-                </div>
-            </div>
-
-            <div class="tx-stat-box">
-                <div class="tx-stat-icon">⭐</div>
-                <div class="tx-stat-details">
-                    <span class="tx-stat-label">Merchant Rating</span>
-                    <h2 class="tx-stat-value">4.9/5.0</h2>
-                    <span class="tx-stat-trend gold">Top Rated Seller</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dynamic Data Section -->
-        <div class="tx-grid-layout">
-            <!-- Recent Orders Table -->
-            <section class="tx-card-panel">
-                <div class="ta-panel-head">
-                    <h3>Recent Business Leads</h3>
-                    <a href="/seller/orders" class="tx-view-all">View All</a>
-                </div>
-                <div class="tx-table-wrapper">
-                    <table class="tx-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Buyer Name</th>
-                                <th>Fabric Type</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#BT-9901</td>
-                                <td>Rahul Sharma</td>
-                                <td>Premium Cotton</td>
-                                <td><span class="badge pending">Pending</span></td>
-                                <td>₹45,000</td>
-                            </tr>
-                            <tr>
-                                <td>#BT-9892</td>
-                                <td>Karan Mehta</td>
-                                <td>Denim Finish</td>
-                                <td><span class="badge success">Completed</span></td>
-                                <td>₹82,000</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Quick Tips/Notifications -->
-            <section class="tx-card-panel tx-tips">
-                <h3>Merchant Insights</h3>
-                <div class="tx-tip-item">
-                    <p>💡 <strong>Pro Tip:</strong> Polyester demand is up by 20% in Bhilwara region this week.</p>
-                </div>
-                <div class="tx-tip-item">
-                    <p>🔔 <strong>Notice:</strong> Complete your GST verification to unlock "Elite" badge.</p>
-                </div>
-            </section>
-        </div>
-
-    </div>
-</main>
 <style>
-    :root {
-        --gold: #C9922A;
-        --dark-card: #111827;
-        --text-muted: #94a3b8;
-        --bg-body: #08090a;
-    }
-
-    /* Core Layout */
+    body { background-color: #050507; margin: 0; font-family: 'Inter', sans-serif; }
+    
     .tx-main-wrapper { 
         margin-left: 280px; 
-        padding: 40px; 
-        background: var(--bg-body); 
-        min-height: 100vh; 
+        min-height: 100vh;
+        padding: 40px;
+        background: radial-gradient(circle at top right, #111, #050507);
+    }
+
+    .glass-card {
+        background: rgba(17, 17, 19, 0.7);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 24px;
         transition: all 0.3s ease;
+        cursor: pointer;
     }
 
-    .tx-content-container {
-        max-width: 1200px;
-        margin: 0 auto;
+    .glass-card:hover {
+        border-color: #C9922A;
+        transform: translateY(-5px);
+        background: rgba(20, 20, 25, 0.9);
     }
 
-    .gold-gradient { 
-        background: linear-gradient(to right, #C9922A, #f1c40f); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
+    .gold-gradient-text {
+        background: linear-gradient(to right, #C9922A, #F3D084);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
-    /* Header & Actions */
-    .tx-dash-header { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-start; 
-        margin-bottom: 40px; 
-        flex-wrap: wrap; 
-        gap: 20px;
-    }
-    
-    .tx-welcome h1 { font-size: clamp(24px, 5vw, 32px); font-weight: 800; margin: 0; color: white; line-height: 1.2; }
-    .tx-welcome p { color: var(--text-muted); margin-top: 5px; font-size: 14px; }
-    
-    .tx-action-btns { display: flex; gap: 10px; }
-    .tx-btn-gold { background: var(--gold); border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; color: #000; white-space: nowrap; }
-    .tx-btn-outline { background: transparent; border: 1px solid #1f2937; color: white; padding: 12px 20px; border-radius: 12px; cursor: pointer; white-space: nowrap; }
-
-    /* Stats Grid - Responsive behavior */
-    .tx-stats-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-        gap: 20px; 
-        margin-bottom: 40px; 
-    }
-    .tx-stat-box { background: var(--dark-card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 15px; }
-    .tx-stat-icon { font-size: 30px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 15px; }
-    .tx-stat-value { font-size: 24px; font-weight: 900; margin: 2px 0; color: white; }
-
-    /* Main Content Grid */
-    .tx-grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; align-items: start; }
-
-    .tx-card-panel { background: var(--dark-card); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
-    .tx-table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .tx-table { width: 100%; border-collapse: collapse; min-width: 500px; } /* Ensures table doesn't squish too much */
-
-    /* Responsive Breakpoints */
-    @media (max-width: 1100px) {
-        .tx-grid-layout { grid-template-columns: 1fr; }
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     @media (max-width: 768px) {
-        .tx-main-wrapper { 
-            margin-left: 0; 
-            padding: 100px 15px 40px 15px; /* Added top padding for mobile menu toggle */
-        }
-        
-        .tx-dash-header { flex-direction: column; }
-        .tx-action-btns { width: 100%; }
-        .tx-action-btns button { flex: 1; font-size: 13px; padding: 10px; }
-        
-        .tx-stat-box { padding: 20px; }
-    }
-
-    @media (max-width: 480px) {
-        .tx-stats-grid { grid-template-columns: 1fr; }
-        .tx-welcome h1 { font-size: 22px; }
+        .tx-main-wrapper { margin-left: 0; padding: 80px 20px; }
     }
 </style>
+
+<main class="tx-main-wrapper">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+        <div>
+            <h1 style="color: white; font-size: 32px; margin: 0; font-weight: 900; text-transform: uppercase; font-style: italic;">
+                Ram Ram, <span class="gold-gradient-text"><%= user.companyName || user.name %></span>
+            </h1>
+            <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+                <% if (user.status === 'Approved') { %>
+                    <span class="status-badge" style="background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2);">
+                        ● Verified Authority
+                    </span>
+                <% } else { %>
+                    <span class="status-badge" style="background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.2);">
+                        ● Pending Sync
+                    </span>
+                <% } %>
+                <span style="color: #52525b; font-size: 9px; font-weight: 800; text-transform: uppercase;">Node ID: <%= user._id.toString().slice(-6).toUpperCase() %></span>
+            </div>
+        </div>
+        
+        <button onclick="location.href='/seller/add-product'" style="background: #C9922A; color: black; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(201, 146, 42, 0.2);">
+            + Dispatch New Fabric
+        </button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px;">
+        
+        <div class="glass-card" onclick="location.href='/seller/my-products'">
+            <div style="font-size: 24px; margin-bottom: 15px;">📦</div>
+            <p style="color: #71717a; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Total Inventory</p>
+            <h2 style="color: white; font-size: 38px; margin: 10px 0; font-weight: 900; font-style: italic;"><%= stats.totalProducts %></h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #C9922A; font-size: 9px; font-weight: 800; text-transform: uppercase;">Manage Fabrics</span>
+                <i class="fa-solid fa-arrow-right-long" style="color: #C9922A; font-size: 10px;"></i>
+            </div>
+        </div>
+
+        <!-- Yahan Click link update kiya hai /tx-inquiries par -->
+        <div class="glass-card" onclick="location.href='/tx-inquiries'" style="border-left: 4px solid #C9922A;">
+            <div style="font-size: 24px; margin-bottom: 15px;">📡</div>
+            <p style="color: #71717a; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Active Signals</p>
+            <h2 style="color: white; font-size: 38px; margin: 10px 0; font-weight: 900; font-style: italic;"><%= stats.leadsCount %></h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #22c55e; font-size: 9px; font-weight: 800; text-transform: uppercase;">View Potential Leads</span>
+                <div style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%; animate: pulse 2s infinite;"></div>
+            </div>
+        </div>
+
+        <div class="glass-card" onclick="location.href='/tx-profile'">
+            <div style="font-size: 24px; margin-bottom: 15px;">🏆</div>
+            <p style="color: #71717a; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0;">Authority Grade</p>
+            <h2 style="color: white; font-size: 38px; margin: 10px 0; font-weight: 900; font-style: italic;">ELITE</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #3b82f6; font-size: 9px; font-weight: 800; text-transform: uppercase;">Merchant Profile</span>
+                <i class="fa-solid fa-user-gear" style="color: #3b82f6; font-size: 10px;"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="glass-card" style="padding: 0; overflow: hidden; cursor: default;">
+        <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+            <h3 style="margin: 0; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: white; font-style: italic;">Live Signal Intercepts</h3>
+            <span style="font-size: 8px; color: #52525b; font-weight: 900; text-transform: uppercase;">Real-Time Feed</span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background: rgba(0,0,0,0.2);">
+                    <tr>
+                        <th style="padding: 18px 24px; font-size: 9px; color: #C9922A; text-transform: uppercase; letter-spacing: 2px;">Origin</th>
+                        <th style="padding: 18px 24px; font-size: 9px; color: #C9922A; text-transform: uppercase; letter-spacing: 2px;">Requirement Stream</th>
+                        <th style="padding: 18px 24px; font-size: 9px; color: #C9922A; text-transform: uppercase; letter-spacing: 2px; text-align: right;">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody style="color: #d4d4d8;">
+                    <% if(recentLeads && recentLeads.length > 0) { %>
+                        <% recentLeads.forEach(lead => { %>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.3s;" onmouseover="this.style.background='rgba(201,146,42,0.02)'" onmouseout="this.style.background='transparent'">
+                            
+                            <!-- Buyer Name & Phone -->
+                            <td style="padding: 18px 24px;">
+                                <div style="font-size: 11px; font-weight: 800; color: white; text-transform: uppercase;"><%= lead.buyerName %></div>
+                                <div style="font-size: 9px; color: #52525b; margin-top: 4px; font-family: monospace;">📞 <%= lead.buyerPhone %></div>
+                            </td>
+                            
+                            <!-- Product Details & Message -->
+                            <td style="padding: 18px 24px;">
+                                <div style="font-size: 10px; font-weight: 800; color: #C9922A; text-transform: uppercase; margin-bottom: 5px;">📦 <%= lead.productName %></div>
+                                <div style="font-size: 10px; color: #a1a1aa; font-style: italic; background: rgba(255,255,255,0.03); padding: 6px 12px; border-radius: 8px; display: inline-block;">
+                                    "<%= lead.message.substring(0, 60) %>..."
+                                </div>
+                            </td>
+                            
+                            <!-- Status & Date -->
+                       <!-- ==========================================
+     BUYER DETAILS WITH WHATSAPP INTEGRATION 
+=========================================== -->
+<td style="padding: 18px 24px; vertical-align: top;">
+    <div style="font-size: 13px; font-weight: 800; color: white; text-transform: uppercase;"><%= lead.buyerName %></div>
+    
+    <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+        <!-- Call Button -->
+        <a href="tel:<%= lead.buyerPhone %>" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-family: monospace; text-decoration: none; border: 1px solid rgba(59, 130, 246, 0.2); transition: 0.2s;" onmouseover="this.style.background='#3b82f6'; this.style.color='white'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'; this.style.color='#60a5fa'">
+            📞 <%= lead.buyerPhone %>
+        </a>
+        
+        <!-- WhatsApp Magic Button -->
+        <a href="https://wa.me/91<%= lead.buyerPhone %>?text=Ram%20Ram%20<%= encodeURIComponent(lead.buyerName) %>,%20I%20saw%20your%20inquiry%20for%20<%= encodeURIComponent(lead.productName) %>%20on%20Bhilwara%20Textile%20Marketplace.%20How%20can%20we%20help%20you?" target="_blank" style="background: rgba(37, 211, 102, 0.1); color: #22c55e; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; text-decoration: none; border: 1px solid rgba(37, 211, 102, 0.2); transition: 0.2s; display: flex; align-items: center; gap: 5px;" onmouseover="this.style.background='#22c55e'; this.style.color='white'" onmouseout="this.style.background='rgba(37, 211, 102, 0.1)'; this.style.color='#22c55e'">
+            <i class="fa-brands fa-whatsapp" style="font-size: 13px;"></i> WhatsApp
+        </a>
+    </div>
+</td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="3" style="padding: 60px; text-align: center; color: #3f3f46; font-size: 9px; text-transform: uppercase; font-weight: 900; letter-spacing: 3px;">
+                                <i class="fa-solid fa-satellite-dish" style="font-size: 20px; display: block; margin-bottom: 15px; opacity: 0.2;"></i>
+                                Scanning frequencies for buyer signals...
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
